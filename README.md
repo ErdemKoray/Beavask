@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="[https://your-image-url.com/logo.png](https://drive.google.com/file/d/1Zg-nnHgDRTnUfETOfJHwwRQiMDK55xCP/view?usp=sharing)" alt="Beavask Logo" width="200"/>
+</p>
+
 # 🚀 BEAVASK - GITHUB REPOSITORY DESCRIPTION
 
 **Beavask** is a **Task Management System** designed to enhance the workflow of development teams by **streamlining task creation, assignment, and tracking processes** for GitHub projects. The system integrates with **GitHub API** to provide a seamless project management experience.  
