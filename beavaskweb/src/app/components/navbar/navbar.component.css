@@ -1,0 +1,59 @@
+.navbar {
+    background-color: var(--main-white-color);
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.bv-img {
+    position: absolute;
+    left: 25%; 
+}
+
+.bv-img img {
+    background-color:  var(--main-white-color);
+    height: 50px; 
+    width: auto;
+    display: block;
+    cursor: pointer;
+}
+
+.nv-bv li {
+    background-color: var(--main-white-color);
+}
+
+.bv-account {
+    background-color: var(--main-white-color);
+    position: absolute;
+    right: 25%;
+    color: #494945;
+    cursor: pointer;
+}
+
+.bv-hamb{
+    display: none;
+}
+@media screen and (max-width: 768px) {
+    .bv-img{
+        position: absolute;
+        left: 80%;
+    }
+
+    .nv-bv{
+        height: 50px;
+    }
+    .nv-bv li, .bv-account{
+
+        display: none;
+
+    }
+
+    .bv-hamb{
+        display: block;
+        cursor: pointer; 
+    
+    }
+
+
+}
