@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="[https://your-image-url.com/logo.png](https://drive.google.com/file/d/1Zg-nnHgDRTnUfETOfJHwwRQiMDK55xCP/view?usp=sharing)" alt="Beavask Logo" width="200"/>
+  <img src="Beavask.jpg" alt="Beavask Logo" width="200"/>
 </p>
 
 # 🚀 BEAVASK - GITHUB REPOSITORY DESCRIPTION
