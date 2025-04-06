@@ -1,0 +1,11 @@
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\bin\Debug\net8.0\TaskManagement.Common.deps.json
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\bin\Debug\net8.0\TaskManagement.Common.dll
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\bin\Debug\net8.0\TaskManagement.Common.pdb
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.AssemblyInfoInputs.cache
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.AssemblyInfo.cs
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.csproj.CoreCompileInputs.cache
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.dll
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\refint\TaskManagement.Common.dll
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\TaskManagement.Common.pdb
+C:\Users\koray\OneDrive\Documents\GitHub\NewBeavask\Backend\TaskManagement.Common\obj\Debug\net8.0\ref\TaskManagement.Common.dll

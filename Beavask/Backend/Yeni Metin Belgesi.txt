@@ -1,0 +1,68 @@
+Beavask
+├── backend
+│   ├── Beavask.API
+│   │   ├── Controllers
+│   │   │   ├── WeatherForecastController.cs
+│   │   │   └── (diğer controller'lar)
+│   │   ├── Middleware
+│   │   ├── Extensions
+│   │   ├── Program.cs
+│   │   └── launchSettings.json
+│   │
+│   ├── Beavask.Application
+│   │   ├── Interfaces
+│   │   │   ├── Services
+│   │   │   └── Repositories
+│   │   ├── Services
+│   │   ├── DTOs
+│   │   └── Validators
+│   │
+│   ├── Beavask.Domain
+│   │   ├── Entities
+│   │   │   ├── Core
+│   │   │   │   ├── User.cs
+│   │   │   │   ├── Project.cs
+│   │   │   │   ├── Task.cs
+│   │   │   │   ├── Message.cs
+│   │   │   │   └── Problem.cs
+│   │   │   └── Relationships
+│   │   │       ├── ProjectMember.cs
+│   │   │       └── UserRole.cs
+│   │   ├── Enums
+│   │   │   ├── ProblemStatus.cs
+│   │   │   └── TaskStatus.cs
+│   │   └── ValueObjects
+│   │       └── Address.cs
+│   │
+│   ├── Beavask.Infrastructure
+│   │   ├── Repositories
+│   │   ├── Persistence
+│   │   │   ├── BeavaskDbContext.cs
+│   │   │   └── Migrations
+│   │   └── ExternalServices
+│   │
+│   └── Beavask.Common
+│       ├── Exceptions
+│       ├── Helpers
+│       └── Constants
+│
+├── frontend
+│   └── beavask-ui
+│       ├── src
+│       │   ├── app
+│       │   │   ├── core
+│       │   │   │   └── (singleton servisler, interceptors, guard'lar)
+│       │   │   ├── shared
+│       │   │   │   └── (ortak componentler, pipe'lar, directive'ler)
+│       │   │   └── features
+│       │   │       ├── dashboard
+│       │   │       ├── tasks
+│       │   │       └── projects
+│       │   ├── assets
+│       │   ├── environments
+│       │   └── index.html
+│       ├── angular.json
+│       ├── package.json
+│       └── README.md
+│
+└── README.md
