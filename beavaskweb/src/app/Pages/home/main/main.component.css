@@ -1,0 +1,141 @@
+.bv-home-container {
+    padding: 32px;
+    background-color: #efefe8;
+    color: #494945;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .bv-home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bv-home-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .bv-home-link {
+    color: #3b6dd8;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .bv-home-projects {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .bv-home-project-card {
+    background-color: #f3f3f2;
+    border-radius: 8px;
+    padding: 16px;
+    width: 260px;
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+  }
+
+  .bv-home-project-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .bv-home-project-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #d8d8d2;
+    border-radius: 8px;
+  }
+
+  .bv-home-project-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .bv-home-project-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+    font-size: 13px;
+    color: #6e6e6e;
+  }
+
+  .bv-home-tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+  }
+
+  .bv-tab {
+    cursor: pointer;
+    padding-bottom: 6px;
+    font-size: 14px;
+    color: #494945;
+  }
+
+  .bv-tab.active {
+    border-bottom: 2px solid #494945;
+    font-weight: bold;
+  }
+
+  .bv-home-activity {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bv-activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .bv-activity-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #c8c8c8;
+    border-radius: 4px;
+    margin-right: 16px;
+  }
+
+  .bv-activity-details {
+    flex: 1;
+  }
+
+  .bv-activity-title {
+    font-weight: 600;
+    display: block;
+  }
+
+  .bv-activity-subtitle {
+    font-size: 12px;
+    color: #757575;
+  }
+
+  .bv-activity-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .bv-activity-user {
+    background-color: #2ecc71;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50px;
+    margin-top: 4px;
+    font-weight: bold;
+    font-size: 12px;
+  }

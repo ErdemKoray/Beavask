@@ -1,0 +1,45 @@
+<div class="bv-home-container">
+  <!-- Recent Projects Section -->
+  <div class="bv-home-section">
+    <div class="bv-home-header">
+      <span class="bv-home-title">Your work</span>
+      <a href="/projects" class="bv-home-link">View all projects</a>
+    </div>
+
+    <div class="bv-home-projects">
+      <div class="bv-home-project-card" *ngFor="let project of recentProjects">
+        <div class="bv-home-project-icon"></div>
+        <div class="bv-home-project-info">
+          <h3>{{ project.name }}</h3>
+          <ul>
+            <li>My open issues: {{ project.openIssues }}</li>
+            <li>Done issues: {{ project.doneIssues }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Section -->
+  <div class="bv-home-tabs">
+    <span class="bv-tab active">Worked on</span>
+    <span class="bv-tab">Viewed</span>
+    <span class="bv-tab">Assigned to me</span>
+    <span class="bv-tab">Starred</span>
+  </div>
+
+  <!-- Activity List -->
+  <div class="bv-home-activity">
+    <div class="bv-activity-item" *ngFor="let activity of activities">
+      <div class="bv-activity-icon"></div>
+      <div class="bv-activity-details">
+        <span class="bv-activity-title">{{ activity.title }}</span>
+        <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+      </div>
+      <div class="bv-activity-meta">
+        <span class="bv-activity-type">{{ activity.action }}</span>
+        <span class="bv-activity-user">{{ activity.userInitials }}</span>
+      </div>
+    </div>
+  </div>
+</div>

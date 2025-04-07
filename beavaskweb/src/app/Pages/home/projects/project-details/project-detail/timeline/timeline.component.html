@@ -1,0 +1,65 @@
+<div class="bv-timeline-container">
+    <!-- Header -->
+    <div class="bv-timeline-header">
+      <div class="bv-timeline-title">Timeline</div>
+  
+      <div class="bv-timeline-controls">
+        <input class="bv-timeline-search" type="text" placeholder="Search timeline" />
+        <div class="bv-timeline-users">
+          <div class="bv-user-avatar">MA</div>
+          <div class="bv-user-avatar bv-user-empty"></div>
+        </div>
+        <select class="bv-timeline-filter">
+          <option>Status category</option>
+        </select>
+        <select class="bv-timeline-type">
+          <option>Epik</option>
+        </select>
+        <button class="bv-timeline-settings">View settings</button>
+      </div>
+    </div>
+  
+    <!-- Timeline Table -->
+    <div class="bv-timeline-table">
+      <div class="bv-timeline-left">
+        <div class="bv-timeline-row bv-timeline-header-row">
+          <span>ID</span>
+          <span>Title</span>
+        </div>
+  
+        <div class="bv-timeline-row" *ngFor="let item of timelineItems">
+          <div class="bv-timeline-epic-id">{{ item.code }}</div>
+          <div class="bv-timeline-epic-title">{{ item.title }}</div>
+        </div>
+  
+        <div class="bv-timeline-create">+ Create Epik</div>
+      </div>
+  
+      <div class="bv-timeline-right">
+        <!-- Date header -->
+        <div class="bv-timeline-dates">
+          <div class="bv-timeline-date" *ngFor="let date of dateRange">
+            {{ date | date: 'MMM d' }}
+          </div>
+        </div>
+  
+        <!-- Epik bars -->
+        <div class="bv-timeline-bars" *ngFor="let item of timelineItems">
+          <div
+            class="bv-timeline-bar"
+            [style.left.%]="getStartOffset(item.startDate)"
+            [style.width.%]="getDurationWidth(item.startDate, item.endDate)"
+          ></div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Footer Controls -->
+    <div class="bv-timeline-footer">
+      <button class="bv-timeline-today">Today</button>
+      <button class="bv-timeline-view selected">Weeks</button>
+      <button class="bv-timeline-view">Months</button>
+      <button class="bv-timeline-view">Quarters</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,120 @@
+.bv-u-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.bv-u-body{
+    background-color: #d8d8d2;
+    width: 50%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+
+
+
+
+.bv-u-header{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #858580;
+    border: 3px solid #70706c;
+    color: white;
+}
+
+.profile-img-container{
+    position: absolute;
+    top:20%;
+    left: 28%;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background-color: #858580;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    border: #d8d8d2 3px solid;
+    cursor: pointer;
+}
+.bv-u-header-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.profile-img-none{
+    opacity: 0%;
+    transition: opacity 0.2s ease-in;
+}
+.profile-img-container:hover{
+   background-color: #6b6b66;
+}
+.profile-img-container:hover .profile-img-none{
+    opacity: 100%;
+}
+
+.bv-u-header-container:hover{
+    background-color: #6b6b66;
+
+}
+.header-img-none{
+    opacity: 0%;
+    transition: opacity 0.2s ease-in;
+
+}
+.bv-u-header-container:hover .header-img-none{
+    opacity: 100%;
+}
+
+
+
+
+.bv-u-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    background-color: #d8d8d2;
+    width: 100%;
+    height: fit-content;
+}
+
+.bv-u-main-left{
+    background-color: #ccccc6;
+    width: 30%;
+    height: fit-content;
+    min-height: 500px;
+}
+.bv-u-main-right{
+    width: 70%;
+    height: fit-content;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+@media screen and (max-width: 768px){
+    .bv-u-body{
+        width: 100%;
+    }
+    .bv-u-main-left{
+        width: 100%;
+    }
+    .bv-u-main-right{
+        width: 100%;
+    }
+    
+}

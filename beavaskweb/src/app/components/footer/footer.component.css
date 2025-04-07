@@ -1,0 +1,11 @@
+*{
+    color: white;
+}
+
+footer li{
+    background-color: #2e2e1e;
+}
+
+footer li a:hover{
+    color: #ddddd6;
+}

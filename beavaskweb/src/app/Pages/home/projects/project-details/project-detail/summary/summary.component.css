@@ -1,0 +1,151 @@
+/* Sayfa genel container */
+.bv-summary-container {
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Üst istatistik kutuları */
+  .bv-summary-top-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .bv-summary-card {
+    flex: 1 1 200px;
+    background-color: var(--main-white-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .bv-summary-card h3 {
+    font-size: 28px;
+    margin: 0;
+    color: var(--main-color-dark);
+  }
+  
+  .bv-summary-card p {
+    margin: 5px 0;
+    font-weight: bold;
+  }
+  
+  .bv-summary-card span {
+    font-size: 12px;
+    color: gray;
+  }
+  
+  /* Alt 2x2 grid */
+  .bv-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Her kutu (box) */
+  .bv-summary-box {
+    background-color: var(--main-white-color);
+    border-radius: 8px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .bv-summary-box h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  /* Status chart ve legend */
+  .bv-summary-status-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bv-summary-legend {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    width: 100%;
+  }
+  
+  .bv-summary-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .bv-status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .bv-status-dot.todo {
+    background-color: #7cb342;
+  }
+  
+  .bv-status-dot.inprogress {
+    background-color: #1976d2;
+  }
+  
+  .bv-status-dot.done {
+    background-color: #388e3c;
+  }
+  
+  /* No activity mesajı */
+  .bv-no-activity {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .bv-activity-helper {
+    font-size: 13px;
+    color: #999;
+  }
+  
+  /* Görev türleri */
+  .bv-summary-type-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .bv-summary-type-bar {
+    flex: 1;
+    height: 8px;
+    background-color: #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .bv-summary-type-bar .fill {
+    height: 100%;
+    background-color: #3f51b5;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  /* Responsive düzeltmeler */
+  @media (max-width: 768px) {
+    .bv-summary-top-cards {
+      flex-direction: column;
+    }
+  
+    .bv-summary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
