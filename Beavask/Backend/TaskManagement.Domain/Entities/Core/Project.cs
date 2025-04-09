@@ -14,5 +14,8 @@ namespace TaskManagement.Domain.Entities.Core
         public bool IsActive { get; set; } = true;
 
         public ICollection<ProjectMember> Members = new List<ProjectMember>();        
+        public ICollection<Milestone> Milestones = new List<Milestone>();
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }
