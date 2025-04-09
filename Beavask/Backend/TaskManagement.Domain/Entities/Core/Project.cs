@@ -17,5 +17,7 @@ namespace TaskManagement.Domain.Entities.Core
         public ICollection<Milestone> Milestones = new List<Milestone>();
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
+
+        public ICollection<Task> Tasks = new List<Task>();
     }
 }
