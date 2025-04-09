@@ -19,7 +19,7 @@ namespace TaskManagement.Domain.Entities.Core
         public bool IsActive { get; set; } = true;
 
         public TaskPriority Priority { get; set; }
-        public TaskStatus Status { get; set; }
+        public Enums.TaskStatus Status { get; set; }
 
         public int ProjectId { get; set; }
         public Project Project { get; set; }
