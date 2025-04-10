@@ -4,7 +4,7 @@ using TaskManagement.Domain.Entities.Relationships;
 
 namespace TaskManagement.Domain.Entities.Core
 {
-    public class Permisson
+    public class Permission
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

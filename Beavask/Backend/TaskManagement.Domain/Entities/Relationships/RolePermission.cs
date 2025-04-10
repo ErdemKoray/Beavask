@@ -12,7 +12,7 @@ namespace TaskManagement.Domain.Entities.Relationships
         public required Role Role { get; set; }
         public int RoleId { get; set; }
 
-        public required Permisson Permisson { get; set; }
+        public required Permission Permisson { get; set; }
         public int PermissonId { get; set; }
     }
 }
