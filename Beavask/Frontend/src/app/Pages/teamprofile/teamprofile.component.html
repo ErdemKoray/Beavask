@@ -1,1 +1,51 @@
-<p>teamprofile works!</p>
+<div class="bv-team-container">
+    <!-- Team Banner -->
+    <div class="bv-team-header">
+      <img [src]="teamData?.headerImagePath || 'assets/default-team-banner.jpg'" alt="Team Banner" class="bv-team-banner" />
+      <div class="bv-team-info">
+        <h2>{{ teamData?.name }}</h2>
+        <p>{{ teamData?.description }}</p>
+      </div>
+    </div>
+  
+    <!-- Main Body -->
+    <div class="bv-team-main">
+      
+      <div class="bv-team-left">
+        <h3>Team Members</h3>
+            <div  (click)="gotoprofile()" class="bv-team-member" *ngFor="let member of members">
+              <img [src]="member.profileImagePath || 'assets/default-profile.png'" class="bv-team-member-img" />
+              <div class="bv-team-member-info">
+                <span class="bv-member-name">{{ member.firstName }} {{ member.lastName }}</span>
+                <span class="bv-member-role">{{ member.role }}</span>
+              </div>
+              <div class="bv-member-status" [ngClass]="{ 'active': member.isActive, 'inactive': !member.isActive }">
+                ● {{ member.isActive ? 'Active' : 'Inactive' }}
+              </div>
+           
+        </div>
+      </div>
+  
+      <div class="bv-team-right">
+        <div class="bv-team-section">
+          <h3>Assigned Tasks</h3>
+          <div class="bv-task-card" *ngFor="let task of tasks">
+            <div class="bv-task-title">{{ task.title }}</div>
+            <div class="bv-task-user">Assigned to: {{ task.assignedUserName }}</div>
+            <div class="bv-task-status">{{ task.status }}</div>
+          </div>
+        </div>
+  
+     
+        <div class="bv-team-section">
+          <h3>Team Activity</h3>
+          <div class="bv-activity-log" *ngFor="let act of activities">
+            <div class="bv-activity-user">{{ act.userName }}</div>
+            <div class="bv-activity-desc">{{ act.description }}</div>
+            <div class="bv-activity-time">{{ act.createdAt | date:'short' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

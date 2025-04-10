@@ -94,12 +94,12 @@ export class NavbarComponent   {
     }
   }
 
-  /** Create project modal toggle */
+
   toggleCreateProject() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;
   }
 
-  /** Seçim dropdown içerik güncelleme */
+ 
   choiseoption(option: any) {
     const optionsElement = document.querySelector('#options');
     if (optionsElement) {
@@ -108,7 +108,6 @@ export class NavbarComponent   {
     this.toggleDropdown('modal');
   }
 
-  /** Navigation */
   gotohome() {
     this.router.navigate(['/']);
   }
@@ -121,7 +120,10 @@ export class NavbarComponent   {
     this.router.navigate(['/projects']);
   }
 
-  /** Reactive form tanımı */
+  gototeam() {  
+    this.router.navigate(['/teams/1']);
+  }
+
   form = new FormGroup({
     projectName: new FormControl(''),
     projectexp: new FormControl(''),

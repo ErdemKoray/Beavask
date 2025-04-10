@@ -14,6 +14,21 @@ export const routes: Routes = [
                 path: 'userprofile',
                 loadComponent:()=>import('./Pages/userprofile/userprofile.component').then(m=>m.UserprofileComponent)
             },
+             {
+                path: 'teams/:id',
+                loadComponent: () => import('./Pages/teamprofile/teamprofile.component').then(m => m.TeamprofileComponent)
+            }
+,
+            {
+                path:'company',
+                loadComponent:()=>import('./Pages/Company/company.component').then(m=>m.CompanyComponent),
+                children:[
+                    {
+                        path:'profile',
+                        loadComponent:()=>import('./Pages/Company/cprofile/cprofile.component').then(m=>m.CprofileComponent)
+                    }
+                ]
+            },
             {
                 path:'projects',
                 loadComponent:()=>import('./Pages/home/projects/projects.component').then(m=>m.ProjectsComponent),
