@@ -41,7 +41,17 @@ namespace TaskManagement.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Burada Fluent API yapılandırmaları, tablo isimleri, ilişkiler vb. tanımlanabilir.
+                modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)              // Her Message'ın bir Sender'ı vardır
+                .WithMany(u => u.SentMessages)      // Bir User'ın birden fazla gönderdiği Message olabilir
+                .HasForeignKey(m => m.SenderId)     // Foreign key olarak SenderId kullanılıyor
+                .OnDelete(DeleteBehavior.Restrict); // Sender silindiğinde Message silinmesin
+
+                modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver)             // Her Message'ın bir Receiver'ı vardır
+                .WithMany(u => u.ReceivedMessages)   // Bir User'ın birden fazla aldığı Message olabilir
+                .HasForeignKey(m => m.ReceiverId)    // Foreign key olarak ReceiverId kullanılıyor
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
