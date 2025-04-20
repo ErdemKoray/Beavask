@@ -1,5 +1,6 @@
 using Beavask.Application.Interfaces;
 using Beavask.Infrastructure.Persistence;
+using Beavask.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<BeavaskDbContext>(options =>
     options.UseNpgsql(conn));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddRepositories();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
