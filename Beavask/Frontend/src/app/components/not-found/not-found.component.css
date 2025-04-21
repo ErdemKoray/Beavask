@@ -1,0 +1,52 @@
+.not-found-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #fafafa; /* Açık gri arka plan */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .error-content {
+    margin-bottom: 40px;
+  }
+  
+  .error-content h1 {
+    font-size: 100px;
+    font-weight: bold;
+    color: #2c3e50; /* Koyu gri başlık */
+  }
+  
+  .error-message {
+    font-size: 24px;
+    color: #e74c3c; /* Kırmızı başlık */
+    margin-top: 10px;
+  }
+  
+  .error-description {
+    font-size: 18px;
+    color: #7f8c8d; /* Gri metin */
+    margin-top: 20px;
+  }
+  
+  .back-link {
+    font-size: 18px;
+    color: #3498db; /* Mavi renkli geri butonu */
+    text-decoration: none;
+    margin-top: 30px;
+    font-weight: bold;
+  }
+  
+  .back-link:hover {
+    color: #2980b9; /* Koyu mavi hover */
+    text-decoration: underline;
+  }
+  
+  .error-image img {
+    width: 150px;
+    height: auto;
+    margin-top: 40px;
+  }
+  

@@ -1,13 +1,17 @@
 .bv-home-container {
+
   padding: 32px;
-  background-color: #efefe8;
-  color: #494945;
+  background-color: var(--card-swhite-color);
+  color: var(--text-dark-white-color);
   font-family: 'Segoe UI', sans-serif;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  max-width: 1200px; /* Container'ın maksimum genişliği */
-  margin: 0 auto; /* Ortalamak için */
+  max-width: 1200px; 
+  margin: 0 auto; 
+  margin-top: 30px;
+  height: 100vh;
+  box-shadow:0px 0px 5px var(--border-sdark-white-color);
 }
 
 .bv-home-header {
@@ -19,40 +23,56 @@
 .bv-home-title {
   font-size: 24px;
   font-weight: 600;
+  margin: 10px;
 }
 
 .bv-home-link {
-  color: #3b6dd8;
-  font-size: 14px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--card-dark-white-color);
+  color: var(--text-lwhite-white-color);
+  font-size: 16px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
 }
-
+.bv-home-link:hover {
+  background-color: var(--card-blue-white-color);
+  color: var(--text-dark-white-color);
+  box-shadow: 0 0x 6px var(--shadow-03blue-white-color);
+  
+}
 .bv-home-projects {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  justify-content: start; /* Projeleri düzenli yerleştir */
+  justify-content: start; 
 }
 
 .bv-home-project-card {
-  background-color: #f3f3f2;
+  background-color: var(--card-lblue-white-color);
   border-radius: 8px;
   padding: 16px;
   width: 260px;
   display: flex;
   gap: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5x 2px var(--shadow-dark-white-color);
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .bv-home-project-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 6px var(--shadow-03blue-white-color);
 }
 
 .bv-home-project-icon {
   width: 40px;
   height: 40px;
-  background-color: #d8d8d2;
+  background-color:var( --main-white-color);
   border-radius: 8px;
 }
 
@@ -60,6 +80,8 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
+  color: var(--text-fdark-white-color);
+
 }
 
 .bv-home-project-info ul {
@@ -67,13 +89,13 @@
   padding: 0;
   margin: 4px 0 0 0;
   font-size: 13px;
-  color: #6e6e6e;
+  color: var(--text-bwhite-white-color);
 }
 
 .bv-home-tabs {
   display: flex;
   gap: 24px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--main-xsdark-white-color);
   padding-bottom: 8px;
 }
 
@@ -81,32 +103,51 @@
   cursor: pointer;
   padding-bottom: 6px;
   font-size: 14px;
-  color: #494945;
+  color: var(--text-dark-white-color);
+  transition: all 0.1s ease-in;
+  padding: 5px;
 }
+.bv-tab:hover {
+  
+  border-bottom: 2px solid var(--text-dark-white-color);
+ 
 
+}
 .bv-tab.active {
-  border-bottom: 2px solid #494945;
+  border-bottom: 2px solid var(--text-dark-white-color);
   font-weight: bold;
 }
 
 .bv-home-activity {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 5px;
 }
 
 .bv-activity-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 6px 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  
+}
+.bv-activity-item:nth-child(odd){
+  background-color: var(--card-lblue-white-color);
+
+  box-shadow: 0 0 6px var(--shadow-01blue-white-color);
+  transition: all 0.2s ease-in-out;
+}
+
+.bv-activity-item:hover {
+  box-shadow: inset 0 0 9px var(--shadow-03blue-white-color);
 }
 
 .bv-activity-icon {
   width: 30px;
   height: 30px;
-  background-color: #c8c8c8;
+  background-color: var(--main-white-color);
   border-radius: 4px;
   margin-right: 16px;
 }
@@ -122,23 +163,25 @@
 
 .bv-activity-subtitle {
   font-size: 12px;
-  color: #757575;
+  color: var(--text-dark-white-color);
+  font-weight: 700;
 }
+
 
 .bv-activity-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   font-size: 12px;
-  color: #666;
+  color: var(--text-dark-white-color);;
 }
 
 .bv-activity-user {
-  background-color: #2ecc71;
+  background-color: var(--status-color-green);
   color: white;
   padding: 2px 6px;
   border-radius: 50px;
   margin-top: 4px;
-  font-weight: bold;
+  font-weight: bolder;
   font-size: 12px;
 }

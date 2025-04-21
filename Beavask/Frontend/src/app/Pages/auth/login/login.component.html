@@ -18,7 +18,7 @@
              
               <div class="form-group form-check bv-checkbox">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <label class="form-check-label" for="exampleCheck1">keep me signed in</label>
               </div>
               <div class="bv-check2">
                     <div class="bv-forgot-password">
@@ -49,11 +49,17 @@
                         GitHub
                     </div>
                 </div>
-                <button type="submit" class="bv-submit">Submit</button>
+                <button  type="submit" class="bv-submit">Submit</button>
               </div>
+              <div (click)="getbyId()">denme</div>
+              <div *ngIf="IsLoading && project">
               
+              </div>
             </form>
           
       </div>
     </div>
 </div>
+
+
+<app-toast></app-toast>

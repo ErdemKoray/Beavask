@@ -1,4 +1,4 @@
-/* Container */
+
 .bv-team-container {
   width: 100vw;
   height: 100vh;
@@ -6,13 +6,10 @@
   flex-direction: column;
   background-color: #f8f8f5;
   color: #494945;
-  font-family: "Segoe UI", sans-serif;
-  max-width: 1200px; /* Container'ın maksimum genişliği */
-  margin: 0 auto; /* Ortalamak için */
-
+  max-width: 1200px; 
+  margin: 0 auto; 
 }
 
-/* Header / Banner */
 .bv-team-header {
   position: relative;
   width: 100%;
@@ -46,13 +43,11 @@
   font-size: 16px;
 }
 
-/* Main Body */
 .bv-team-main {
   display: flex;
   height: calc(100% - 220px);
 }
 
-/* Left: Members */
 .bv-team-left {
   width: 30%;
   padding: 20px;
@@ -93,6 +88,7 @@
 .bv-member-name {
   display: block;
   font-weight: 600;
+  max-width: 176px;
 }
 
 .bv-member-role {
@@ -113,7 +109,6 @@
   color: #c53030;
 }
 
-/* Right: Tasks & Activities */
 .bv-team-right {
   width: 70%;
   padding: 20px;

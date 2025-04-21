@@ -2,8 +2,8 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: #efefe8;
-    border-right: 4px solid #e2e2db;
+    background-color: var(--main-white-color);
+    border-right: 4px solid var(--border-sdark-white-color);
 }
 .bv-pn-container{
     width: 100%;
@@ -52,13 +52,13 @@
     margin-top: 10px;
    cursor: pointer;
     height: 50px;
-    border-radius:2px;
+  
     transition: background-color 0.1s ease-in;
 }
 .bv-pn-planning a{
     text-decoration: none;
     font-weight: bold;
-    color:#494945;
+    color: var(--text-dark-white-color);
 }
 
 
@@ -68,7 +68,7 @@
 
 .active-link{
     width: 100%;
-    background-color:#494945;
+    background-color:var(--border-sdark-white-color);
 }
 
 .active-link a{
@@ -79,8 +79,8 @@
 }
 
 .bv-pn-planning li:hover{
-    background-color: #e2e2db;
+    background-color: var(--main-sdark-white-color);
 }
 .active-link:hover{
-    background-color:#6b6b67!important;
+    background-color: var(--main-sdark-white-color)!important;
 }

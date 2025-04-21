@@ -20,11 +20,16 @@
 
     <div class="bv-u-main">
       <div class="bv-u-main-left">
-        <h3>{{ user.fullName }}</h3>
-        <p>{{ user.email }}</p>
-        <p><strong>Role:</strong> {{ user.role }}</p>
-        <p><strong>Projects:</strong> {{ user.totalProjects }}</p>
-        <p><strong>Tasks:</strong> {{ user.totalTasks }}</p>
+        <div class="bv-uml-content">
+          <div class="bv-lc-about">
+            <h3>{{ user.fullName }}</h3>
+            <p>{{ user.email }}</p>
+            <p><strong>Role:</strong> {{ user.role }}</p>
+            <p><strong>Projects:</strong> {{ user.totalProjects }}</p>
+            <p><strong>Tasks:</strong> {{ user.totalTasks }}</p>
+          </div>
+
+        </div>
       </div>
       <div class="bv-u-main-right">
         <div *ngFor="let activity of activities" class="bv-activity-card">

@@ -3,18 +3,19 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from "../../components/footer/footer.component";
 import { ToastComponent } from "../../components/toast/toast.component";
 import {  RouterOutlet } from '@angular/router';
+import { ToastService } from '../../components/toast/toast.service';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, ToastComponent,RouterOutlet],
+  imports: [NavbarComponent,RouterOutlet,ToastComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent{
   @ViewChild('hambcontainer') hamb!:ElementRef;
-  constructor(private rendered:Renderer2
+  constructor(private rendered:Renderer2,private toast:ToastService
   ) {}
 
   tooglemenu(){
@@ -30,4 +31,18 @@ export class HomeComponent{
     }
   }
 }
+
+
+
+
+showToast() {
+  this.toast.show({
+    title: 'Başarılı!',
+    message: 'İşlem başarıyla tamamlandı.'
+ 
+  });
+
+}
+
+
 }
