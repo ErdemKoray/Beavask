@@ -1,5 +1,6 @@
 using AutoMapper;
 using Beavask.Application.DTOs.Event;
+using Beavask.Application.DTOs.Team;
 using Beavask.Application.DTOs.UserContact;
 using Beavask.Domain.Entities.Base;
 
@@ -17,5 +18,10 @@ public class MappingProfile : Profile
         CreateMap<EventCreateDto, Event>();
         CreateMap<EventUpdateDto, Event>();
         CreateMap<Event, EventDto>().ReverseMap();
+        
+        // Team
+        CreateMap<Team, TeamDto>().ReverseMap();
+        CreateMap<TeamCreateDto, Team>();
+        CreateMap<TeamUpdateDto, Team>();
     }
 }
