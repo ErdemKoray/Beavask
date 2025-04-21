@@ -1,73 +1,90 @@
-
 <div *ngIf="isCreateProjectOpen" class="bv-create-project-modal">
+  
   <div class="bv-cp-container">
-      <div class="bv-cp-body">
-        <div class="bv-cp-form">
-          <form [formGroup]="form">
-            <div class="bv-cr-input-grp">
-              <div class="form-group bv-cr-text-group">
-                <label for="projectName">Project Name</label>
-                <input formControlName="projectName" type="text" class="form-control" id="projectName" placeholder="Project Name">
-              </div>
+    <form [formGroup]="form" class="bv-cp-form">
 
-              <div class="form-group bv-cr-text-group">
-                <label  for="projectName2">Project Tag</label>
-                <input formControlName="projecttitle" type="text" class="form-control" id="projectName2" placeholder="Project Name">
-              </div>
-            </div>
-
-            <div class="bv-cr-input-grp">
-              <div class="form-group bv-cr-text-group">
-                <div class="bv-cr-comment-section">
-                  <label  for="explantionarea">Explantion</label>
-                  <textarea formControlName="projectexp" placeholder="Explantion..." id="explantionarea" class="comment-input"></textarea>
-                </div>
-              </div>
-              <div class="bv-cr-appointed bv-cr-text-group">  
-
-                <label for="appointedperson">appointed person</label>
-                <div class="bv-cp-dropdown">
-                  <div class="bv-cp-dropdown-button" data-dropdown="modal" (click)="toggleDropdown('modal')">
-                    Choise
-                  </div>
-                  
-
-
-                  <div  *ngIf="isModalDropdownOpen" class="bv-cp-dropdown-content">
-
-                    <div class="bv-cp-dropdown-item">
-                      <img src="iconbeavask.png" alt="">
-                      <div>lşlkş</div>
-                    </div>
-                    <div (click)="choiseoption(3)" class="bv-cp-dropdown-item">
-                      <img src="iconbeavask.png" alt="">
-                      <div>şklkş</div>
-                    </div>
-                  </div>
-                </div>
-                
-              </div>
-
-            </div>
-            <div class="bv-cr-input-grp">
-                <div class="form-group bv-cr-text-group">
-                  <label for="projectfile">Project Name</label>
-                  <input formControlName="projectfile" type="file" class="form-control" id="projectfile" placeholder="Project Name">
-                </div>
-            </div>
-          </form>
+     
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group" style="margin-top: 100px;">
+          <label for="projectName">Project Name</label>
+          <input formControlName="projectName" type="text" id="projectName" placeholder="e.g. Marketing Launch">
+        </div>
+        <div class="bv-cr-text-group" style="margin-top: 100px;">
+          <label for="projectKey">Project Key</label>
+          <input formControlName="projectKey" type="text" id="projectKey" maxlength="5" placeholder="e.g. MKT">
         </div>
       </div>
+
+      <div class="bv-cr-text-group" style="width: 100%;">
+        <label for="projectDescription">Description</label>
+        <textarea formControlName="projectDescription" id="projectDescription" placeholder="Write about the project..." rows="4"></textarea>
+      </div>
+
+  
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group">
+          <label for="startDate">Start Date</label>
+          <input formControlName="startDate" type="date" id="startDate">
+        </div>
+        <div class="bv-cr-text-group">
+          <label for="endDate">End Date</label>
+          <input formControlName="endDate" type="date" id="endDate">
+        </div>
+      </div>
+
+      <!-- Lead & Type -->
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group">
+          <label for="lead">Project Lead</label>
+          <select formControlName="lead" id="lead">
+            <option *ngFor="let user of person" [value]="user.id">{{ user.name }}</option>
+          </select>
+        </div>
+        <div class="bv-cr-text-group">
+          <label for="type">Project Type</label>
+          <select formControlName="type" id="type">
+            <option value="Scrum">Scrum</option>
+            <option value="Kanban">Kanban</option>
+            <option value="Bug Tracking">Bug Tracking</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Priority & Status -->
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group">
+          <label for="priority">Priority</label>
+          <select formControlName="priority" id="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="bv-cr-text-group">
+          <label for="status">Status</label>
+          <select formControlName="status" id="status">
+            <option value="Draft">Draft</option>
+            <option value="Active">Active</option>
+            <option value="Done">Done</option>
+          </select>
+        </div>
+      </div>
+
+     
+      <div class="bv-cr-text-group">
+        <label for="projectFile">Attachment</label>
+        <input formControlName="projectFile" type="file" id="projectFile">
+      </div>
+
+  
       <div class="bv-cp-options">
-        <button [disabled]="!form.valid"  class="bv-cp-submit" (click)="createnewproject()">
-          Submit
-        </button>
-        <div class="bv-cp-close" (click)="toggleCreateProject()">
-          Close
-        </div>
+        <button type="submit" class="bv-cp-submit" [disabled]="!form.valid">Create</button>
+        <div class="bv-cp-close" (click)="toggleCreateProject()">Cancel</div>
       </div>
+    </form>
   </div>
 </div>
+
 
 
 <nav class="navbar navbar-expand " style="background-color: var(--main-white-color);">
@@ -91,31 +108,59 @@
           Projects
         </a>
         
-
         <div *ngIf="isProjectDropdownOpen" class="bv-dropdown-content">
-          <a class="dropdown-item" (click)="gotomyproject()">My Projects</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" (click)="gototeam()">team</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <div class="bv-dropdown-recent-projects-header">Recent Projects</div>
+          <div class="dropdown-item di-projects" *ngFor="let project of projects">
+            <div class="bv-dropdown-recent-projects-item">
+              <img class="bv-drpi-img" src="iconbeavask.png" alt="Project Icon" />
+              <div class="bv-drpi-name">{{ project.name }}</div>
+            </div>
           </div>
+          <div class="di-line"></div>
+          <a class="dropdown-item" (click)="gotomyproject()">My Projects</a>
+        </div>
+        
       </li>
       <li class="nav-item bv-dropdown">
-        <a class="nav-link dropdown-toggle" data-dropdown="dropdown" (click)="toggleDropdown('dropdown')">
-          Dropdown
+        <a class="nav-link dropdown-toggle" data-dropdown="teamdropdown" (click)="toggleDropdown('teamdropdown')">
+          Team
         </a>
         
+        
+        <div *ngIf="isTeamDropdownOpen" class="bv-dropdown-content">
+          <div class="bv-dropdown-recent-projects-header">Recent Teams</div>
+          <div class="dropdown-item di-projects" *ngFor="let team of teams">
+            <div class="bv-dropdown-recent-projects-item">
+              <img class="bv-drpi-img" src="iconbeavask.png" alt="Team Icon" />
+              <div class="bv-drpi-name">{{ team.name }}</div>
+            </div>
+          </div>
+          <div class="di-line"></div>
+          <a class="dropdown-item" (click)="gototeam()">My Teams</a>
+        </div>
+        
+      </li>
+      <li class="nav-item bv-dropdown">
+        <a class="nav-link dropdown-toggle" data-dropdown="taskdropdown" (click)="toggleDropdown('taskdropdown')">
+          Task
+        </a>
 
-      </li>
-      <li class="nav-item bv-dropdown">
-        <a class="nav-link dropdown-toggle" data-dropdown="dropdown" (click)="toggleDropdown('dropdown')">
-          Dropdown
-        </a>
+        <div *ngIf="isTaskDropdownOpen" class="bv-dropdown-content">
+          <div class="bv-dropdown-recent-projects-header">Recent Task</div>
+          <div class="dropdown-item di-projects" *ngFor="let team of teams">
+            <div class="bv-dropdown-recent-projects-item">
+              <img class="bv-drpi-img" src="iconbeavask.png" alt="Team Icon" />
+              <div class="bv-drpi-name">{{ team.name }}</div>
+            </div>
+          </div>
+          <div class="di-line"></div>
+          <a class="dropdown-item" (click)="gotomytask()">My Task</a>
+        </div>
         
       </li>
       <li class="nav-item bv-dropdown">
         <a class="nav-link dropdown-toggle" data-dropdown="dropdown" (click)="toggleDropdown('dropdown')">
-          Dropdown
+          My Work
         </a>
         
         <div  *ngIf="isDropdownOpen" class="bv-dropdown-content">

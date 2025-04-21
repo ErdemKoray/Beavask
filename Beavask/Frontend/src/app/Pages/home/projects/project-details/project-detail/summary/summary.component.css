@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    height: 100%;
+    background-color: var(--body-white-color);
   }
   
   /* Üst istatistik kutuları */
@@ -17,16 +19,18 @@
   
   .bv-summary-card {
     flex: 1 1 200px;
-    background-color: var(--main-white-color);
+    background-color: var(--card-white-color);
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 var(--shadow-dark-white-color);
     text-align: center;
+    color: var(--text-dark-white-color);
   }
   
   .bv-summary-card h3 {
     font-size: 28px;
     margin: 0;
+    font-weight: 500;
     color: var(--main-color-dark);
   }
   
@@ -37,7 +41,7 @@
   
   .bv-summary-card span {
     font-size: 12px;
-    color: gray;
+    color: var(--text-bwhite-white-color);
   }
   
   /* Alt 2x2 grid */
@@ -92,27 +96,27 @@
   }
   
   .bv-status-dot.todo {
-    background-color: #7cb342;
+    background-color: var(--status-color-green);
   }
   
   .bv-status-dot.inprogress {
-    background-color: #1976d2;
+    background-color: var(--status-color-red);
   }
   
   .bv-status-dot.done {
-    background-color: #388e3c;
+    background-color: var(--status-color-yellow);
   }
   
   /* No activity mesajı */
   .bv-no-activity {
     font-size: 16px;
     font-weight: 500;
-    color: #666;
+    color: var(--text-dark-white-color);
   }
   
   .bv-activity-helper {
     font-size: 13px;
-    color: #999;
+    color: var(--text-bwhite-white-color);
   }
   
   /* Görev türleri */
@@ -134,7 +138,7 @@
   
   .bv-summary-type-bar .fill {
     height: 100%;
-    background-color: #3f51b5;
+    background-color: var(--status-color-purple);
     transition: width 0.3s ease-in-out;
   }
   

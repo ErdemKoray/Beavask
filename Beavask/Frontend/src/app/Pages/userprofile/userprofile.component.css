@@ -4,7 +4,10 @@
   display: flex;
   justify-content: center;
   background-color: #f4f4f2;
-  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+ 
 }
 
 .bv-u-body {
@@ -20,7 +23,7 @@
 
 .bv-u-header {
   width: 100%;
-  height: 200px;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,8 +35,8 @@
 .profile-img-container {
   position: absolute;
   top: 120px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0%;
+  transform: translateX(50%);
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -43,7 +46,7 @@
   align-items: center;
   border: 4px solid #d8d8d2;
   cursor: pointer;
-  z-index: 10;
+  z-index: 0;
 }
 
 .bv-u-header-container {
@@ -90,18 +93,16 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  margin-top: 100px;
-  padding: 20px;
-  gap: 24px;
+ height: calc(100% - 220px);
+ 
 }
 
 .bv-u-main-left {
-  background-color: #f0f0e8;
+  background-color: #f3f3f0;
   width: 30%;
-  border-radius: 8px;
   padding: 20px;
   min-height: 400px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid #c4c4c1;
 }
 
 .bv-u-main-left h3 {
@@ -116,14 +117,16 @@
   color: #6e6e6e;
   margin: 4px 0;
 }
-
+/* about section */
+.bv-lc-about{
+  margin-top: 80px;
+}
 .bv-u-main-right {
   width: 70%;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background-color: #ffffff;
-  border-radius: 8px;
+  background-color: #f8f8f5;
   padding: 20px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
   min-height: 400px;

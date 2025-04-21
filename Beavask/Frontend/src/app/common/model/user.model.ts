@@ -1,0 +1,33 @@
+import { ProjectMember } from './projectMember.model'; 
+import { UserContact } from './userContact.model'; 
+import { Message } from './message.model'; 
+import { Role } from './role.model'; 
+import { Team } from './team.model'; 
+import { Company } from './company.model'; 
+import { Problem } from './problem.model'; 
+import { Log } from './log.model'; 
+import { Notification } from './notification.model'; 
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  passwordHash: string;
+  passwordSalt: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  isActive: boolean;
+
+  projects: ProjectMember[];
+  contacts: UserContact[];
+  sentMessages: Message[];
+  receivedMessages: Message[];
+  userRoles: Role[];
+  teamId: number;
+  team: Team;
+  companyId: number;
+  company: Company;
+  problems: Problem[];
+  logs: Log[];
+  notifications: Notification[];
+}

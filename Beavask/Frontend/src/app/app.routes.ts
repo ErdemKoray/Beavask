@@ -60,7 +60,7 @@ export const routes: Routes = [
         loadComponent:()=>import('./Pages/auth/login/login.component').then(m=>m.LoginComponent)
     },
     {
-        path: 'register',
-        loadComponent:()=>import('./Pages/auth/register/register.component').then(m=>m.RegisterComponent)
+        path:"**",
+        loadComponent:()=>import('./components/not-found/not-found.component').then(m=>m.NotFoundComponent)
     }
 ];

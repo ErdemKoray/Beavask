@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer2, ViewChild, OnInit, HostListener } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -10,27 +10,57 @@ import { CommonModule } from '@angular/common';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent   {
+  
+    constructor(
+      private router: Router,
+      private fb:FormBuilder
+    ) {
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.closeAllDropdowns();
+        }
+      });
+    }
   person = [
-    { name: 'Profile', icon: 'fa fa-user' },
-    { name: 'Settings', icon: 'fa fa-cog' },
-    { name: 'Logout', icon: 'fa fa-sign-out' }
+    {id:1, name: 'Profile', icon: 'fa fa-user' },
+    {id:2, name: 'Settings', icon: 'fa fa-cog' },
+    {id:3, name: 'Logout', icon: 'fa fa-sign-out' }
   ];
 
-  // Dropdown & Modal flags
+  projects = [
+    { name: 'Project 1', icon: 'fa fa-folder' },
+    { name: 'Project 2', icon: 'fa fa-folder' },
+    { name: 'Project 3', icon: 'fa fa-folder' }
+  ];
+  teams= [
+    {id:1, name: 'Frontend' },
+    {id:2, name: 'Backend' },
+    {id:3, name: 'Design' }
+  ];
+
+form = new FormGroup({
+  projectName: new FormControl('', Validators.required),
+  projectKey: new FormControl('', [Validators.required, Validators.maxLength(5)]),
+  projectDescription: new FormControl(''),
+  startDate: new FormControl('', Validators.required),
+  endDate: new FormControl('', Validators.required),
+  lead: new FormControl('', Validators.required),
+  type: new FormControl('Scrum', Validators.required),
+  priority: new FormControl('Medium', Validators.required),
+  status: new FormControl('Draft', Validators.required),
+  projectFile: new FormControl(null)
+});
+
+  
+ 
+
+  
   isProjectDropdownOpen = false;
   isDropdownOpen = false;
   isModalDropdownOpen = false;
   isCreateProjectOpen = false;
-
-  constructor(
-    private router: Router,
-  ) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.closeAllDropdowns();
-      }
-    });
-  }
+  isTeamDropdownOpen = false;
+  isTaskDropdownOpen = false;
 
 
   @HostListener('document:keydown.escape', ['$event'])
@@ -73,6 +103,20 @@ export class NavbarComponent   {
     ) {
       this.isCreateProjectOpen = false;
     }
+    if (
+      this.isTeamDropdownOpen &&
+      !target.closest('.bv-cp-dropdown-content') &&
+      !target.closest('[data-dropdown="teamdropdown"]')
+    ) {
+      this.isTeamDropdownOpen = false;
+    }
+    if (
+      this.isTaskDropdownOpen &&
+      !target.closest('.bv-cp-dropdown-content') &&
+      !target.closest('[data-dropdown="taskdropdown"]')
+    ) {
+      this.isTaskDropdownOpen = false;
+    }
   }
   
   
@@ -82,9 +126,11 @@ export class NavbarComponent   {
     this.isDropdownOpen = false;
     this.isModalDropdownOpen = false;
     this.isCreateProjectOpen = false;
+    this.isTeamDropdownOpen= false;
+    this.isTaskDropdownOpen = false;
   }
 
-  toggleDropdown(type: 'project' | 'dropdown' | 'modal') {
+  toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown') {
     if (type === 'project') {
       this.isProjectDropdownOpen = !this.isProjectDropdownOpen;
     } else if (type === 'dropdown') {
@@ -92,8 +138,15 @@ export class NavbarComponent   {
     } else if (type === 'modal') {
       this.isModalDropdownOpen = !this.isModalDropdownOpen;
     }
+     else if (type === 'teamdropdown') {
+      this.isTeamDropdownOpen = !this.isTeamDropdownOpen;
+    }
+    else if (type === 'taskdropdown') {
+        this.isTaskDropdownOpen = !this.isTaskDropdownOpen;
+    }
   }
 
+  gotomytask() {  }
 
   toggleCreateProject() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;
@@ -124,12 +177,7 @@ export class NavbarComponent   {
     this.router.navigate(['/teams/1']);
   }
 
-  form = new FormGroup({
-    projectName: new FormControl(''),
-    projectexp: new FormControl(''),
-    projecttitle: new FormControl(''),
-    projectfile: new FormControl('')
-  });
+  
 
   createnewproject() {
     if (this.form.valid) {

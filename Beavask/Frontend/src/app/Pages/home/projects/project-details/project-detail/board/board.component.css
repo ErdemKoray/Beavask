@@ -22,7 +22,7 @@
 }
 
 .bv-b-actions div{
-    background-color: #494945;
+    background-color: var(--button-dark-white-color);
     width: 40px;
     height: 40px;
     display: flex;
@@ -65,12 +65,12 @@ border: 1px solid #c9c9c4;
 .bv-b-op-search input:focus{
 
     outline: none;
-    border: 1px solid #494945;
-    box-shadow: 0 0 2px #494945;
+    border: 1px solid var(--text-dark-white-color);
+    box-shadow: 0 0 2px var(--shadow-dark-white-color);
  
 }
 .bv-b-s-button{
-    background-color: #494945;
+    background-color:var(--button-dark-white-color);
     width: 40px;
     height: 40px;
     border: none;
@@ -82,8 +82,8 @@ border: 1px solid #c9c9c4;
     margin-top: 20px;
     display: flex;
     gap: 10px;
-    border-bottom: 2px solid #c9c9c4 ; 
-    border-top: 2px solid #c9c9c4 ;
+    border-bottom: 2px solid var(--border-sdark-white-color) ; 
+  border-top: 2px solid var(--border-sdark-white-color) ;
     padding: 20px 0px 20px 0px;
 }
 
@@ -101,7 +101,7 @@ border: 1px solid #c9c9c4;
     border-radius: 4px;
     width: 250px;
     height: 400px;
-    background-color: #49494575;
+    background-color: var(--status-color-sred);
 }
 
 .bv-b-task-item:hover .bv-b-ci{
@@ -109,10 +109,10 @@ border: 1px solid #c9c9c4;
 }
 
 .bv-b-task-done{
-    background-color: #304b2ead;
+    background-color: var(--status-color-sgreen);
 }
 .bv-b-task-current{
-    background-color: #2e384bad;
+    background-color: var(--status-color-sblue);
 }
 .bv-b-ti-header{
     cursor: pointer;
@@ -167,13 +167,13 @@ border: 1px solid #c9c9c4;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #494945;
+    background-color: var(--button-dark-white-color);
     border-radius: 3px;
     border: none;
     transition: all 0.1s ease-in;
 }
 .bv-b-task-add-button:hover{
-    box-shadow: 0px 0px 3px #494945;
+    box-shadow: 0px 0px 3px var(--shadow-dark-white-color);
 }
 
 

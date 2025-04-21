@@ -1,11 +1,11 @@
-<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small class="text-body-secondary">2 seconds ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="bv-toast-wrapper">
+  <div class="bv-toast"
+       *ngFor="let toast of toasts"
+       [@slideInOut]>
+    <div class="bv-toast-header">
+      <strong>{{ toast.title }}</strong>
+      <small>{{ toast.time | date:'HH:mm' }}</small>
     </div>
-    <div class="toast-body">
-      Heads up, toasts will stack automatically
-    </div>
+    <div class="bv-toast-body">{{ toast.message }}</div>
   </div>
+</div>
