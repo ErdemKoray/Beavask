@@ -1,6 +1,7 @@
 using AutoMapper;
 using Beavask.Application.DTOs.Company;
 using Beavask.Application.DTOs.Event;
+using Beavask.Application.DTOs.LogDtos;
 using Beavask.Application.DTOs.Problem;
 using Beavask.Application.DTOs.Team;
 using Beavask.Application.DTOs.UserContact;
@@ -35,5 +36,9 @@ public class MappingProfile : Profile
         CreateMap<Company, CompanyDto>();
         CreateMap<CompanyCreateDto, Company>();
         CreateMap<CompanyUpdateDto, Company>();
+
+        //Log Entity
+        CreateMap<Log, LogDto>().ReverseMap();
+        CreateMap<LogCreateDto, Log>();       
     }
 }
