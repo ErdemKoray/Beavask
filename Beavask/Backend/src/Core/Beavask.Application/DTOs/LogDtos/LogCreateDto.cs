@@ -1,4 +1,4 @@
-namespace Beavask.Application.DTOs.Log;
+namespace Beavask.Application.DTOs.LogDtos;
 
 public class LogCreateDto
 {
