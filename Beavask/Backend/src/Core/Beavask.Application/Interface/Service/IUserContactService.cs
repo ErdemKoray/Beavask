@@ -1,7 +1,7 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.UserContact;
 
-
+namespace Beavask.Application.Interface.Service;
 public interface IUserContactService
 {
     Task<Response<UserContactDto>> GetByIdAsync(int id);

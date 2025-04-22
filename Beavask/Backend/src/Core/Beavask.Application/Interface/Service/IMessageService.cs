@@ -1,12 +1,12 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.Message;
 
-namespace Beavask.Application.Interface.Service
+namespace Beavask.Application.Interface.Service;
+
+public interface IMessageService
 {
-    public interface IMessageService
-    {
-        Task<Response<MessageDto>> CreateAsync(MessageCreateDto messageCreateDto);
-        Task<Response<IEnumerable<MessageDto>>> GetMessagesBySenderIdAsync(int senderId);
-        Task<Response<IEnumerable<MessageDto>>> GetMessagesByReceiverIdAsync(int receiverId);
-    }
+    Task<Response<MessageDto>> CreateAsync(MessageCreateDto messageCreateDto);
+    Task<Response<IEnumerable<MessageDto>>> GetMessagesBySenderIdAsync(int senderId);
+    Task<Response<IEnumerable<MessageDto>>> GetMessagesByReceiverIdAsync(int receiverId);
 }
+

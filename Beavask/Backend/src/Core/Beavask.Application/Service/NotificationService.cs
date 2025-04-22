@@ -1,19 +1,15 @@
 using AutoMapper;
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.NotificationDtos;
+using Beavask.Application.Interface.Service;
 using Beavask.Application.Interfaces;
 using Beavask.Domain.Entities.Base;
 
-public class NotificationService : INotificationService
+namespace Beavask.Application.Service;
+public class NotificationService(IUnitOfWork unitOfWork, IMapper mapper) : INotificationService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-
-    public NotificationService(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Response<IEnumerable<NotificationDto>>> GetAllAsync()
     {

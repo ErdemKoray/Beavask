@@ -3,6 +3,7 @@ using Beavask.Application.DTOs.UserContact;
 using Beavask.Application.Interfaces;
 using AutoMapper;
 using Beavask.Domain.Entities.Base;
+using Beavask.Application.Interface.Service;
 
 namespace Beavask.Application.Service;
 
