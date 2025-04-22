@@ -1,4 +1,4 @@
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using Beavask.Application.Mapping;
 using Beavask.Infrastructure.Extensions;
 using Beavask.Infrastructure.Persistence;

@@ -1,5 +1,5 @@
 using Beavask.Application.Interface.Repository;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using Beavask.Infrastructure.Persistence;
 using Beavask.Persistence.Repository;
 

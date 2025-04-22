@@ -23,6 +23,7 @@ namespace Beavask.Infrastructure.Persistence
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Domain.Entities.Base.Permission> Permissions { get; set; }
         public DbSet<Problem> Problems { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<Domain.Entities.Base.Task> Tasks { get; set; }
