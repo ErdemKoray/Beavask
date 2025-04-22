@@ -2,6 +2,7 @@ using Beavask.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Scrutor;
 using Beavask.Application.Interfaces;
+using Beavask.Application.Interface.Service;
 
 namespace Beavask.Infrastructure.Extensions;
 

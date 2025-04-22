@@ -5,6 +5,7 @@ using Beavask.Application.DTOs.LogDtos;
 using Beavask.Application.DTOs.Message;
 using Beavask.Application.DTOs.NotificationDtos;
 using Beavask.Application.DTOs.Problem;
+using Beavask.Application.DTOs.Role;
 using Beavask.Application.DTOs.Team;
 using Beavask.Application.DTOs.UserContact;
 using Beavask.Domain.Entities.Base;
@@ -50,5 +51,10 @@ public class MappingProfile : Profile
         //Message Entity
         CreateMap<MessageCreateDto, Message>();
         CreateMap<Message, MessageDto>();
+
+        //Role Entity
+        CreateMap<RoleCreateDto, Role>().ReverseMap();
+        CreateMap<RoleUpdateDto, Role>().ReverseMap();
+        CreateMap<RoleDto, Role>().ReverseMap();
     }
 }

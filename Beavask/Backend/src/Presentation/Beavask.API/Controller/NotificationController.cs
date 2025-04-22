@@ -1,4 +1,5 @@
 using Beavask.Application.DTOs.NotificationDtos;
+using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
