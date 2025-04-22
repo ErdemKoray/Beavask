@@ -4,6 +4,7 @@ using Beavask.Application.DTOs.Event;
 using Beavask.Application.DTOs.LogDtos;
 using Beavask.Application.DTOs.Message;
 using Beavask.Application.DTOs.NotificationDtos;
+using Beavask.Application.DTOs.Permission;
 using Beavask.Application.DTOs.Problem;
 using Beavask.Application.DTOs.Role;
 using Beavask.Application.DTOs.Team;
@@ -56,5 +57,10 @@ public class MappingProfile : Profile
         CreateMap<RoleCreateDto, Role>().ReverseMap();
         CreateMap<RoleUpdateDto, Role>().ReverseMap();
         CreateMap<RoleDto, Role>().ReverseMap();
+
+        //Permission Entity
+        CreateMap<PermissionCreateDto, Permission>().ReverseMap();
+        CreateMap<PermissionUpdateDto, Permission>().ReverseMap();
+        CreateMap<PermissionDto, Permission>().ReverseMap();
     }
 }
