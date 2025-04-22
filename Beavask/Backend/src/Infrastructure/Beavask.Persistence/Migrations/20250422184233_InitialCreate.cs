@@ -160,14 +160,15 @@ namespace Beavask.Persistence.Migrations
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     RoleId = table.Column<int>(type: "integer", nullable: false),
+                    PermissionId = table.Column<int>(type: "integer", nullable: false),
                     PermissonId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RolePermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Permissions_PermissonId",
-                        column: x => x.PermissonId,
+                        name: "FK_RolePermissions_Permissions_PermissionId",
+                        column: x => x.PermissionId,
                         principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -646,9 +647,9 @@ namespace Beavask.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_PermissonId",
+                name: "IX_RolePermissions_PermissionId",
                 table: "RolePermissions",
-                column: "PermissonId");
+                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermissions_RoleId",
