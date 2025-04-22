@@ -778,7 +778,7 @@ namespace Beavask.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PermissionId")
+                    b.Property<int>("PermissonId")
                         .HasColumnType("integer");
 
                     b.Property<int>("RoleId")
@@ -789,7 +789,7 @@ namespace Beavask.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PermissionId");
+                    b.HasIndex("PermissonId");
 
                     b.HasIndex("RoleId");
 
@@ -1048,9 +1048,9 @@ namespace Beavask.Persistence.Migrations
 
             modelBuilder.Entity("Beavask.Domain.Entities.Join.RolePermission", b =>
                 {
-                    b.HasOne("Beavask.Domain.Entities.Base.Permission", "Permission")
+                    b.HasOne("Beavask.Domain.Entities.Base.Permission", "Permisson")
                         .WithMany("Roles")
-                        .HasForeignKey("PermissionId")
+                        .HasForeignKey("PermissonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1060,7 +1060,7 @@ namespace Beavask.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Permission");
+                    b.Navigation("Permisson");
 
                     b.Navigation("Role");
                 });
