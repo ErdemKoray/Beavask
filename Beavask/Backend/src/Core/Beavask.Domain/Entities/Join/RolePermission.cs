@@ -12,7 +12,7 @@ namespace Beavask.Domain.Entities.Join
         public required Role Role { get; set; }
         public int RoleId { get; set; }
 
-        public required Permission Permisson { get; set; }
-        public int PermissonId { get; set; }
+        public required Permission Permission { get; set; }
+        public int PermissionId { get; set; }
     }
 }
