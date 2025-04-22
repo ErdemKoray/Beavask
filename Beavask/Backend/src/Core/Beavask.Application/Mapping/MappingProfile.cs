@@ -3,6 +3,7 @@ using Beavask.Application.DTOs.Company;
 using Beavask.Application.DTOs.Event;
 using Beavask.Application.DTOs.LogDtos;
 using Beavask.Application.DTOs.Message;
+using Beavask.Application.DTOs.Milestone;
 using Beavask.Application.DTOs.NotificationDtos;
 using Beavask.Application.DTOs.Permission;
 using Beavask.Application.DTOs.Problem;
@@ -79,5 +80,10 @@ public class MappingProfile : Profile
         CreateMap<UserCreateDto, User>();
         CreateMap<UserUpdateDto, User>();
         CreateMap<User, UserDto>();
+
+        //Milestone Entity
+        CreateMap<Milestone, MilestoneDto>().ReverseMap();
+        CreateMap<MilestoneCreateDto, Milestone>().ReverseMap();
+        CreateMap<MilestoneUpdateDto, Milestone>().ReverseMap();
     }
 }
