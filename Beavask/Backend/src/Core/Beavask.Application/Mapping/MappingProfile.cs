@@ -9,6 +9,7 @@ using Beavask.Application.DTOs.Problem;
 using Beavask.Application.DTOs.Role;
 using Beavask.Application.DTOs.RolePermission;
 using Beavask.Application.DTOs.Team;
+using Beavask.Application.DTOs.User;
 using Beavask.Application.DTOs.UserContact;
 using Beavask.Application.DTOs.UserRole;
 using Beavask.Domain.Entities.Base;
@@ -73,5 +74,10 @@ public class MappingProfile : Profile
         //UserRole Entity
         CreateMap<UserRoleCreateDto, UserRole>();
         CreateMap<UserRole, UserRoleDto>();
+
+        //User Entity
+        CreateMap<UserCreateDto, User>();
+        CreateMap<UserUpdateDto, User>();
+        CreateMap<User, UserDto>();
     }
 }
