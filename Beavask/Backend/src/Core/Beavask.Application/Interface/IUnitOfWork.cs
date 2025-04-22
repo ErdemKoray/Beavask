@@ -1,6 +1,6 @@
 using Beavask.Application.Interface.Repository;
 
-namespace Beavask.Application.Interfaces;
+namespace Beavask.Application.Interface;
 
 public interface IUnitOfWork
 {

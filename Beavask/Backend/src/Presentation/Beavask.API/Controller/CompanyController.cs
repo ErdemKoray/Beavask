@@ -3,7 +3,7 @@ using Beavask.Application.Interface.Service;
 using Beavask.Application.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Beavask.API.Controllers;
+namespace Beavask.API.Controller;
 
 [ApiController]
 [Route("api/[controller]")]

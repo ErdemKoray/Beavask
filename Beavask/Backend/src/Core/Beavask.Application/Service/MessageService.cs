@@ -2,7 +2,7 @@ using Beavask.Application.Common;
 using Beavask.Application.DTOs.Message;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using AutoMapper;
 
 namespace Beavask.Application.Service;

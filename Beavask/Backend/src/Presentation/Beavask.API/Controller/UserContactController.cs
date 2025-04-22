@@ -1,8 +1,6 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.UserContact;
 using Beavask.Application.Interface.Service;
-using Beavask.Application.Interfaces;
-using Beavask.Application.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Beavask.API.Controller;

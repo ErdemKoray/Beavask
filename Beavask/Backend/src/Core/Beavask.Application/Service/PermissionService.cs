@@ -1,5 +1,5 @@
 using Beavask.Application.DTOs.Permission;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using AutoMapper;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.Common;

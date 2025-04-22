@@ -3,7 +3,7 @@ using Beavask.Application.DTOs.Event;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Beavask.API.Controllers;
+namespace Beavask.API.Controller;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -2,6 +2,8 @@ using Beavask.Application.DTOs.NotificationDtos;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
+namespace Beavask.API.Controller;
+
 [ApiController]
 [Route("api/[controller]")]
 public class NotificationController : ControllerBase

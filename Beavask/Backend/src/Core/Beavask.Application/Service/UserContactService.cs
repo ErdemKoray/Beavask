@@ -1,6 +1,6 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.UserContact;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using AutoMapper;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.Interface.Service;

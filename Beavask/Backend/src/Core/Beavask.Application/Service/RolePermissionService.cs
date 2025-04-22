@@ -3,7 +3,7 @@ using Beavask.Application.Interface.Service;
 using Beavask.Application.Common;
 using AutoMapper;
 using Beavask.Domain.Entities.Join;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 
 namespace Beavask.Application.Service;
 

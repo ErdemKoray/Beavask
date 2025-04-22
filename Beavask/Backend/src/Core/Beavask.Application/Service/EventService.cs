@@ -1,6 +1,6 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.Event;
-using Beavask.Application.Interfaces;
+using Beavask.Application.Interface;
 using AutoMapper;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
