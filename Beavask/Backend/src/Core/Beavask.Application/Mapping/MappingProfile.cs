@@ -11,6 +11,7 @@ using Beavask.Application.DTOs.Problem;
 using Beavask.Application.DTOs.Project;
 using Beavask.Application.DTOs.Role;
 using Beavask.Application.DTOs.RolePermission;
+using Beavask.Application.DTOs.Task;
 using Beavask.Application.DTOs.Team;
 using Beavask.Application.DTOs.User;
 using Beavask.Application.DTOs.UserContact;
@@ -96,6 +97,11 @@ public class MappingProfile : Profile
         //Project Entity
         CreateMap<Project, ProjectDto>().ReverseMap();
         CreateMap<ProjectCreateDto, Project>();
-        CreateMap<ProjectUpdateDto, Project>();        
+        CreateMap<ProjectUpdateDto, Project>();   
+
+        //Task Entity
+        CreateMap<Domain.Entities.Base.Task, TaskDto>().ReverseMap();
+        CreateMap<TaskCreateDto, Domain.Entities.Base.Task>();
+        CreateMap<TaskUpdateDto, Domain.Entities.Base.Task>();     
     }
 }
