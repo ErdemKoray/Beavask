@@ -9,10 +9,10 @@ namespace Beavask.Domain.Entities.Join
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;
 
-        public required Team Team { get; set; }
+        public Team Team { get; set; }  = null!;
         public int TeamId { get; set; }
 
-        public required Event Event { get; set; }
+        public Event Event { get; set; }  = null!;
         public int EventId { get; set; }
 
     }
