@@ -6,4 +6,5 @@ public interface ITeamRepository : IBaseRepository<Team, int>
 {
     Task<Team?> GetTeamWithMembersAsync(int teamId);
     Task<IEnumerable<User>> GetMembersByTeamId(int teamId);
+    Task<List<Event>> GetEventsByTeamId(int teamId);
 } 

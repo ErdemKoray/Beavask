@@ -1,4 +1,5 @@
 using Beavask.Application.Common;
+using Beavask.Application.DTOs.Event;
 using Beavask.Application.DTOs.Team;
 using Beavask.Application.DTOs.User;
 
@@ -15,4 +16,5 @@ public interface ITeamService
 
     Task<Response<TeamWithMembersDto>> GetTeamWithMembersAsync(int teamId);
     Task<Response<IEnumerable<UserDto>>> GetMembersByTeamIdAsync(int teamId);
+    Task<Response<IEnumerable<EventDto>>> GetEventsByTeamIdAsync(int teamId);
 }

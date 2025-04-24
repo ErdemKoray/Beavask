@@ -1,4 +1,5 @@
 using Beavask.Application.Common;
+using Beavask.Application.DTOs.Event;
 using Beavask.Application.DTOs.Team;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,13 @@ public class TeamController : ControllerBase
     public async Task<ActionResult<Response<IEnumerable<TeamDto>>>> GetMembersByTeamId(int teamId)
     {
         var result = await _teamService.GetMembersByTeamIdAsync(teamId);
+        return Ok(result);
+    }
+
+    [HttpGet("{teamId}/events")]
+    public async Task<ActionResult<Response<IEnumerable<EventDto>>>> GetEventsByTeamId(int teamId)
+    {
+        var result = await _teamService.GetEventsByTeamIdAsync(teamId);
         return Ok(result);
     }
 }

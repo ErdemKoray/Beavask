@@ -27,4 +27,11 @@ public class TeamRepository : BaseRepository<Team, int>, ITeamRepository
             .Where(u => u.TeamId == teamId)
             .ToListAsync();
     }
+
+    public Task<List<Event>> GetEventsByTeamId(int teamId)
+    {
+        return _context.Events
+            .Where(e => e.Teams.Any(te => te.TeamId == teamId))
+            .ToListAsync();
+    }
 }

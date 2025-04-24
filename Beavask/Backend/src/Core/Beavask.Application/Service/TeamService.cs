@@ -5,6 +5,7 @@ using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.DTOs.User;
+using Beavask.Application.DTOs.Event;
 
 namespace Beavask.Application.Service;
 
@@ -127,5 +128,15 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper) : ITeamService
         var dtos = _mapper.Map<IEnumerable<UserDto>>(members);
         return Response<IEnumerable<UserDto>>.Success(dtos);
     
+    }
+
+    public async Task<Response<IEnumerable<EventDto>>> GetEventsByTeamIdAsync(int teamId)
+    {
+        var events = await _unitOfWork.TeamRepository.GetEventsByTeamId(teamId);
+        if (events == null || !events.Any())
+            return Response<IEnumerable<EventDto>>.NotFound();
+        
+        var dtos = _mapper.Map<IEnumerable<EventDto>>(events);
+        return Response<IEnumerable<EventDto>>.Success(dtos);
     }
 }
