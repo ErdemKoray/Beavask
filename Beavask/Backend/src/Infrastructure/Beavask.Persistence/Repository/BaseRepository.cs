@@ -52,4 +52,16 @@ public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : class
         _dbSet.Remove(entity);
         await _context.SaveChangesAsync();
     }
+
+    public IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression, bool trackChanges)  => trackChanges ? _dbSet.Where(expression) :
+                                                             _dbSet.Where(expression).AsNoTracking();
+    
+    public async Task<T?> GetSingleByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges = false)
+    {
+        var query = _dbSet.Where(expression);
+        if (!trackChanges)
+            query = query.AsNoTracking();
+
+        return await query.FirstOrDefaultAsync();
+    }
 }

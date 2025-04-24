@@ -1,4 +1,6 @@
+using Beavask.API.Service;
 using Beavask.Application.Interface;
+using Beavask.Application.Interface.Service;
 using Beavask.Application.Mapping;
 using Beavask.Infrastructure.Extensions;
 using Beavask.Infrastructure.Persistence;
@@ -7,8 +9,12 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connection string
+// Connection string -> User-Secrets 
 var conn = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+//JWT -> User-Secrets 
+var jwtKey = builder.Configuration["Jwt:Key"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
 // DbContext
 builder.Services.AddDbContext<BeavaskDbContext>(options =>
@@ -20,6 +26,8 @@ builder.Services.AddScoped<DbContext>(provider => provider.GetRequiredService<Be
 // DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddApplicationDependencies();
+builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+
 
 // AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));

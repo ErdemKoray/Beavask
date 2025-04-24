@@ -10,4 +10,6 @@ public interface IBaseRepository<T, TKey> where T : class
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);
     Task DeleteAsync(T entity);
+    IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
+    Task<T?> GetSingleByConditionAsync(Expression<Func<T, bool>> expression, bool trackChanges = false);
 }

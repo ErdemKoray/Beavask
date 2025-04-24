@@ -7,7 +7,8 @@ namespace Beavask.Domain.Entities.Base
     public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string PasswordSalt { get; set; } = string.Empty;
@@ -29,12 +30,12 @@ namespace Beavask.Domain.Entities.Base
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
         // User - Team one-to-many relationship 
-        public int TeamId { get; set; }
-        public required Team Team { get; set; }
+        public int? TeamId { get; set; }
+        public Team? Team { get; set; }
  
         // User - Company one-to-many relationship
-        public int CompanyId { get; set; }
-        public required Company Company { get; set; }
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
 
         // User - Problem one-to-many relationship
         public ICollection<Problem> Problems = new List<Problem>();
