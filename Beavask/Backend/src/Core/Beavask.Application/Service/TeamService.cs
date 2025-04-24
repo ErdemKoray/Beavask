@@ -4,6 +4,7 @@ using Beavask.Application.DTOs.Team;
 using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
+using Beavask.Application.DTOs.User;
 
 namespace Beavask.Application.Service;
 
@@ -98,5 +99,33 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper) : ITeamService
         {
             return Response<bool>.Fail(ex.Message);
         }
+    }
+
+    public async Task<Response<TeamWithMembersDto>> GetTeamWithMembersAsync(int teamId)
+    {
+        try
+        {
+            var entity = await _unitOfWork.TeamRepository.GetTeamWithMembersAsync(teamId);
+            if (entity == null)
+                return Response<TeamWithMembersDto>.NotFound();
+
+            var dto = _mapper.Map<TeamWithMembersDto>(entity);
+            return Response<TeamWithMembersDto>.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            return Response<TeamWithMembersDto>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<IEnumerable<UserDto>>> GetMembersByTeamIdAsync(int teamId)
+    {
+        var members = await _unitOfWork.TeamRepository.GetMembersByTeamId(teamId);
+        if (members == null || !members.Any())
+            return Response<IEnumerable<UserDto>>.NotFound();
+        
+        var dtos = _mapper.Map<IEnumerable<UserDto>>(members);
+        return Response<IEnumerable<UserDto>>.Success(dtos);
+    
     }
 }

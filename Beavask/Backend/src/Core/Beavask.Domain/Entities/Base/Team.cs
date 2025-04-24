@@ -12,10 +12,10 @@ namespace Beavask.Domain.Entities.Base
         public DateTime? UpdatedAt { get; set; }
 
         // User - Team one-to-many relationship 
-        public ICollection<User> TeamMembers = new List<User>();
+        public ICollection<User> TeamMembers { get; set; } = new List<User>();
 
         // Team - Event many-to-many relationship
-        public ICollection<TeamEvent> Events = new List<TeamEvent>(); 
+        public ICollection<TeamEvent> Events { get; set; } = new List<TeamEvent>(); 
 
     }
 }

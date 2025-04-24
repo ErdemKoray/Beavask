@@ -1,5 +1,6 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.Team;
+using Beavask.Application.DTOs.User;
 
 
 namespace Beavask.Application.Interface.Service;
@@ -11,4 +12,7 @@ public interface ITeamService
     Task<Response<TeamDto>> CreateAsync(TeamCreateDto teamCreateDto);
     Task<Response<TeamDto>> UpdateAsync(int id, TeamUpdateDto teamUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
+
+    Task<Response<TeamWithMembersDto>> GetTeamWithMembersAsync(int teamId);
+    Task<Response<IEnumerable<UserDto>>> GetMembersByTeamIdAsync(int teamId);
 }

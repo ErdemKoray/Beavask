@@ -38,6 +38,7 @@ public class MappingProfile : Profile
         CreateMap<Team, TeamDto>().ReverseMap();
         CreateMap<TeamCreateDto, Team>();
         CreateMap<TeamUpdateDto, Team>();
+        CreateMap<Team, TeamWithMembersDto>();
 
         //Problem Entity
         CreateMap<Problem, ProblemDto>().ReverseMap();

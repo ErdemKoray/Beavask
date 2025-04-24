@@ -4,5 +4,6 @@ namespace Beavask.Application.Interface.Repository;
 
 public interface ITeamRepository : IBaseRepository<Team, int>
 {
-    // Add any team-specific repository methods here
+    Task<Team?> GetTeamWithMembersAsync(int teamId);
+    Task<IEnumerable<User>> GetMembersByTeamId(int teamId);
 } 

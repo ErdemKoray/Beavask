@@ -50,4 +50,18 @@ public class TeamController : ControllerBase
         var result = await _teamService.DeleteAsync(id);
         return Ok(result);
     }
+
+    [HttpGet("{teamId}/members")]
+    public async Task<ActionResult<Response<TeamWithMembersDto>>> GetTeamWithMembers(int teamId)
+    {
+        var result = await _teamService.GetTeamWithMembersAsync(teamId);
+        return Ok(result);
+    }
+
+    [HttpGet("{teamId}/members/all")]
+    public async Task<ActionResult<Response<IEnumerable<TeamDto>>>> GetMembersByTeamId(int teamId)
+    {
+        var result = await _teamService.GetMembersByTeamIdAsync(teamId);
+        return Ok(result);
+    }
 }

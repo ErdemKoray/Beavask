@@ -24,12 +24,25 @@ builder.Services.AddApplicationDependencies();
 // AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin() // dev için, prod'da sınırlanmalı
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 // Controller ve Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors();
 
 // Middleware
 if (app.Environment.IsDevelopment())
