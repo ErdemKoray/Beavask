@@ -20,6 +20,10 @@ var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
+//GitHub Project Info
+var ClientId = builder.Configuration["GitHub:ClientId"];
+var ClientSecret = builder.Configuration["GitHub:ClientSecret"];
+
 // DbContext
 builder.Services.AddDbContext<BeavaskDbContext>(options =>
     options.UseNpgsql(conn));

@@ -5,5 +5,6 @@ public interface ICurrentUserService
     string? Email { get; }
     string? FirstName { get; }
     string? LastName { get; }
+    string? UserName { get;}
 }
 

@@ -24,5 +24,12 @@ public class CurrentUserService : ICurrentUserService
 
     public string? LastName =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Surname);
+    
+    public string? UserName =>
+        _httpContextAccessor
+            .HttpContext?
+            .User?
+            .FindFirstValue("UserName");
+
 }
 

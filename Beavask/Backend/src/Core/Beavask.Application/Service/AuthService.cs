@@ -13,6 +13,7 @@ namespace Beavask.Application.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenGenerator _tokenGenerator;
 
+
         public AuthService(IUnitOfWork unitOfWork, ITokenGenerator tokenGenerator)
         {
             _unitOfWork = unitOfWork;
@@ -79,5 +80,84 @@ namespace Beavask.Application.Service
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(computedHash) == hash;
         }
+        public async Task<Response<string>> LoginWithGitHubAsync(GitHubLoginRequestDto dto, string clientId, string clientSecret)
+        {
+            try
+            {
+                var client = new HttpClient();
+
+                // 1. GitHub Access Token Al
+                var tokenRequest = new Dictionary<string, string>
+                {
+                    { "client_id", clientId },
+                    { "client_secret", clientSecret },
+                    { "code", dto.Code }
+                };
+
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token")
+                {
+                    Content = new FormUrlEncodedContent(tokenRequest)
+                };
+                request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await client.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                    return Response<string>.Fail("GitHub access token alınamadı.");
+
+                var content = await response.Content.ReadAsStringAsync();
+                var tokenJson = System.Text.Json.JsonDocument.Parse(content);
+                var accessToken = tokenJson.RootElement.GetProperty("access_token").GetString();
+
+                if (string.IsNullOrEmpty(accessToken))
+                    return Response<string>.Fail("Access token değeri boş.");
+
+                // 2. GitHub User Getir
+                var userRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
+                userRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+                userRequest.Headers.UserAgent.ParseAdd("BeavaskApp");
+
+                var userResponse = await client.SendAsync(userRequest);
+                if (!userResponse.IsSuccessStatusCode)
+                    return Response<string>.Fail("GitHub kullanıcısı alınamadı.");
+
+                var userJson = await userResponse.Content.ReadAsStringAsync();
+                var githubUser = System.Text.Json.JsonSerializer.Deserialize<GitHubUserDto>(userJson, new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (githubUser == null)
+                    return Response<string>.Fail("GitHub kullanıcı bilgisi çözümlenemedi.");
+
+                // 3. Kullanıcı DB'de var mı kontrol
+                var existingUser = await _unitOfWork.UserRepository
+                    .GetSingleByConditionAsync(u => u.UserName == githubUser.Login || u.Email == githubUser.Email);
+
+                if (existingUser == null)
+                {
+                    var user = new User
+                    {
+                        UserName = githubUser.Login,
+                        Email = githubUser.Email ?? $"{githubUser.Login}@github.local",
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true,
+                        PasswordHash = "github",
+                        PasswordSalt = "github"
+                    };
+
+                    await _unitOfWork.UserRepository.AddAsync(user);
+                    await _unitOfWork.SaveChangesAsync();
+                    existingUser = user;
+                }
+
+                var jwt = _tokenGenerator.GenerateToken(existingUser);
+                return Response<string>.Success(jwt);
+            }
+            catch (Exception ex)
+            {
+                return Response<string>.Fail($"Hata: {ex.Message}");
+            }
+        }
+
     }
 }

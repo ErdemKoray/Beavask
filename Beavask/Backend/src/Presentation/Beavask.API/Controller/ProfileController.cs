@@ -22,7 +22,8 @@ namespace Beavask.API.Controllers
                 _currentUser.UserId,
                 _currentUser.Email,
                 _currentUser.FirstName,
-                _currentUser.LastName
+                _currentUser.LastName,
+                _currentUser.UserName
             });
         }
     }
