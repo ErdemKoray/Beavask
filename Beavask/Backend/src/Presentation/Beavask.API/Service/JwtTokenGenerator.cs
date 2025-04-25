@@ -22,7 +22,7 @@ namespace Beavask.API.Service
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim("UserName", user.UserName)
+                new Claim("UserName", user.UserName ?? "default_username")
             };
 
             var token = new JwtSecurityToken(
