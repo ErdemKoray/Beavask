@@ -14,6 +14,7 @@ export const routes: Routes = [
                 path: 'userprofile',
                 loadComponent:()=>import('./Pages/userprofile/userprofile.component').then(m=>m.UserprofileComponent)
             },
+            
              {
                 path: 'teams/:id',
                 loadComponent: () => import('./Pages/teamprofile/teamprofile.component').then(m => m.TeamprofileComponent)

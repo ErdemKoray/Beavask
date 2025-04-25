@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
+import { TeamService } from '../../common/services/team/team.service';
+import { Team } from '../../common/model/team.model';
 
 @Component({
   selector: 'app-teamprofile',
@@ -12,16 +14,38 @@ import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
   styleUrl: './teamprofile.component.css'
 })
 export class TeamprofileComponent implements OnInit {
-  constructor(private router: Router,private route: ActivatedRoute, private http: HttpClient,) {}
+  constructor(private router: Router,private route: ActivatedRoute, private http: HttpClient,private teamService:TeamService) {}
+  teamId: number = 0; 
+  team: Team | null = null;
+  isLoading: boolean = true;
+  errorMessage: string | null = null;
+  headerImagePath= 'https://placehold.co/1200x300?text=Frontend+Team'
   ngOnInit(): void {
-    console.log("Team profile component loaded");
+    
+    this.route.params.subscribe(params => {
+      this.teamId = +params['id']; // 'id' parametresi
+
+      // API'den veriyi al
+      this.getTeamDetail();
+    });
   }
   
-  teamData: any = {
-    name: 'Frontend Takımı',
-    description: 'Kullanıcı arayüzü tasarımı ve Angular uygulamaları geliştirir.',
-    headerImagePath: 'https://placehold.co/1200x300?text=Frontend+Team'
-  };
+  getTeamDetail(): void {
+    this.teamService.getById(this.teamId).subscribe({
+      next: (response) => {
+        this.team = response.data;  // Başarılı veri geldiğinde
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = 'Team not found! Redirecting to the home page...';
+    
+        setTimeout(() => {
+          this.router.navigate(['/']); 
+        }, 2000); 
+      }
+    });
+  }
 
   members = [
     {

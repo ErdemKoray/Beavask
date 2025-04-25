@@ -1,4 +1,159 @@
-/* You can add global styles to this file, and also import other style files */
+
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0;}
+
+
+.dark-theme {
+ 
+        --body-white-color: #09122c;
+        --main-white-color: #121c3b;
+        --main-light-white-color: #1c2a4d;
+        --main-blue-white-color: #872341;
+      
+        --main-xsdark-white-color: #872341;
+        --main-sdark-white-color: #a72d47;
+        --main-ldark-white-color: #be3144;
+        --main-dark-white-color: #e17564;
+      
+        --card-white-color: #1e2a4d;
+        --card-ssblue-white-color: #1c829b;
+        --card-lblue-white-color: #1c2a4d;
+        --card-sblue-white-color: #202d53;
+        --card-blue-white-color: #2d374d;
+        --card-dark-white-color: #0e162b;
+        --card-swhite-color: #1b233c;
+      
+        --dropdownh-d-white-color: #182038;
+        --dropdown-white-color: #1b233c;
+      
+        --border-sdark-white-color: #3a4a64;
+        --border-fdark-white-color: #2d374d;
+        --border-blue-white-color: #d6b9bd;
+        --border-dark-white-color: #872341;
+        --border-yellow-white-color: #f1c27d;
+        --border-fyellow-white-color: #d9a066;
+      
+        --text-lwhite-white-color: #e5e5e5;
+        --text-white-white-color: #dddddd;
+        --text-bwhite-white-color: #cccccc;
+        --text-sdark-white-color: #999999;
+        --text-dark-white-color: #f1f1f1;
+        --text-yellow-white-color: #f1c27d;
+        --text-dyellow-white-color: #e0b66d;
+        --text-softyellow-white-color: #e0b66d;
+      
+        --button-lwhite-white-color: #2e3a53;
+        --button-ldark-white-color: #872341;
+        --button-dark-white-color: #be3144;
+        --button-white-white-color: #f1f1f1;
+        --buttonh-dark-white-color: #631828;
+        --buttonh-white-white-color: #eeeeee;
+        --button-yellow-white-color: #f1c27d;
+        --buttonh-yellow-white-color: #ddb676;
+        --button-blue-white-color: #be3144;
+      
+        --shadow-dark-white-color: rgba(0, 0, 0, 0.5);
+        --shadow-yellow-white-color: rgba(241, 194, 125, 0.3);
+        --shadow-03dark-white-color: rgba(0, 0, 0, 0.3);
+        --shadow-03yellow-white-color: rgba(241, 194, 125, 0.3);
+        --shadow-01dark-white-color: rgba(0, 0, 0, 0.2);
+        --shadow-01yellow-white-color: rgba(241, 194, 125, 0.2);
+        --shadow-blue-white-color: rgba(190, 49, 68, 0.3);
+        --shadow-03blue-white-color: rgba(190, 49, 68, 0.3);
+        --shadow-01blue-white-color: rgba(190, 49, 68, 0.2);
+      
+        --modal-dark-white-color: rgba(9, 18, 44, 0.75);
+      
+        --input-yellow-white-color: #2c2230;
+      
+        --status-color-green: #1DCD9F;
+        --status-color-gray: #777777;
+        --status-color-yellow: #FFD63A;
+        --status-color-red: #FF6363;
+        --status-color-blue: #3D90D7;
+        --status-color-purple: #b778db;
+        --status-color-sgreen: #3d6d65;
+        --status-color-syellow: #8d7b4f;
+        --status-color-sred: #b64d4d;
+        --status-color-sblue: #556069;
+        --status-color-spurple: #575568;
+      
+      
+  }
+
+  :root{
+    --body-white-color:#f0f5f5;
+    --main-white-color:#ffffff;
+    --main-light-white-color:#ecece2;
+    --main-blue-white-color:#8ac4ce;
+    
+    --main-xsdark-white-color:#b6cdd1;
+    --main-sdark-white-color:#96b3b8;
+    --main-ldark-white-color:#618085;
+    --main-dark-white-color:#39484b;
+  
+    --card-white-color:#ffffff;
+    --card-lblue-white-color:#dce6e7;
+    --card-sblue-white-color:#eff6f8;
+    --card-blue-white-color:#8ac4ce;
+    --card-dark-white-color:#39484b;
+    --card-swhite-color:#ffffff;
+    
+    --dropdownh-d-white-color:#e7f1f3;
+    --dropdown-white-color:#ffffff;
+    
+    
+    --border-sdark-white-color:#c6d0d1;
+    --border-fdark-white-color:#39484b;
+    --border-blue-white-color:#64b5c4;
+    --border-dark-white-color:#618085;
+    --border-sdark-white-color:#a1b6b9;
+    --border-yellow-white-color:#B2B377;
+    --border-fyellow-white-color:#848554;
+  
+    --text-lwhite-white-color:#eaf1f3;
+    --text-white-white-color:#d8e2e4;
+    --text-bwhite-white-color:#829497;
+    --text-sdark-white-color:#c6d0d1;
+    --text-dark-white-color:#39484b;
+    --text-yellow-white-color:#eff0df;
+    --text-dyellow-white-color:#8b8d69;
+    --text-softyellow-white-color:#B2B377;
+  
+    --button-lwhite-white-color:#eceeee;
+    --button-ldark-white-color:#d4e3e6;
+    --button-dark-white-color:#39484b;
+    --button-white-white-color:#eaf1f3;
+    --buttonh-dark-white-color:#39484b;
+    --buttonh-white-white-color:#E5E1DA;
+    --button-yellow-white-color:#B2B377;
+    --buttonh-yellow-white-color:#B2B377;
+    --button-blue-white-color:#8ac4ce;
+  
+    --shadow-dark-white-color:#484f52;
+    --shadow-yellow-white-color:#B2B377;
+    --shadow-03dark-white-color:#39484b3d;
+    --shadow-03yellow-white-color:#b2b3773d;
+    --shadow-01dark-white-color:#39484b1c;
+    --shadow-01yellow-white-color:#b2b3771c;
+    --shadow-blue-white-color:#4d98a5;
+    --shadow-03blue-white-color:#4d98543d;
+    --shadow-01blue-white-color:#4d98541c;
+  
+    --modal-dark-white-color:rgba(57, 72, 75,0.5);
+  
+    --input-yellow-white-color:#f0f0d8;
+    
+    --status-color-green:#1DCD9F;
+    --status-color-gray:#777777;
+    --status-color-yellow:#FFD63A;
+    --status-color-red:#FF6363;
+    --status-color-blue:#3D90D7;
+    --status-color-purple:#7C73C0;
+    --status-color-sgreen:#5c8177;
+    --status-color-syellow:#77715b;
+    --status-color-sred:#6d5353;
+    --status-color-sblue:#556069;
+    --status-color-spurple:#575568;
+  }

@@ -3,7 +3,8 @@
 
     <div class="bv-login-container">
         <div class="bv-logo" (click)="gotohome()">
-            <img src="iconbeavask.png" alt="Logo">
+          <img *ngIf="!darkMode" src="iconbeavask.png" alt="Logo">
+          <img *ngIf="darkMode" src="Beavaskpink.png" alt="Logo">
         </div>
       <div class="bv-form-container">
           <form>

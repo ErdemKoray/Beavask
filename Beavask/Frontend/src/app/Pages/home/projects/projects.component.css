@@ -1,15 +1,18 @@
 .bv-mp-container {
-    width: 100vw;
-    height: 100vh;
+ 
+    height: 85vh;
     display: flex;
     justify-content: center;
   }
   
   .bv-mp-body {
+    margin-top: 5vh;
     width: 100%;
     max-width: 1200px;
     padding: 40px 20px;
-    background-color: #f8f8f5;
+    background-color: var(--main-white-color);
+    box-shadow:0px 0px 5px var(--border-sdark-white-color);
+
   }
   
   .bv-mp-header {
@@ -22,7 +25,7 @@
   .bv-mp-h-title {
     font-size: 32px;
     font-weight: bold;
-    color: #494945;
+    color: var(--text-dark-white-color);
   }
   
   .bv-mp-h-a-filter {
@@ -33,15 +36,15 @@
   .bv-mp-h-a-input {
     height: 40px;
     padding: 0 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-sdark-white-color);
     border-radius: 4px 0 0 4px;
     outline: none;
-    background: white;
+    background: var(--main-white-color);
   }
   
   .bv-mp-h-a-button {
-    background-color: #494945;
-    color: white;
+    background-color: var(--button-dark-white-color);
+    color: var(--main-white-color);
     border: none;
     border-radius: 0 4px 4px 0;
     width: 40px;
@@ -49,7 +52,7 @@
     transition: background 0.2s;
   }
   .bv-mp-h-a-button:hover {
-    background-color: #343432;
+    background-color: var(--button-blue-white-color);
   }
   
   /* Section */
@@ -57,61 +60,123 @@
     margin-top: 30px;
   }
   
-  .bv-mp-section-title {
-    font-size: 18px;
-    color: #5b5b5b;
-    margin-bottom: 12px;
-    border-bottom: 1px solid #d3d3cd;
-    padding-bottom: 4px;
-  }
-  
-  /* Grid */
   .bv-mp-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Card */
-  .bv-project-card {
-    background-color: white;
-    border: 1px solid #e1e1dd;
+    overflow-x: auto;
+    background-color: var(--main-white-color);
     border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    
+  }
+  .bv-mp-grid::-webkit-scrollbar {
+    width: 28px;
+    height: 9px;
+    background-color: var(--border-sdark-white-color);
+  }
+
+  .bv-mp-grid::-webkit-scrollbar-thumb {
+    background-color: var(--text-dark-white-color);
+    border-radius: 8px;
+    width: 4px;
+  }
+  .bv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+
+    color: var(--text-dark-white-color);
+  }
+  
+  .bv-table th,
+  .bv-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-sdark-white-color);
+    white-space: nowrap;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .bv-table th:hover{
+    box-shadow:inset  0 2px 8px var(--shadow-01dark-white-color);
+    
+
+  }
+  .bv-table-header{
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    gap: 10px;
+  }
+  .bv-table-header svg{
+    fill: var(--text-dark-white-color);
+  }
+  .bv-table thead {
+    background-color: var(--card-swhite-color);
   }
   
-  .bv-project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  }
-  
-  .bv-project-card-header {
+  .bv-user {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
   }
   
-  .bv-project-title {
+  .bv-user img,
+  .bv-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .bv-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
     font-weight: 600;
-    color: #333;
-  }
-  
-  .bv-project-tag {
+    color: var(--main-white-color);
     font-size: 12px;
-    background: #deded7;
-    padding: 2px 8px;
-    border-radius: 4px;
-    color: #494945;
+    text-transform: capitalize;
+    display: inline-block;
   }
   
-  .bv-project-meta {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #6e6e6e;
-    display: flex;
-    justify-content: space-between;
+  .bv-high {
+    background-color: var(--status-color-red);
   }
   
+  .bv-medium {
+    background-color: var(--status-color-purple);
+  }
+  
+  .bv-low {
+    background-color: var(--status-color-blue);
+  }
+  
+  .bv-status {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .bv-status-open {
+    background-color: var(--status-color-green);
+  }
+  
+  .bv-status-closed {
+    background-color: var(--status-color-red);
+  }
+  .bv-status-pending{
+    background-color: var(--status-color-gray);
+  }
+  .bv-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--main-ldark-white-color);
+  }
+  .bv-project-item{
+    transition: all 0.2s ease-in-out;
+  }
+  .bv-project-item:hover{
+    background-color:  var(--card-lblue-white-color);
+  }

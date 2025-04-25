@@ -4,10 +4,13 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f8f8f5;
-  color: #494945;
+  background-color: var(--main-white-color);
+  color: var(--text-dark-white-color);
   max-width: 1200px; 
   margin: 0 auto; 
+  margin-top: 5vh;
+  box-shadow:0px 0px 5px var(--border-sdark-white-color);
+
 }
 
 .bv-team-header {
@@ -15,7 +18,7 @@
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background-color: #e3e3e3;
+  background-color: var(--main-lwhite-white-color);
 }
 
 .bv-team-banner {
@@ -30,7 +33,7 @@
   top: 50%;
   left: 40px;
   transform: translateY(-50%);
-  color: #ffffff;
+  color: var(--main-white-color);
 }
 
 .bv-team-info h2 {
@@ -51,18 +54,21 @@
 .bv-team-left {
   width: 30%;
   padding: 20px;
-  border-right: 1px solid #c4c4c1;
-  background-color: #f3f3f0;
+  border-right: 1px solid var(--card-lblue-white-color);
+  background-color: var(--card-sblue-white-color);
   overflow-y: auto;
 }
-
+.bv-team-left h3{
+  font-weight: 500;
+  color: var(--text-dark-white-color);
+}
 .bv-team-member {
   cursor: pointer;
   display: flex;
   align-items: center;
   margin-bottom: 16px;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: var(--card-white-color);
   border-radius: 6px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
@@ -93,20 +99,21 @@
 
 .bv-member-role {
   font-size: 13px;
-  color: #757571;
+  color: var(--text-bwhite-white-color);
+  font-weight: 500;
 }
 
 .bv-member-status {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .bv-member-status.active {
-  color: #38a169;
+  color: var(--status-color-green);
 }
 
 .bv-member-status.inactive {
-  color: #c53030;
+  color: var(--status-color-red);
 }
 
 .bv-team-right {
@@ -121,10 +128,10 @@
 
 .bv-task-card,
 .bv-activity-log {
-  background-color: #ffffff;
+  background-color: var(--card-lblue-white-color);
   margin-bottom: 12px;
   padding: 12px 16px;
-  border-left: 4px solid #494945;
+  border-left: 4px solid var(--border-dark-white-color);
   border-radius: 4px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
 }
@@ -140,7 +147,7 @@
 .bv-activity-desc,
 .bv-activity-time {
   font-size: 14px;
-  color: #595954;
+  color: var(--text-dark-white-color);
 }
 
 .bv-activity-user {
@@ -149,5 +156,5 @@
 
 .bv-activity-time {
   font-size: 12px;
-  color: #a1a1a1;
+  color: var(--text-bwhite-white-color);
 }

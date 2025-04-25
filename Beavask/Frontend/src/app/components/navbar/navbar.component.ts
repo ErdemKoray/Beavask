@@ -1,19 +1,30 @@
 import { Component, ElementRef, Renderer2, ViewChild, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TeamService } from '../../common/services/team/team.service';
+import { Team } from '../../common/model/team.model';
+import { ThemeService } from '../../common/services/theme/theme.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent   {
-  
+export class NavbarComponent implements OnInit {
+
+
+  ngOnInit() {
+    this.getTeams(); 
+
+    localStorage.getItem(this.themeKey)=== 'dark' ? this.darkMode = true : this.darkMode = false;
+  }
     constructor(
       private router: Router,
-      private fb:FormBuilder
+      private fb:FormBuilder,
+      private teamService: TeamService,
+      private themeService: ThemeService,
     ) {
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
@@ -32,11 +43,17 @@ export class NavbarComponent   {
     { name: 'Project 2', icon: 'fa fa-folder' },
     { name: 'Project 3', icon: 'fa fa-folder' }
   ];
-  teams= [
-    {id:1, name: 'Frontend' },
-    {id:2, name: 'Backend' },
-    {id:3, name: 'Design' }
-  ];
+
+  darkMode = false;
+  teams: Team[] = []; 
+  private themeKey = 'theme';
+
+
+  toggleTheme(){
+    this.themeService.toggleTheme();
+    this.darkMode = !this.darkMode;
+  }
+
 
 form = new FormGroup({
   projectName: new FormControl('', Validators.required),
@@ -61,7 +78,7 @@ form = new FormGroup({
   isCreateProjectOpen = false;
   isTeamDropdownOpen = false;
   isTaskDropdownOpen = false;
-
+  isProfileDropdownOpen= false;
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscape(event: KeyboardEvent) {
@@ -116,6 +133,12 @@ form = new FormGroup({
       !target.closest('[data-dropdown="taskdropdown"]')
     ) {
       this.isTaskDropdownOpen = false;
+    } if (
+      this.isProfileDropdownOpen &&
+      !target.closest('.bv-cp-dropdown-content') &&
+      !target.closest('[data-dropdown="profiledropdown"]')
+    ) {
+      this.isProfileDropdownOpen = false;
     }
   }
   
@@ -128,9 +151,10 @@ form = new FormGroup({
     this.isCreateProjectOpen = false;
     this.isTeamDropdownOpen= false;
     this.isTaskDropdownOpen = false;
+    this.isProfileDropdownOpen = false;
   }
 
-  toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown') {
+  toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown' | 'profile') {
     if (type === 'project') {
       this.isProjectDropdownOpen = !this.isProjectDropdownOpen;
     } else if (type === 'dropdown') {
@@ -143,7 +167,9 @@ form = new FormGroup({
     }
     else if (type === 'taskdropdown') {
         this.isTaskDropdownOpen = !this.isTaskDropdownOpen;
-    }
+    }  else if (type === 'profile') {
+      this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
+  }
   }
 
   gotomytask() {  }
@@ -151,7 +177,9 @@ form = new FormGroup({
   toggleCreateProject() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;
   }
-
+  gotomyactivities() {
+    this.router.navigate(['/myactivities']);
+  }
  
   choiseoption(option: any) {
     const optionsElement = document.querySelector('#options');
@@ -173,8 +201,8 @@ form = new FormGroup({
     this.router.navigate(['/projects']);
   }
 
-  gototeam() {  
-    this.router.navigate(['/teams/1']);
+  gototeam(id: number) {
+    this.router.navigate(['/teams', id]);  
   }
 
   
@@ -185,5 +213,18 @@ form = new FormGroup({
       this.form.reset();
       this.toggleCreateProject();
     }
+  }
+
+
+
+  getTeams() {
+    this.teamService.getAll().subscribe(response => {
+      if (response?.data) {
+        this.teams = response.data.slice(0,3).map((team: any) => ({
+          id: team.id,
+          name: team.title 
+        }));
+      }
+    });
   }
 }

@@ -6,7 +6,8 @@
       <a routerLink="/" class="back-link">Ana Sayfaya Dön</a>
     </div>
     <div class="error-image">
-      <img src="iconbeavask.png" alt="404" />
+      <img *ngIf="!darkMode" src="iconbeavask.png" alt="404" />
+      <img *ngIf="darkMode" src="Beavaskpink.png" alt="404" />
     </div>
   </div>
   

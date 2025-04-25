@@ -2,34 +2,35 @@
 
    
     <div class="bv-summary-top-cards">
-      <div class="bv-summary-card">
+      <div class="bv-summary-card bv-summary-box">
         <h3>0</h3>
         <p>Completed</p>
         <span>in the last 7 days</span>
       </div>
-      <div class="bv-summary-card">
+      <div class="bv-summary-card bv-summary-box">
         <h3>0</h3>
         <p>Updated</p>
         <span>in the last 7 days</span>
       </div>
-      <div class="bv-summary-card">
+      <div class="bv-summary-card bv-summary-box">
         <h3>0</h3>
         <p>Created</p>
         <span>in the last 7 days</span>
       </div>
-      <div class="bv-summary-card">
+      <div class="bv-summary-card bv-summary-box">
         <h3>0</h3>
         <p>Due Soon</p>
         <span>in the next 7 days</span>
       </div>
     </div>
   
-    <div class="bv-summary-grid">
-  
+    <div class="bv-summary-grid" style="padding-bottom: 20px;">
+      
+      
       <div class="bv-summary-box bv-summary-status">
         <h4>Status Overview</h4>
         <div class="bv-summary-status-chart">
-          <canvas id="statusChart"></canvas>
+          <canvas id="statusChart" width="10" height="10"></canvas>
           <ul class="bv-summary-legend">
             <li><span class="bv-status-dot todo"></span>To Do: 3</li>
             <li><span class="bv-status-dot inprogress"></span>In Progress: 0</li>
@@ -37,6 +38,7 @@
           </ul>
         </div>
       </div>
+      
   
       
       <div class="bv-summary-box bv-summary-activity">
@@ -48,10 +50,7 @@
       </div>
   
      
-      <div class="bv-summary-box bv-summary-workload">
-        <h4>Team Workload</h4>
-        <canvas id="priorityChart"></canvas>
-      </div>
+      
   
    
       <div class="bv-summary-box bv-summary-types">
@@ -65,6 +64,13 @@
         </div>
       </div>
   
+      <div class="bv-summary-box bv-summary-workload">
+        <h4>Team Workload</h4>
+        <div class="bv-chart-cubuk">
+
+          <canvas id="priorityChart"></canvas>
+        </div>
+      </div>
     </div>
   
   </div>

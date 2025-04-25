@@ -4,7 +4,7 @@
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background-color: #fafafa; /* Açık gri arka plan */
+    background-color: var(--body-white-color); /* Açık gri arka plan */
     padding: 20px;
     text-align: center;
   }
@@ -16,12 +16,12 @@
   .error-content h1 {
     font-size: 100px;
     font-weight: bold;
-    color: #2c3e50; /* Koyu gri başlık */
+    color: var(--text-dark-white-color); /* Koyu gri başlık */
   }
   
   .error-message {
     font-size: 24px;
-    color: #e74c3c; /* Kırmızı başlık */
+    color: var(--status-color-red); /* Kırmızı başlık */
     margin-top: 10px;
   }
   

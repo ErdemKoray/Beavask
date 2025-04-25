@@ -1,155 +1,174 @@
 /* Sayfa genel container */
 .bv-summary-container {
-    padding: 20px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    height: 100%;
-    background-color: var(--body-white-color);
-  }
-  
-  /* Üst istatistik kutuları */
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  height: 100%;
+  background-color: var(--body-white-color);
+}
+
+/* Üst istatistik kutuları */
+.bv-summary-top-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bv-summary-card {
+  flex: 1 1 200px;
+  background-color: var(--card-white-color);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 0 var(--shadow-dark-white-color);
+  text-align: center;
+  color: var(--text-dark-white-color);
+  max-height: 120px;
+}
+
+.bv-summary-card h3 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 500;
+  color: var(--main-color-dark);
+}
+
+.bv-summary-card p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.bv-summary-card span {
+  font-size: 12px;
+  color: var(--text-bwhite-white-color);
+}
+
+
+.bv-summary-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows:1fr 1fr  ;
+  gap: 20px;
+  max-height: 80vh;
+}
+
+
+.bv-summary-box {
+  background-color: var(--main-white-color);
+  border-radius: 8px;
+  padding: 20px;
+  height: auto;
+  min-height: 200px;
+  box-shadow: 0 1px 6px var(--shadow-dark-white-color);
+}
+
+.bv-summary-box:nth-child(1) :nth-child(3) {
+ grid-column: 2/5;
+}
+.bv-summary-box:nth-child(2) :nth-child(4) {
+  grid-column: 2/5;
+ }
+.bv-summary-box h4 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: var(--text-dark-white-color);
+}
+
+
+.bv-summary-status-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 65%;
+}
+.bv-chart-cubuk{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 80%;
+}
+.bv-summary-legend {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.bv-summary-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: var(--text-dark-white-color);
+}
+
+.bv-status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.bv-status-dot.todo {
+  background-color: var(--status-color-green);
+}
+
+.bv-status-dot.inprogress {
+  background-color: var(--status-color-red);
+}
+
+.bv-status-dot.done {
+  background-color: var(--status-color-yellow);
+}
+
+/* No activity mesajı */
+.bv-no-activity {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-dark-white-color);
+}
+
+.bv-activity-helper {
+  font-size: 13px;
+  color: var(--text-bwhite-white-color);
+}
+
+/* Görev türleri */
+.bv-summary-type-row {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--text-dark-white-color);
+}
+
+.bv-summary-type-bar {
+  flex: 1;
+  height: 8px;
+  background-color: var(--card-white-color);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bv-summary-type-bar .fill {
+  height: 100%;
+  background-color: var(--status-color-purple);
+  transition: width 0.3s ease-in-out;
+}
+
+/* Responsive düzeltmeler */
+@media (max-width: 768px) {
   .bv-summary-top-cards {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  
-  .bv-summary-card {
-    flex: 1 1 200px;
-    background-color: var(--card-white-color);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 0 var(--shadow-dark-white-color);
-    text-align: center;
-    color: var(--text-dark-white-color);
-  }
-  
-  .bv-summary-card h3 {
-    font-size: 28px;
-    margin: 0;
-    font-weight: 500;
-    color: var(--main-color-dark);
-  }
-  
-  .bv-summary-card p {
-    margin: 5px 0;
-    font-weight: bold;
-  }
-  
-  .bv-summary-card span {
-    font-size: 12px;
-    color: var(--text-bwhite-white-color);
-  }
-  
-  /* Alt 2x2 grid */
-  .bv-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Her kutu (box) */
-  .bv-summary-box {
-    background-color: var(--main-white-color);
-    border-radius: 8px;
-    padding: 20px;
-    height: 100%;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-  }
-  
-  .bv-summary-box h4 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
-  
-  /* Status chart ve legend */
-  .bv-summary-status-chart {
-    display: flex;
     flex-direction: column;
-    align-items: center;
   }
-  
-  .bv-summary-legend {
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-    width: 100%;
+
+  .bv-summary-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .bv-summary-legend li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .bv-status-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  
-  .bv-status-dot.todo {
-    background-color: var(--status-color-green);
-  }
-  
-  .bv-status-dot.inprogress {
-    background-color: var(--status-color-red);
-  }
-  
-  .bv-status-dot.done {
-    background-color: var(--status-color-yellow);
-  }
-  
-  /* No activity mesajı */
-  .bv-no-activity {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-dark-white-color);
-  }
-  
-  .bv-activity-helper {
-    font-size: 13px;
-    color: var(--text-bwhite-white-color);
-  }
-  
-  /* Görev türleri */
-  .bv-summary-type-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  
-  .bv-summary-type-bar {
-    flex: 1;
-    height: 8px;
-    background-color: #ccc;
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .bv-summary-type-bar .fill {
-    height: 100%;
-    background-color: var(--status-color-purple);
-    transition: width 0.3s ease-in-out;
-  }
-  
-  /* Responsive düzeltmeler */
-  @media (max-width: 768px) {
-    .bv-summary-top-cards {
-      flex-direction: column;
-    }
-  
-    .bv-summary-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}

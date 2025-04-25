@@ -16,15 +16,9 @@ export interface Task {
   startDate?: Date;
   dueDate?: Date;
   completedDate?: Date;
-  isActive: boolean;
   priority: TaskPriority;
   status: TaskStatus;
   projectId: number;
-  project: Project;
   assignedUserId?: number;
   assignedUser?: User;
-  timeTrackings: TimeTracking[];
-  dependencies: Dependency[];
-  comments: Comment[];
-  files: File[];
 }

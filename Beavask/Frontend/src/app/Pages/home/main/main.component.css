@@ -9,7 +9,7 @@
   gap: 32px;
   max-width: 1200px; 
   margin: 0 auto; 
-  margin-top: 30px;
+  margin-top: 5vh;
   height: 100vh;
   box-shadow:0px 0px 5px var(--border-sdark-white-color);
 }
@@ -136,7 +136,7 @@
 .bv-activity-item:nth-child(odd){
   background-color: var(--card-lblue-white-color);
 
-  box-shadow: 0 0 6px var(--shadow-01blue-white-color);
+
   transition: all 0.2s ease-in-out;
 }
 
@@ -184,4 +184,58 @@
   margin-top: 4px;
   font-weight: bolder;
   font-size: 12px;
+}
+
+
+.bv-pagination {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin-top: 20px; 
+  gap: 5px; 
+  flex-wrap: wrap; 
+}
+
+.bv-pagination-btn,
+.bv-pagination-page {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.bv-pagination-btn:hover,
+.bv-pagination-page:hover:not([disabled]) {
+  background-color: var(--button-blue-white-color);
+  border-color: var(--border-blue-white-color);
+  color: var(--text-dark-white-color);
+}
+
+.bv-pagination-btn:disabled,
+.bv-pagination-page:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bv-pagination-page.active {
+  background-color: var(--button-dark-white-color); 
+  color: var(--button-white-white-color);
+  border-color: var(--border-dark-white-color);
+  font-weight: bold;
+}
+
+.bv-pagination-info {
+    margin-left: 15px; 
+    font-size: 0.9em;
+    color: var(--text-fdark-white-color);
+}
+
+.bv-no-results {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-bwhite-white-color);
+    font-style: italic;
 }
