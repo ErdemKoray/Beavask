@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../common/services/auth/auth.service';
 import { auth } from '../../../common/model/auth.model';
@@ -13,12 +13,16 @@ import { ToastComponent } from '../../../components/toast/toast.component';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   project: auth | null = null;
   IsLoading : boolean = false;
-
+  darkMode = false;
   constructor(private router:Router,private authservice:AuthService,private toast:ToastService) {}
 
+
+  ngOnInit(): void {
+    localStorage.getItem('theme')=== 'dark' ? this.darkMode = true : this.darkMode = false;
+  }
   gotohome(){
     this.router.navigate(['/']);
   }
@@ -32,15 +36,6 @@ export class LoginComponent {
   }
 
   getbyId(){
-    this.authservice.getById(2).subscribe({
-      next: (data) => {this.project = data
-      this.IsLoading= true
-      this.toast.show( {title:'başarı', message: 'An error occurred while fetching the data.'})
-    },
-      error: (err) => {this.toast.show(  {title:'Error', message: 'An error occurred while fetching the data.'});
-      this.IsLoading = false;}
-    });
-
-    console.log(this.project);
+   
   }
 }

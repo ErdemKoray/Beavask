@@ -52,19 +52,19 @@
 .bv-submit{
     width: 180px;
     height: 50px;
-    background-color: #888883;
+    background-color: var(--button-dark-white-color);
     color: white;
     border-radius: 10px;
     transition: box-shadow 0.3s ease-in;
     border: none;
 }
 .bv-submit:hover{
-    box-shadow: #888883 0px 0px 5px 1px;
+    box-shadow:  var(--button-dark-white-color) 0px 0px 5px 1px;
 }
 
 .bv-login-logo{
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,13 +84,14 @@
    font-weight: bold;
     font-size: 20px;
     margin-bottom: 10px;
-    color:  #494945;
+    color:  var(--text-dark-white-color);
 
 
 }
 .bv-text-group input{
-    background-color: #bdbdb7;
+    background-color: var(--card-sblue-white-color);
     height: 48px;
+    border: 2px solid var(--border-sdark-white-color);
 }
 
 .bv-text-group label{
@@ -100,16 +101,16 @@
 
 .bv-text-group input::placeholder{
     
-    color: #fffffd;
+    color: var(--text-dark-white-color);
 }
 .bv-text-group input:focus-visible{
-    border: 2px solid #494945;
-    box-shadow:  #494945 0px 0px 5px 1px;
+    border: 2px solid var(--border-dark-white-color);
+    box-shadow:  var(--shadow-dark-white-color)  0px 0px 5px 1px;
 }
 .bv-logo img{
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 180px;
     margin-bottom: 20px;
 }
 
@@ -128,13 +129,13 @@
 }
 
 .bv-checkbox input:checked{
-    background-color: #494945;
-    box-shadow: #000000 0px 0px 5px 1px;
+    background-color: var(--card-dark-white-color);
+    box-shadow: var(--shadow-dark-white-color) 0px 0px 5px 1px;
     border: none;
 }
 
 .bv-checkbox label{
- color: #494945;
+ color: var(--text-dark-white-color);
  font-weight: bold;
 }
 
@@ -143,9 +144,10 @@
     justify-content: space-between;
     width: 100%;
     margin-top: 20px;
+
 }
 .bv-check2 div{
-    color:  #494945;
+    color:  var(--text-dark-white-color);
     font-weight: bold;
     cursor: pointer;
 }

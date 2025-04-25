@@ -2,7 +2,7 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: var(--main-white-color);
+    background-color: var(--body-white-color);
     border-right: 4px solid var(--border-sdark-white-color);
 }
 .bv-pn-container{
@@ -64,6 +64,10 @@
 
 .bv-pn-logo{
     margin-left: 8px;
+}
+
+.bv-pn-logo svg{
+    fill: var(--text-dark-white-color);
 }
 
 .active-link{

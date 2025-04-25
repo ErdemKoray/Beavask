@@ -1,5 +1,5 @@
 <div class="bv-home-container">
-  
+
   <div class="bv-home-section">
     <div class="bv-home-header">
       <span class="bv-home-title">Your work</span>
@@ -20,25 +20,122 @@
     </div>
   </div>
 
-
   <div class="bv-home-tabs">
-    <span class="bv-tab active">Worked on</span>
-    <span class="bv-tab">Viewed</span>
-    <span class="bv-tab">Assigned to me</span>
-    <span class="bv-tab">Starred</span>
+    <span class="bv-tab" [class.active]="activeTab === 'worked'" (click)="setTab('worked')">Worked on</span>
+    <span class="bv-tab" [class.active]="activeTab === 'viewed'" (click)="setTab('viewed')">Viewed</span>
+    <span class="bv-tab" [class.active]="activeTab === 'assigned'" (click)="setTab('assigned')">Assigned to me</span>
+    <span class="bv-tab" [class.active]="activeTab === 'starred'" (click)="setTab('starred')">Starred</span>
   </div>
 
   <div class="bv-home-activity">
-    <div class="bv-activity-item" *ngFor="let activity of activities">
-      <div class="bv-activity-icon"></div>
-      <div class="bv-activity-details">
-        <span class="bv-activity-title">{{ activity.title }}</span>
-        <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+
+    <div *ngIf="activeTab === 'worked'">
+      <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+        <div class="bv-activity-details">
+          <span class="bv-activity-title">{{ activity.title }}</span>
+          <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+        </div>
+        <div class="bv-activity-meta">
+          <span class="bv-activity-type">{{ activity.action }}</span>
+          <span class="bv-activity-user">{{ activity.userInitials }}</span>
+        </div>
       </div>
-      <div class="bv-activity-meta">
-        <span class="bv-activity-type">{{ activity.action }}</span>
-        <span class="bv-activity-user">{{ activity.userInitials }}</span>
+      <div class="bv-pagination" *ngIf="totalPages > 1">
+          <button class="bv-pagination-btn" (click)="prevPage()" [disabled]="!canGoPrev">Previous</button>
+          <ng-container *ngFor="let page of pageNumbers">
+              <button
+                class="bv-pagination-page"
+                [class.active]="page === currentPage[activeTab]"
+                (click)="goToPage(page)">
+                {{ page }}
+              </button>
+          </ng-container>
+          <button class="bv-pagination-btn" (click)="nextPage()" [disabled]="!canGoNext">Next</button>
+          <span class="bv-pagination-info">{{ currentItemsRange }}</span>
       </div>
+       <div *ngIf="totalItems === 0" class="bv-no-results">No activities found.</div>
     </div>
+
+    <div *ngIf="activeTab === 'viewed'">
+       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+         <div class="bv-activity-details">
+           <span class="bv-activity-title">{{ activity.title }}</span>
+           <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+         </div>
+         <div class="bv-activity-meta">
+           <span class="bv-activity-type">Viewed</span>
+           <span class="bv-activity-user">{{ activity.userInitials }}</span>
+         </div>
+       </div>
+        <div class="bv-pagination" *ngIf="totalPages > 1">
+           <button class="bv-pagination-btn" (click)="prevPage()" [disabled]="!canGoPrev">Previous</button>
+           <ng-container *ngFor="let page of pageNumbers">
+               <button
+                 class="bv-pagination-page"
+                 [class.active]="page === currentPage[activeTab]"
+                 (click)="goToPage(page)">
+                 {{ page }}
+               </button>
+           </ng-container>
+           <button class="bv-pagination-btn" (click)="nextPage()" [disabled]="!canGoNext">Next</button>
+           <span class="bv-pagination-info">{{ currentItemsRange }}</span>
+       </div>
+        <div *ngIf="totalItems === 0" class="bv-no-results">No activities found.</div>
+    </div>
+
+    <div *ngIf="activeTab === 'assigned'">
+       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+         <div class="bv-activity-details">
+           <span class="bv-activity-title">{{ activity.title }}</span>
+           <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+         </div>
+         <div class="bv-activity-meta">
+           <span class="bv-activity-type">Assigned</span>
+           <span class="bv-activity-user">{{ activity.userInitials }}</span>
+         </div>
+       </div>
+        <div class="bv-pagination" *ngIf="totalPages > 1">
+           <button class="bv-pagination-btn" (click)="prevPage()" [disabled]="!canGoPrev">Previous</button>
+           <ng-container *ngFor="let page of pageNumbers">
+               <button
+                 class="bv-pagination-page"
+                 [class.active]="page === currentPage[activeTab]"
+                 (click)="goToPage(page)">
+                 {{ page }}
+               </button>
+           </ng-container>
+           <button class="bv-pagination-btn" (click)="nextPage()" [disabled]="!canGoNext">Next</button>
+           <span class="bv-pagination-info">{{ currentItemsRange }}</span>
+       </div>
+       <div *ngIf="totalItems === 0" class="bv-no-results">No activities found.</div>
+    </div>
+
+    <div *ngIf="activeTab === 'starred'">
+       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+         <div class="bv-activity-details">
+           <span class="bv-activity-title">{{ activity.title }}</span>
+           <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
+         </div>
+         <div class="bv-activity-meta">
+           <span class="bv-activity-type">Starred</span>
+           <span class="bv-activity-user">{{ activity.userInitials }}</span>
+         </div>
+       </div>
+        <div class="bv-pagination" *ngIf="totalPages > 1">
+           <button class="bv-pagination-btn" (click)="prevPage()" [disabled]="!canGoPrev">Previous</button>
+           <ng-container *ngFor="let page of pageNumbers">
+               <button
+                 class="bv-pagination-page"
+                 [class.active]="page === currentPage[activeTab]"
+                 (click)="goToPage(page)">
+                 {{ page }}
+               </button>
+           </ng-container>
+           <button class="bv-pagination-btn" (click)="nextPage()" [disabled]="!canGoNext">Next</button>
+           <span class="bv-pagination-info">{{ currentItemsRange }}</span>
+       </div>
+       <div *ngIf="totalItems === 0" class="bv-no-results">No activities found.</div>
+    </div>
+
   </div>
 </div>
