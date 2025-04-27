@@ -34,6 +34,7 @@ namespace Beavask.Application.Service
                 {
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
+                    UserName = dto.Username,
                     Email = dto.Email,
                     PasswordHash = hash,
                     PasswordSalt = salt,
