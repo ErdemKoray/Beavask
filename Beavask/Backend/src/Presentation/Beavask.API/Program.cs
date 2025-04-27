@@ -38,7 +38,7 @@ builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+builder.Services.AddScoped<IRepoService, RepoService>();
 // AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
 
@@ -100,6 +100,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
