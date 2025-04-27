@@ -3,6 +3,7 @@ using System;
 using Beavask.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Beavask.Persistence.Migrations
 {
     [DbContext(typeof(BeavaskDbContext))]
-    partial class BeavaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427192213_AddRepoUrlToProject")]
+    partial class AddRepoUrlToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -500,7 +503,7 @@ namespace Beavask.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -514,9 +517,6 @@ namespace Beavask.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("OwnerId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("RepoUrl")
                         .IsRequired()
                         .HasColumnType("text");
@@ -527,8 +527,6 @@ namespace Beavask.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Projects");
                 });
@@ -981,15 +979,11 @@ namespace Beavask.Persistence.Migrations
                 {
                     b.HasOne("Beavask.Domain.Entities.Base.Customer", "Customer")
                         .WithMany("Projects")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Beavask.Domain.Entities.Base.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Beavask.Domain.Entities.Base.Task", b =>

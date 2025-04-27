@@ -4,6 +4,7 @@ using Beavask.Application.DTOs.Project;
 using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
+using Beavask.Application.DTOs.Repo;
 
 namespace Beavask.Application.Service;
 
@@ -11,6 +12,7 @@ public class ProjectService(IUnitOfWork unitOfWork, IMapper mapper) : IProjectSe
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentUserService? _currentUserService;
 
     public async Task<Response<ProjectDto>> GetByIdAsync(int id)
     {
@@ -99,5 +101,38 @@ public class ProjectService(IUnitOfWork unitOfWork, IMapper mapper) : IProjectSe
             return Response<bool>.Fail(ex.Message);
         }
     }
+    public async Task<Response<bool>> CreateProjectFromSingleGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo, int? userId)
+    {
+        if (repo == null)
+            return Response<bool>.Fail("Repo bilgisi boş.");
+
+        if (string.IsNullOrWhiteSpace(repo.Name))
+            return Response<bool>.Fail("Proje adı boş olamaz.");
+
+        if (string.IsNullOrWhiteSpace(repo.RepoUrl))
+            return Response<bool>.Fail("Repo URL boş olamaz.");
+
+        if (!repo.IsCompanyProject && userId == null)
+        {
+            return Response<bool>.Fail("Bireysel proje oluşturuluyor ancak kullanıcı ID bulunamadı.");
+        }
+
+        var project = new Project
+        {
+            Name = repo.Name,
+            Description = repo.Description ?? string.Empty,
+            RepoUrl = repo.RepoUrl,
+            CreatedAt = DateTime.UtcNow,
+            IsActive = true,
+            OwnerId = repo.IsCompanyProject ? null : userId,
+            CustomerId = null
+        };
+
+        await _unitOfWork.ProjectRepository.AddAsync(project);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Response<bool>.Success(true);
+    }
+
 }
 

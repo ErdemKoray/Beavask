@@ -1,4 +1,5 @@
 using Beavask.Application.DTOs.Project;
+using Beavask.Application.DTOs.Repo;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +7,10 @@ namespace Beavask.API.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProjectController(IProjectService projectService) : ControllerBase
+public class ProjectController(IProjectService projectService , ICurrentUserService currentUserService) : ControllerBase
 {
     private readonly IProjectService _projectService = projectService;
+    private readonly ICurrentUserService? _currentUserService = currentUserService;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
@@ -44,5 +46,20 @@ public class ProjectController(IProjectService projectService) : ControllerBase
         var result = await _projectService.DeleteAsync(id);
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
+    
+    [HttpPost("create-single-from-github")]
+    public async Task<IActionResult> CreateProjectFromSingleGitHubRepo([FromBody] CreateProjectFromGitHubRepoDto repo)
+    {
+        var userId = currentUserService.UserId;
+
+        var result = await _projectService.CreateProjectFromSingleGitHubRepoAsync(repo, userId);
+
+        if (result.IsSuccess)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+
+
 }
 
