@@ -22,7 +22,8 @@ namespace Beavask.API.Service
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim("UserName", user.UserName ?? "default_username")
+                new Claim("UserName", user.UserName ?? "default_username"),
+                new Claim("AvatarUrl", user.AvatarUrl ?? "default_avatar_url")
             };
 
             var token = new JwtSecurityToken(

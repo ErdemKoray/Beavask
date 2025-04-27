@@ -6,5 +6,6 @@ public interface ICurrentUserService
     string? FirstName { get; }
     string? LastName { get; }
     string? UserName { get;}
+    string? AvatarUrl { get; } 
 }
 

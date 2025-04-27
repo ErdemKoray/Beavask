@@ -36,7 +36,6 @@ public class AuthController(IAuthService authService , IConfiguration configurat
     {
         var clientId = configuration["GitHub:ClientId"];
         var clientSecret = configuration["GitHub:ClientSecret"];
-        Console.WriteLine($"clientId: {clientId}, secret: {clientSecret}");
 
         var result = await _authService.LoginWithGitHubAsync(dto, clientId!, clientSecret!);
         return result.IsSuccess ? Ok(result) : BadRequest(result);

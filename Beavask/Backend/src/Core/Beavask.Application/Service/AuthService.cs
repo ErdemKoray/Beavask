@@ -125,31 +125,40 @@ namespace Beavask.Application.Service
                 {
                     PropertyNameCaseInsensitive = true
                 });
-
+                Console.WriteLine($"Avatar URL: {githubUser.AvatarUrl}");
+                
                 if (githubUser == null)
                     return Response<string>.Fail("GitHub kullanıcı bilgisi çözümlenemedi.");
 
-                // 3. Kullanıcı DB'de var mı kontrol
+                // Avatar URL kontrolü ve loglama
+                var avatarUrl = githubUser.AvatarUrl ?? "https://default-avatar-url.com/default-avatar.png"; // Fallback URL
+                Console.WriteLine("Avatar URL: " + avatarUrl);  // Debug: Avatar URL'yi logla
+                
+                // 3. Kullanıcı DB'de var mı kontrol et
                 var existingUser = await _unitOfWork.UserRepository
                     .GetSingleByConditionAsync(u => u.UserName == githubUser.Login || u.Email == githubUser.Email);
 
                 if (existingUser == null)
                 {
+                    // Yeni kullanıcı oluştur
                     var user = new User
                     {
                         UserName = githubUser.Login,
-                        Email = githubUser.Email ?? $"{githubUser.Login}@github.local",
+                        Email = githubUser.Email ?? $"{githubUser.Login}@github.local", // Eğer e-posta boşsa fallback kullan
+                        AvatarUrl = avatarUrl,  // Avatar URL'sini kaydediyoruz
                         CreatedAt = DateTime.UtcNow,
                         IsActive = true,
-                        PasswordHash = "github",
-                        PasswordSalt = "github"
+                        PasswordHash = "github", // GitHub kullanıcı kaydı için geçici değer
+                        PasswordSalt = "github"  // GitHub kullanıcı kaydı için geçici değer
                     };
 
                     await _unitOfWork.UserRepository.AddAsync(user);
                     await _unitOfWork.SaveChangesAsync();
+
                     existingUser = user;
                 }
 
+                // JWT Token üret
                 var jwt = _tokenGenerator.GenerateToken(existingUser);
                 return Response<string>.Success(jwt);
             }

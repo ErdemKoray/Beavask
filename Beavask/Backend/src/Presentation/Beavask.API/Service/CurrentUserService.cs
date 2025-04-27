@@ -26,10 +26,10 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Surname);
     
     public string? UserName =>
-        _httpContextAccessor
-            .HttpContext?
-            .User?
-            .FindFirstValue("UserName");
+        _httpContextAccessor.HttpContext?.User?.FindFirstValue("UserName");
+    
+    public string? AvatarUrl => 
+        _httpContextAccessor.HttpContext?.User?.FindFirstValue("AvatarUrl");
 
 }
 

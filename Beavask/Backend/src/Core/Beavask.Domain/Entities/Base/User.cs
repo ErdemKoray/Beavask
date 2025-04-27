@@ -11,6 +11,7 @@ namespace Beavask.Domain.Entities.Base
         public string LastName { get; set; } = string.Empty;
 
         public string? UserName { get; set; }
+        public string? AvatarUrl { get; set; }
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string PasswordSalt { get; set; } = string.Empty;
