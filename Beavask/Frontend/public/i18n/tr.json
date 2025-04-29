@@ -1,0 +1,52 @@
+{
+  "navbar": {
+    "projects": "Projeler",
+    "team": "Takım",
+    "task": "Görev",
+    "myWork": "Çalışmalarım",
+    "profile": "Profilim",
+    "logout": "Çıkış Yap",
+    "creatProject": "Proje Oluştur",
+    "myActivities": "Aktivitelerim",
+    "myTasks": "Görevlerim",
+    "myProjects": "Projelerim",
+    "myTeams": "Takımlarım",
+    "myProfile": "Profilim",
+    "recentActivities": "Son Aktiviteler",
+    "recentTasks": "Son Görevler",
+    "recentProjects": "Son Projeler",
+    "recentTeams": "Son Takımlar",
+    "recentWork": "Son Çalışmalar"
+  },
+  "project": {
+    "createProject": "Proje Oluştur",
+    "projectName": "Proje Adı",
+    "projectKey": "Proje Kodu",
+    "projectDescription": "Proje Açıklaması",
+    "startDate": "Başlangıç Tarihi",
+    "endDate": "Bitiş Tarihi",
+    "projectLead": "Proje Lideri",
+    "projectType": "Proje Türü",
+    "priority": "Öncelik",
+    "status": "Durum",
+    "attachment": "Dosya Eki",
+    "projectNamePlaceholder": "Örn: Pazarlama Lansmanı",
+    "projectKeyPlaceholder": "Örn: MKT",
+    "projectDescriptionPlaceholder": "Proje hakkında yazın...",
+    "bugTracking": "Hata Takibi"
+  },
+  "priority": {
+    "low": "Düşük",
+    "medium": "Orta",
+    "high": "Yüksek"
+  },
+  "status": {
+    "draft": "Taslak",
+    "active": "Aktif",
+    "done": "Tamamlandı"
+  },
+  "button": {
+    "create": "Oluştur",
+    "cancel": "İptal"
+  }
+}

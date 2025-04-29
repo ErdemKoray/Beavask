@@ -100,6 +100,48 @@
             </tr>
           </tbody>
         </table>
+        
+        <table class="bv-table">
+          <thead>
+            <tr>
+              <th (click)="setSort('name')" [class.active-sort]="sortKey === 'name'">
+                <div class="bv-table-header">
+                  <div class="bv-th-title">Project Name</div>
+                  <div [innerHTML]="getSortIcon('name')"></div>
+                </div>
+              </th>
+        
+              <th (click)="setSort('description')" [class.active-sort]="sortKey === 'description'">
+                <div class="bv-table-header">
+                  <div class="bv-th-title">Description</div>
+                  <div [innerHTML]="getSortIcon('description')"></div>
+                </div>
+              </th>
+        
+              <th (click)="setSort('created_at')" [class.active-sort]="sortKey === 'created_at'">
+                <div class="bv-table-header">
+                  <div class="bv-th-title">Created Date</div>
+                  <div [innerHTML]="getSortIcon('created_at')"></div>
+                </div>
+              </th>
+        
+              <th>
+                <div class="bv-table-header">
+                  <div class="bv-th-title">Action</div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bv-project-item" *ngFor="let item of githubrepo | sort: sortKey: sortDirection">
+              <td>{{ item.name }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.created_at | date }}</td>
+              <td><button class="bv-action">...</button></td>
+            </tr>
+          </tbody>
+        </table>
+        
       </div>
     </div>
   </div>

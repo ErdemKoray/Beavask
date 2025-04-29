@@ -13,6 +13,8 @@
     background-color: var(--main-white-color);
     box-shadow:0px 0px 5px var(--border-sdark-white-color);
 
+    height: fit-content;
+
   }
   
   .bv-mp-header {
@@ -40,6 +42,7 @@
     border-radius: 4px 0 0 4px;
     outline: none;
     background: var(--main-white-color);
+    color: var(--text-dark-white-color);
   }
   
   .bv-mp-h-a-button {
@@ -58,12 +61,15 @@
   /* Section */
   .bv-mp-section {
     margin-top: 30px;
+
   }
   
   .bv-mp-grid {
     overflow-x: auto;
     background-color: var(--main-white-color);
     border-radius: 8px;
+    display: grid;
+    gap: 50px;
     
   }
   .bv-mp-grid::-webkit-scrollbar {

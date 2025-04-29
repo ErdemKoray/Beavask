@@ -1,8 +1,7 @@
 
 export interface auth {
-  id: number;
-  name: string;
-  description?: string;
-  startDate: Date;
-  endDate?: Date;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }

@@ -5,10 +5,14 @@ import { CommonModule } from '@angular/common';
 import { TeamService } from '../../common/services/team/team.service';
 import { Team } from '../../common/model/team.model';
 import { ThemeService } from '../../common/services/theme/theme.service';
+import { Profile } from '../../common/services/profile/profile.model';
+import { AuthprofileService } from '../../common/services/profile/authprofile.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LangService } from '../../common/services/lang/lang.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,RouterLink],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink,TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -17,15 +21,19 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.getTeams(); 
-
+    this.getUserInfo();
     localStorage.getItem(this.themeKey)=== 'dark' ? this.darkMode = true : this.darkMode = false;
+    
   }
     constructor(
       private router: Router,
       private fb:FormBuilder,
       private teamService: TeamService,
       private themeService: ThemeService,
+      private profileService: AuthprofileService,
+      private langService: LangService
     ) {
+      this.currentLang = this.langService.getCurrentLanguage();
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           this.closeAllDropdowns();
@@ -140,10 +148,45 @@ form = new FormGroup({
     ) {
       this.isProfileDropdownOpen = false;
     }
+    if (
+      this.dropdownOpen &&
+      !target.closest('.bv-cp-dropdown-content') &&
+      !target.closest('[data-dropdown="lang"]')
+    ) {
+      this.dropdownOpen = false;
+    }
   }
-  
-  
+  userInfo: Profile | null = null;
+  avatarUrl: string = '';
 
+
+  dropdownOpen = false;
+  currentLang: string;
+
+
+  togglelDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  changeLang(lang: string): void {
+    this.langService.setLanguage(lang);
+    this.currentLang = lang;
+    this.dropdownOpen = false; 
+  }
+  getUserInfo(){
+    this.profileService.whoami().subscribe((response: Profile) => {
+      if (response) {
+        this.userInfo = response;
+        if(response.avatarUrl=="default_avatar_url"){
+
+          this.avatarUrl =  this.generateInitialsAvatar(response.firstName + ' ' + response.lastName, 100);
+        }else
+        {
+          this.avatarUrl=response.avatarUrl
+        }
+      }
+    });
+  }
   closeAllDropdowns() {
     this.isProjectDropdownOpen = false;
     this.isDropdownOpen = false;
@@ -152,6 +195,7 @@ form = new FormGroup({
     this.isTeamDropdownOpen= false;
     this.isTaskDropdownOpen = false;
     this.isProfileDropdownOpen = false;
+    this.dropdownOpen = false;
   }
 
   toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown' | 'profile') {
@@ -172,7 +216,9 @@ form = new FormGroup({
   }
   }
 
-  gotomytask() {  }
+  gotomytask() { 
+    this.router.navigate(['/mytasks']);
+   }
 
   toggleCreateProject() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;
@@ -215,7 +261,10 @@ form = new FormGroup({
     }
   }
 
-
+  logout(){
+    localStorage.removeItem('jwtToken');
+    this.router.navigate(['/login']);
+  }
 
   getTeams() {
     this.teamService.getAll().subscribe(response => {
@@ -226,5 +275,34 @@ form = new FormGroup({
         }));
       }
     });
+  }
+
+
+  generateInitialsAvatar(name: string, size: number = 100): string {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+  
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+  
+    ctx.fillStyle = '#4a5568'; 
+    ctx.fillRect(0, 0, size, size);
+  
+    ctx.fillStyle = '#ffffff'; 
+    ctx.font = `${size * 0.4}px Segoe UI, Roboto, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+  
+    const initials = name.split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .substring(0, 2) // Sadece 2 harf alıyoruz
+      .toUpperCase();
+  
+    ctx.fillText(initials, size / 2, size / 2);
+  
+    // Base64 URL döner
+    return canvas.toDataURL();
   }
 }

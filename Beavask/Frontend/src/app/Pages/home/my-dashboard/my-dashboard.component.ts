@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   Chart,
   ChartConfiguration,
@@ -12,11 +14,12 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.css'
 })
 export class MyDashboardComponent {
+  constructor(private router: Router) {}
   recentTasks = [
     { id: 101, subject: 'Fix login bug', priority: 'High', status: 'Open', dueDate: '2025-04-27' },
     { id: 102, subject: 'Create task table component', priority: 'Medium', status: 'Pending', dueDate: '2025-04-30' },
@@ -55,4 +58,12 @@ export class MyDashboardComponent {
       }
     });
   }
+
+  gotofiltertask(status: string) {
+    console.log('Navigating to mytasks with status:');
+    this.router.navigate(['/mytasks'], {
+      queryParams: { status: status }
+    });
+  }
+  
 }

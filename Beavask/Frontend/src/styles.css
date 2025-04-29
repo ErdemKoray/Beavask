@@ -66,6 +66,7 @@ body { margin: 0;}
         --modal-dark-white-color: rgba(9, 18, 44, 0.75);
       
         --input-yellow-white-color: #2c2230;
+        --input-select-white-color: #a0acbe;
       
         --status-color-green: #1DCD9F;
         --status-color-gray: #777777;
@@ -144,6 +145,7 @@ body { margin: 0;}
     --modal-dark-white-color:rgba(57, 72, 75,0.5);
   
     --input-yellow-white-color:#f0f0d8;
+    --input-select-white-color: #3a4a64;
     
     --status-color-green:#1DCD9F;
     --status-color-gray:#777777;

@@ -1,21 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core'; // OnInit import edildi
+import { Component, OnInit } from '@angular/core'; 
 import { TeamService } from '../../../common/services/team/team.service';
 import { Team } from '../../../common/model/team.model';
+import { TranslateModule } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-// OnInit implements edildi
+
 export class MainComponent  {
 
   constructor(private teamService: TeamService) {
 
   }
+  
   recentProjects = [
     {
       name: 'Beavask',
@@ -74,10 +77,21 @@ export class MainComponent  {
   };
   displayedActivities: any[] = []; 
 
+user = {
+  name: 'Mert Aydın',
+  avatarUrl: '',
+
+  avatar: '', 
+};
+
+
+
 
   ngOnInit(): void {
    
     this.updateDisplayedActivities();
+   
+
   }
 
   setTab(tab: string): void {
@@ -163,6 +177,8 @@ export class MainComponent  {
 
     return Array.from({ length: pageCount }, (_, i) => i + 1);
   }
+
+
 }
 
 
@@ -176,4 +192,8 @@ export class Api{
   getTeamById(id: number) {
     return this.teamService.getById(id);
   }
+
+
+  
+  
 }

@@ -1,37 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GenericHttpsService } from '../generic-https.service';
-
-
-import { auth } from '../../model/auth.model';
-
+import { ApiResponse } from '../../model/apiResponse.model'; 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private endpoint = 'users';
+  private baseUrl = 'http://localhost:5092/api/Auth';
 
-  constructor(private apiService: GenericHttpsService<auth>) {}
+  constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.apiService.getAll(this.endpoint);
+  githubLogin(code: string): Observable<ApiResponse<string>> {  
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<ApiResponse<string>>(
+      `${this.baseUrl}/github-login`,
+      { code },
+      { headers }
+    );
+  }
+  register(auth:any): Observable<ApiResponse<string>> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<ApiResponse<string>>(
+      `${this.baseUrl}/register`,
+      auth,
+      { headers }
+    );
   }
 
-  getById(id: number) {
-    return this.apiService.getById(this.endpoint, id);
-  }
-
-  create(auth: auth) {
-    return this.apiService.create(this.endpoint, auth);
-  }
-
-  update(id: number, auth: auth) {
-    return this.apiService.update(this.endpoint, id, auth);
-  }
-
-  delete(id: number) {
-    return this.apiService.delete(this.endpoint, id);
+  login(auth:any): Observable<ApiResponse<string>> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<ApiResponse<string>>(
+      `${this.baseUrl}/login`,
+      auth,
+      { headers }
+    );
   }
   
 }

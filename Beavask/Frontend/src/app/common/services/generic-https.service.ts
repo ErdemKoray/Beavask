@@ -22,6 +22,9 @@ export class GenericHttpsService<T> {
 
   create(endpoint: string, item: T): Observable<ApiResponse<T>> {
     return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, item);
+  } 
+  register(endpoint: string, item: T): Observable<ApiResponse<T>> {
+    return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, item);
   }
 
   update(endpoint: string, id: number, item: T): Observable<ApiResponse<T>> {
