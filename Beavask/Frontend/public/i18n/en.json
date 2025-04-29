@@ -1,0 +1,74 @@
+{
+  "navbar": {
+    "projects": "Projects",
+    "team": "Team",
+    "task": "Task",
+    "myWork": "My Work",
+    "profile": "My Profile",
+    "logout": "Quit",
+    "creatProject": "Create Project",
+    "myActivities": "My Activities",
+    "myTasks": "My Tasks",
+    "myProjects": "My Projects",
+    "myTeams": "My Team",
+    "myProfile": "My Profile",
+    "recentActivities": "Recent Activities",
+    "recentTasks": "Recent Tasks",
+    "recentProjects": "Recent Projects",
+    "recentTeams": "Recent Teams",
+    "recentWork": "Recent Work"
+
+  },
+  "project": {
+    "createProject": "Create Project",
+    "projectName": "Project Name",
+    "projectKey": "Project Key",
+    "projectDescription": "Description",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "projectLead": "Project Lead",
+    "projectType": "Project Type",
+    "priority": "Priority",
+    "status": "Status",
+    "attachment": "Attachment",
+    "projectNamePlaceholder": "e.g. Marketing Launch",
+    "projectKeyPlaceholder": "e.g. MKT",
+    "projectDescriptionPlaceholder": "Write about the project...",
+    "bugTracking": "Bug Tracking"
+  },
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "status": {
+    "draft": "Draft",
+    "active": "Active",
+    "done": "Done"
+  },
+  "button": {
+    "create": "Create",
+    "cancel": "Cancel"
+  },
+  "home": {
+    "yourWork": "Your work",
+    "viewAllProjects": "View all projects",
+    "workedOn": "Worked on",
+    "viewed": "Viewed",
+    "assignedToMe": "Assigned to me",
+    "starred": "Starred",
+    "recentProjects": "Recent Projects",
+    "myOpenIssues": "My open issues:",
+    "doneIssues": "Done issues:",
+    "noActivitiesFound": "No activities found.",
+    "recentTask": "Recent Task",
+    "recentWork": "Recent Work",
+    "myActivity": "My Activity",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page: {{ currentPage }} of {{ totalPages }}",
+    "paginationInfo": "Showing {{ currentItemsRange }} items"
+  }
+
+
+}

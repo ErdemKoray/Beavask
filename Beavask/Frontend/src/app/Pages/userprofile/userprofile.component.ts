@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { AuthprofileService } from '../../common/services/profile/authprofile.service';
+import { Profile } from '../../common/services/profile/profile.model';
 
 interface UserProfile {
   id: number;
@@ -30,8 +32,9 @@ interface ActivityItem {
 export class UserprofileComponent {
   user!: UserProfile;
   activities: ActivityItem[] = [];
-
+  constructor(private profileService:AuthprofileService ) { }
   ngOnInit(): void {
+    this.getUserInfo(); 
     this.user = {
       id: 1,
       fullName: 'Muhammed Emin Aldaş',
@@ -70,4 +73,16 @@ export class UserprofileComponent {
     ];
   }
 
+  userInfo: Profile | null = null;
+  avatarUrl: string = '';
+
+
+  getUserInfo(){
+      this.profileService.whoami().subscribe((response: Profile) => {
+        if (response) {
+          this.userInfo = response;
+          this.avatarUrl = response.avatarUrl ;
+        }
+      });
+    }
 }

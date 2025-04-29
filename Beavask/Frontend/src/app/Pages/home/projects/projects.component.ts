@@ -2,22 +2,47 @@ import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../components/toast/toast.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { SortPipe } from '../../../common/pipe/sort.pipe';
+import { GithubrepoService } from '../../../common/services/projects/githubrepo.service';
+import { GithubRepo } from '../../../common/model/githubrepo.model';
 
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SortPipe], 
+  imports: [ReactiveFormsModule, CommonModule, SortPipe,DatePipe], 
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent implements AfterViewInit {
   constructor(
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private githubRepoService: GithubrepoService,
   ) {}
+
+  githubrepo : GithubRepo[] = [];
+  getProjectRepos() {
+    this.githubRepoService.getGithubRepos().subscribe({
+      next:(response) => {
+        console.log(response.data);
+       this.toast.show({
+          title: 'Success!',
+          message: `Fetched ${response.data.length} repositories from Github.`
+        });
+        this.githubrepo = response.data
+        console.log(this.githubrepo);
+      },
+      error:(err) => {
+        this.toast.show({
+          title: 'Error',
+          message: 'Failed to fetch Github repositories.'
+        });
+      }
+    });
+    
+  }
 
  
   sortKey: string = 'id'; 
@@ -86,59 +111,78 @@ export class ProjectsComponent implements AfterViewInit {
      }
    
   ];
+  searchProject(): void {
+    const searchValue = this.searchForm.value.searchname?.toLowerCase() ?? '';
 
-  searchForm = new FormGroup({
-    searchname: new FormControl('', Validators.required)
+    const result = this.originalItems.filter(item =>
+      item.subject.toLowerCase().includes(searchValue) ||
+      item.requestedBy.name.toLowerCase().includes(searchValue)
+    );
+
+    if (result.length === 0) {
+      this.items = [];
+      this.toast.show({
+        title: 'No Results',
+        message: `No projects found for "${searchValue}".`
+      });
+    } else {
+      this.items = result;
+      this.toast.show({
+        title: 'Success!',
+        message: `${result.length} records found.`
+      });
+    }
+  }
+
+  // Github projelerini aramak için
+  searchpProject(): void {
+    const searchValue = this.searchPForm.value.searchpname?.toLowerCase() ?? '';
+
+    const result = this.originalpItems.filter(item =>
+      item.name.toLowerCase().includes(searchValue)
+    );
+
+    if (result.length === 0) {
+      this.githubrepo = [];
+      this.toast.show({
+        title: 'No Results',
+        message: `No repositories found for "${searchValue}".`
+      });
+    } else {
+      this.githubrepo = result;
+      this.toast.show({
+        title: 'Success!',
+        message: `${result.length} repositories found.`
+      });
+    }
+  }
+
+ 
+
+  
+  private originalItems: any[] = [...this.items];
+  private originalpItems: any[] = [...this.githubrepo];
+
+
+ searchForm = new FormGroup({
+    searchname: new FormControl('', [Validators.required])
   });
 
-   
-   private originalItems = [...this.items];
-
-
-  searchProject(): void {
-    if (this.searchForm.valid) {
-      const searchValue = this.searchForm.value.searchname?.toLowerCase() ?? '';
-
-     
-      const result = this.originalItems.filter(item =>
-        item.subject.toLowerCase().includes(searchValue) ||
-        item.requestedBy.name.toLowerCase().includes(searchValue)
-      );
-
-      console.log('Arama sonucu:', result);
-
-      if (result.length === 0) {
-         
-         this.items = [];
-        this.toast.show({
-          title: 'Sonuç bulunamadı!',
-          message: `“${searchValue}” ile eşleşen bir kayıt bulunamadı.`
-        });
-      } else {
-        
-         this.items = result;
-        this.toast.show({
-          title: 'Başarılı!',
-          message: `${result.length} kayıt bulundu.`
-        });
-      
-      }
-   
-    } else {
-         this.items = [...this.originalItems]; 
-         this.toast.show({
-             title: 'Arama Temizlendi',
-             message: 'Tüm kayıtlar gösteriliyor.'
-         });
-    }
-  }
-
-   onSearchInputChange(event: any): void {
+  searchPForm = new FormGroup({
+    searchpname: new FormControl('', [Validators.required])
+  });
+  // Arama kutusu inputu değiştiğinde
+  onSearchInputChange(event: any): void {
     if (!event.target.value) {
-      this.items = [...this.originalItems];
+      this.items = [...this.originalItems]; // Arama sıfırlandığında orijinal veriyi geri yükle
     }
   }
 
+  onSearchpInputChange(event: any): void {
+    if (!event.target.value) {
+      this.githubrepo = [...this.originalpItems]; // Arama sıfırlandığında orijinal Github verisini geri yükle
+    }
+  }
 
   goToDetail(projectId?: number): void {
     const path = projectId ? `/project-detail/${projectId}` : '/project-detail/board';
@@ -152,6 +196,8 @@ export class ProjectsComponent implements AfterViewInit {
     tooltipTriggerList.forEach((tooltipTriggerEl: any) => {
       new (window as any).bootstrap.Tooltip(tooltipTriggerEl);
     });
+
+    this.getProjectRepos();
   }
 
 
