@@ -30,11 +30,13 @@ public class CompanyController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Response<CompanyDto>>> Create([FromBody] CompanyCreateDto companyCreateDto)
+     [HttpPost("register")]
+    public async Task<IActionResult> RegisterCompany(CompanyCreateDto companyCreateDto)
     {
-        var result = await _companyService.CreateAsync(companyCreateDto);
-        return Ok(result);
+        var result = await _companyService.RegisterCompanyAsync(companyCreateDto);
+        if (result.IsSuccess)
+            return Ok("Company successfully registered and login credentials sent.");
+        return BadRequest(result.Message);
     }
 
     [HttpPut("{id}")]

@@ -7,10 +7,11 @@ using Beavask.Domain.Entities.Base;
 
 namespace Beavask.Application.Service;
 
-public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper) : ICompanyService
+public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService) : ICompanyService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly IMailService _mailService = mailService;
 
     public async Task<Response<CompanyDto>> GetByIdAsync(int id)
     {
@@ -43,21 +44,54 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper) : ICompanySe
         }
     }
 
-    public async Task<Response<CompanyDto>> CreateAsync(CompanyCreateDto companyCreateDto)
+    public async Task<Response<bool>> RegisterCompanyAsync(CompanyCreateDto dto)
     {
         try
         {
-            var entity = _mapper.Map<Company>(companyCreateDto);
-            await _unitOfWork.CompanyRepository.AddAsync(entity);
+            // Şirket kaydını yap
+            var company = new Company
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Website = dto.Website,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
+                AddressLine = dto.AddressLine,
+                City = dto.City,
+                Country = dto.Country,
+                PostalCode = dto.PostalCode,
+                CreatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            // Şirketin login ismini ve şifresini oluştur
+            var loginName = $"{dto.Name.ToLower()}_admin";
+            var password = GenerateRandomPassword();
+
+            company.Username = loginName;
+            company.PasswordHash = password; // Şifre hash'leme yapılmalı
+
+            await _unitOfWork.CompanyRepository.AddAsync(company);
             await _unitOfWork.SaveChangesAsync();
 
-            var dto = _mapper.Map<CompanyDto>(entity);
-            return Response<CompanyDto>.Success(dto);
+            // Kullanıcıya mail gönder
+            await _mailService.SendUserCredentialsAsync(company.Email, loginName, password);
+
+            return Response<bool>.Success(true);
         }
         catch (Exception ex)
         {
-            return Response<CompanyDto>.Fail(ex.Message);
+            return Response<bool>.Fail($"Şirket kaydederken hata oluştu: {ex.Message}");
         }
+    }
+
+    private string GenerateRandomPassword()
+    {
+        // Rastgele bir şifre oluştur (en az 8 karakter olmalı)
+        var random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        return new string(Enumerable.Repeat(chars, 12)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
     public async Task<Response<CompanyDto>> UpdateAsync(int id, CompanyUpdateDto companyUpdateDto)
