@@ -14,11 +14,5 @@ namespace Beavask.API.Controllers
             _mailService = mailService;
         }
 
-        [HttpPost("send-test")]
-        public async Task<IActionResult> SendTestEmail()
-        {
-            await _mailService.SendTestEmailAsync();
-            return Ok("Test email has been sent.");
-        }
     }
 }

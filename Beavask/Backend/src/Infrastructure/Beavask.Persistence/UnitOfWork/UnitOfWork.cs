@@ -81,5 +81,8 @@ public class UnitOfWork : IUnitOfWork
     private ICommentRepository? _commentRepository;
     public ICommentRepository CommentRepository => _commentRepository ??= new CommentRepository(_context);
 
+    private IVerificationCodeRepository? _verificationCodeRepository;
+    public IVerificationCodeRepository VerificationCodeRepository => _verificationCodeRepository ??= new VerificationCodeRepository(_context);
+
     public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
 }

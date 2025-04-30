@@ -30,6 +30,7 @@ namespace Beavask.Infrastructure.Persistence
         public DbSet<TimeTracking> TimeTrackings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserContact> UserContacts { get; set; }
+        public DbSet<VerificationCode> VerificationCodes { get; set; }
 
         // Relationships klasöründeki entity'ler
         public DbSet<ProjectMember> ProjectMembers { get; set; }

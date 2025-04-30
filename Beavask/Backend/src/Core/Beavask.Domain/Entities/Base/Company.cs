@@ -19,8 +19,9 @@ namespace Beavask.Domain.Entities.Base
         public string PostalCode { get; set; } = string.Empty;
 
         // Company User and Auth Information
-        public string Username { get; set; } = string.Empty; // Company Login Username
-        public string PasswordHash { get; set; } = string.Empty; // Hashed Password
+        public string Username { get; set; } = string.Empty; 
+        public string PasswordHash { get; set; } = string.Empty; 
+        public string PasswordSalt { get; set; } = string.Empty; 
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }

@@ -4,6 +4,7 @@ using Beavask.Application.DTOs.Company;
 using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
+using Beavask.Application.Helper;
 
 namespace Beavask.Application.Service;
 
@@ -48,7 +49,6 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
     {
         try
         {
-            // Şirket kaydını yap
             var company = new Company
             {
                 Name = dto.Name,
@@ -61,37 +61,72 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
                 Country = dto.Country,
                 PostalCode = dto.PostalCode,
                 CreatedAt = DateTime.UtcNow,
-                IsActive = true
+                IsActive = false
             };
+            if (await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == dto.Email) != null)
+                return Response<bool>.Fail("Email already exists.");
 
-            // Şirketin login ismini ve şifresini oluştur
             var loginName = $"{dto.Name.ToLower()}_admin";
-            var password = GenerateRandomPassword();
+            var password = PasswordHelper.GenerateRandomPassword();
 
             company.Username = loginName;
-            company.PasswordHash = password; // Şifre hash'leme yapılmalı
+            PasswordHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt); 
+            company.PasswordHash = passwordHash;
+            company.PasswordSalt = passwordSalt;
 
             await _unitOfWork.CompanyRepository.AddAsync(company);
             await _unitOfWork.SaveChangesAsync();
 
-            // Kullanıcıya mail gönder
-            await _mailService.SendUserCredentialsAsync(company.Email, loginName, password);
+            var verificationCode = MailHelper.GenerateVerificationCode();
+
+            var verification = new VerificationCode
+            {
+                Email = dto.Email,
+                Code = verificationCode,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
+            await _unitOfWork.SaveChangesAsync();
+
+            await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
 
             return Response<bool>.Success(true);
         }
         catch (Exception ex)
         {
-            return Response<bool>.Fail($"Şirket kaydederken hata oluştu: {ex.Message}");
+            return Response<bool>.Fail($"An error occurred: {ex.Message}");
         }
     }
 
-    private string GenerateRandomPassword()
+    public async Task<Response<bool>> VerifyEmailAsync(string email, string code)
     {
-        // Rastgele bir şifre oluştur (en az 8 karakter olmalı)
-        var random = new Random();
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
-        return new string(Enumerable.Repeat(chars, 12)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
+        try
+        {
+            var verification = await _unitOfWork.VerificationCodeRepository
+                .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
+            if (verification == null)
+                return Response<bool>.Fail("Out of time or invalid verification code.");
+
+            verification.IsUsed = true;
+            await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
+            await _unitOfWork.SaveChangesAsync();
+
+            var company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
+
+            if (company == null)
+                return Response<bool>.Fail("Company not found.");
+            company.IsActive = true;
+            await _unitOfWork.CompanyRepository.UpdateAsync(company);
+            var randomPassword = PasswordHelper.GenerateRandomPassword();
+            await _mailService.SendUserCredentialsAsync(company.Email, company.Username, randomPassword);
+
+            return Response<bool>.Success(true);
+        }
+        catch (Exception ex)
+        {
+            return Response<bool>.Fail($"An eror occurred : {ex.Message}");
+        }
     }
 
     public async Task<Response<CompanyDto>> UpdateAsync(int id, CompanyUpdateDto companyUpdateDto)

@@ -27,6 +27,7 @@ public interface IUnitOfWork
     IUserContactRepository UserContactRepository { get; }
     IProjectMemberRepository ProjectMemberRepository { get; }
     ICommentRepository CommentRepository { get; }
+    IVerificationCodeRepository VerificationCodeRepository { get; }
     
     Task<int> SaveChangesAsync();
 }
