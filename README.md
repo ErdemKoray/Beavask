@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Beavask/Beavask.jpg" alt="Beavask Logo" width="200"/>
+  <img src="Beavask/Frontend/public/iconbeavask.png" alt="Beavask Logo" width="200"/>
 </p>
 
 # 🚀 BEAVASK
