@@ -1,10 +1,18 @@
-namespace Beavask.Application.Helper;
-public class MailHelper
+using System.Security.Cryptography;
+
+namespace Beavask.Application.Helper
 {
-    public static string GenerateVerificationCode()
+    public class MailHelper
     {
-        var random = new Random();
-        var code = random.Next(100000, 999999).ToString();
-        return code;
+        public static string GenerateVerificationCode()
+        {
+            using var rng = RandomNumberGenerator.Create();
+            var bytes = new byte[4];
+            rng.GetBytes(bytes);
+
+            int value = Math.Abs(BitConverter.ToInt32(bytes, 0)) % 900000 + 100000;
+
+            return value.ToString();
+        }
     }
 }

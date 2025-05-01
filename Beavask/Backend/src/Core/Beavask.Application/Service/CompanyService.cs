@@ -78,7 +78,12 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
             await _unitOfWork.SaveChangesAsync();
 
             var verificationCode = MailHelper.GenerateVerificationCode();
-
+            if (verificationCode == null)
+                throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
+            else
+            {
+                Console.WriteLine("verificataion code ",verificationCode);
+            }
             var verification = new VerificationCode
             {
                 Email = dto.Email,
@@ -88,7 +93,8 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
 
             await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
             await _unitOfWork.SaveChangesAsync();
-
+            Console.WriteLine($"Email: {dto.Email}");
+            Console.WriteLine($"Verification Code: {verificationCode}");
             await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
 
             return Response<bool>.Success(true);
@@ -105,9 +111,12 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
         {
             var verification = await _unitOfWork.VerificationCodeRepository
                 .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
-            if (verification == null)
+            if (verification == null){
+                var _company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
+                await _unitOfWork.CompanyRepository.DeleteAsync(_company);
                 return Response<bool>.Fail("Out of time or invalid verification code.");
-
+            }
+                
             verification.IsUsed = true;
             await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
             await _unitOfWork.SaveChangesAsync();
