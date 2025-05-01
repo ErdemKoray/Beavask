@@ -7,8 +7,6 @@ public interface ICompanyService
 {
     Task<Response<CompanyDto>> GetByIdAsync(int id);
     Task<Response<IEnumerable<CompanyDto>>> GetAllAsync();
-    Task<Response<bool>> RegisterCompanyAsync(CompanyCreateDto dto);
-    Task<Response<bool>> VerifyEmailAsync(string email, string code);
     Task<Response<CompanyDto>> UpdateAsync(int id, CompanyUpdateDto companyUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
 }

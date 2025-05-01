@@ -30,22 +30,6 @@ public class CompanyController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("register")]
-    public async Task<IActionResult> RegisterCompany(CompanyCreateDto companyCreateDto)
-    {
-        var result = await _companyService.RegisterCompanyAsync(companyCreateDto);
-        if (result.IsSuccess)
-            return Ok("Company successfully registered and verification code sent.");
-        return BadRequest(result.Message);
-    }
-    [HttpPost("verify-email")]
-    public async Task<IActionResult> VerifyEmail(string email, string code)
-    {
-        var result = await _companyService.VerifyEmailAsync(email, code);
-        if (result.IsSuccess)
-            return Ok("Email successfully verified and login credentials sent.");
-        return BadRequest(result.Message);
-    }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<Response<CompanyDto>>> Update(int id, [FromBody] CompanyUpdateDto companyUpdateDto)

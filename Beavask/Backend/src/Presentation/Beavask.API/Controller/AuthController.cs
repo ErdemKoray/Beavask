@@ -1,4 +1,5 @@
 using Beavask.Application.DTOs.Auth;
+using Beavask.Application.DTOs.Company;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,6 +40,22 @@ public class AuthController(IAuthService authService , IConfiguration configurat
 
         var result = await _authService.LoginWithGitHubAsync(dto, clientId!, clientSecret!);
         return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+    [HttpPost("company-register")]
+    public async Task<IActionResult> RegisterCompany(CompanyCreateDto companyCreateDto)
+    {
+        var result = await _authService.RegisterCompanyAsync(companyCreateDto);
+        if (result.IsSuccess)
+            return Ok("Company successfully registered and verification code sent.");
+        return BadRequest(result.Message);
+    }
+    [HttpPost("verify-company-email")]
+    public async Task<IActionResult> VerifyEmail(string email, string code)
+    {
+        var result = await _authService.VerifyCompanyEmailAsync(email, code);
+        if (result.IsSuccess)
+            return Ok("Email successfully verified and login credentials sent.");
+        return BadRequest(result.Message);
     }
 }
 
