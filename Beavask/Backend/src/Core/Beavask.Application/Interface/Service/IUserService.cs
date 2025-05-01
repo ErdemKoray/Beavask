@@ -5,7 +5,7 @@ namespace Beavask.Application.Interface.Service;
 
 public interface IUserService
 {
-    Task<Response<UserDto>> GetByIdAsync(int id);
+    Task<Response<UserWithTeamAndCompanyDto>> GetUserBriefAsync(int id);
     Task<Response<IEnumerable<UserDto>>> GetAllAsync();
     Task<Response<UserDto>> CreateAsync(UserCreateDto userCreateDto);
     Task<Response<UserDto>> UpdateAsync(int id, UserUpdateDto userUpdateDto);

@@ -84,6 +84,7 @@ public class MappingProfile : Profile
         CreateMap<UserCreateDto, User>();
         CreateMap<UserUpdateDto, User>();
         CreateMap<User, UserDto>();
+        CreateMap<UserWithTeamAndCompanyDto,UserDto>();
 
         //Milestone Entity
         CreateMap<Milestone, MilestoneDto>().ReverseMap();

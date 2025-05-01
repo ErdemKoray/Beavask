@@ -1,8 +1,11 @@
+using System.Linq.Expressions;
+using Beavask.Application.DTOs.User;
 using Beavask.Domain.Entities.Base;
 
 namespace Beavask.Application.Interface.Repository;
 
 public interface IUserRepository : IBaseRepository<User, int>
 {
-    // Add any user-specific repository methods here
+    Task<UserWithTeamAndCompanyDto?> GetUserWithTeamAndCompanyBrief(Expression<Func<User, bool>> predicate, int userId);
+
 } 

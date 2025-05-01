@@ -18,23 +18,24 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<Response<UserDto>> GetByIdAsync(int id)
+    public async Task<Response<UserWithTeamAndCompanyDto>> GetUserBriefAsync(int id)
     {
         try
         {
-            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetUserWithTeamAndCompanyBrief(c => c.Id == id, id);
             if (user == null)
             {
-                return Response<UserDto>.NotFound();
+                return Response<UserWithTeamAndCompanyDto>.NotFound();
             }
-            var userDto = _mapper.Map<UserDto>(user);
-            return Response<UserDto>.Success(userDto);
+
+            return Response<UserWithTeamAndCompanyDto>.Success(user);
         }
         catch (Exception ex)
         {
-            return Response<UserDto>.Fail(ex.Message);
+            return Response<UserWithTeamAndCompanyDto>.Fail(ex.Message);
         }
     }
+
 
     public async Task<Response<IEnumerable<UserDto>>> GetAllAsync()
     {
