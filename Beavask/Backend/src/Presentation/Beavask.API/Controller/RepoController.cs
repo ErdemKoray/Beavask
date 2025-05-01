@@ -24,5 +24,13 @@ namespace Beavask.API.Controller
                 return Ok(result);
             return BadRequest(result);
         }
+        [HttpGet("user-public-repo")]
+        public async Task<IActionResult> GetUserPublicRepository(string repoUrl)
+        {
+            var result = await _repoService.GetSingleRepositoryDetailAsync(repoUrl);
+            if (result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }

@@ -1,8 +1,10 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs;
 using Beavask.Application.DTOs.Repo;
+using Beavask.Application.Helper;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json;
 
 namespace Beavask.API.Service
@@ -47,5 +49,31 @@ namespace Beavask.API.Service
                 return Response<List<GitHubRepoDto>>.Fail($"Hata: {ex.Message}");
             }
         }
+
+        public async Task<Response<GitHubRepoDto>> GetSingleRepositoryDetailAsync(string repoApiUrl)
+        {
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("BeavaskApp");
+                var url = UrlHelper.ConvertToGitHubApiUrl(repoApiUrl);
+                var response = await client.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                    return Response<GitHubRepoDto>.Fail("Could not get the repository details.");
+
+                var content = await response.Content.ReadAsStringAsync();
+                var repository = JsonSerializer.Deserialize<GitHubRepoDto>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return Response<GitHubRepoDto>.Success(repository);
+            }
+            catch (Exception ex)
+            {
+                return Response<GitHubRepoDto>.Fail($"Error: {ex.Message}");
+            }
+        }
     }
 }
+
