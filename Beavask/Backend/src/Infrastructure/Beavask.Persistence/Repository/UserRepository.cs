@@ -46,6 +46,11 @@ public async Task<UserWithTeamAndCompanyDto?> GetUserWithTeamAndCompanyBrief(Exp
 
     return await query.FirstOrDefaultAsync();
 }
+public async Task<IEnumerable<User>> GetWhereAsync(Expression<Func<User, bool>> predicate)
+{
+    return await _context.Users.Where(predicate).ToListAsync();
+}
+
 
 
 } 

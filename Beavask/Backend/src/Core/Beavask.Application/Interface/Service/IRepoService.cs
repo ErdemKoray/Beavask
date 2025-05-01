@@ -9,5 +9,7 @@ namespace Beavask.Application.Interface.Service
     {
         Task<Response<List<GitHubRepoDto>>> GetCurrentUserPublicRepositoriesAsync();
         Task<Response<GitHubRepoDto>> GetSingleRepositoryDetailAsync(string repoApiUrl);
+        Task<Response<List<GitHubContributorDto>>> GetRepositoryContributorsAsync(string repoWebUrl);
+        
     }
 }

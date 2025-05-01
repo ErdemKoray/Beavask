@@ -4,7 +4,6 @@ using Beavask.Application.DTOs.Repo;
 using Beavask.Application.Helper;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json;
 
 namespace Beavask.API.Service
@@ -73,6 +72,41 @@ namespace Beavask.API.Service
             {
                 return Response<GitHubRepoDto>.Fail($"Error: {ex.Message}");
             }
+        }
+        public async Task<Response<List<GitHubContributorDto>>> GetRepositoryContributorsAsync(string repoWebUrl)
+        {
+            var apiBaseUrl = UrlHelper.ConvertToGitHubApiUrl(repoWebUrl);
+            var contributorsApiUrl = $"{apiBaseUrl}/contributors";
+
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("BeavaskApp");
+
+            var response = await client.GetAsync(contributorsApiUrl);
+            if (!response.IsSuccessStatusCode)
+                return Response<List<GitHubContributorDto>>.Fail("Could not fetch contributors.");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var contributors = JsonSerializer.Deserialize<List<GitHubContributorDto>>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<GitHubContributorDto>();
+
+            // 1. GitHub login'larını topla
+            var loginList = contributors.Select(c => c.Username).Distinct().ToList();
+
+            // 2. Veritabanında bu login'lere sahip kullanıcıları çek
+            var registeredUsers = await _unitOfWork.UserRepository
+                .GetWhereAsync(u => loginList.Contains(u.UserName));
+
+            var registeredUsernames = new HashSet<string>(registeredUsers.Select(u => u.UserName));
+
+            // 3. Her contributor'a kayıt durumunu ata
+            foreach (var contributor in contributors)
+            {
+                contributor.IsRegistered = registeredUsernames.Contains(contributor.Username);
+            }
+
+            return Response<List<GitHubContributorDto>>.Success(contributors);
         }
     }
 }

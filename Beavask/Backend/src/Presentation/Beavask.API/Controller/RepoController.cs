@@ -32,5 +32,13 @@ namespace Beavask.API.Controller
                 return Ok(result);
             return BadRequest(result);
         }
+        [HttpGet("repo-contributors")]
+        public async Task<IActionResult> GetRepositoryContributors(string repoUrl)
+        {
+            var result = await _repoService.GetRepositoryContributorsAsync(repoUrl);
+            if (result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }
