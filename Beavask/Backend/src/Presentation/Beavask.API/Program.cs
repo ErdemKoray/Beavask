@@ -38,6 +38,7 @@ builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ICurrentCompanyService, CurrentCompanyService>();
 builder.Services.AddScoped<IRepoService, RepoService>();
 builder.Services.AddScoped<IMailService, GmailMailService>();
 

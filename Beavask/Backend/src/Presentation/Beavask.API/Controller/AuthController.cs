@@ -12,10 +12,19 @@ public class AuthController(IAuthService authService , IConfiguration configurat
     private readonly IAuthService _authService = authService;
     private readonly IConfiguration? _configuration;
 
-    [HttpPost("login")]
+    [HttpPost("login-personal")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
         var result = await _authService.LoginAsync(dto);
+        if (!result.IsSuccess)
+            return Unauthorized(result);
+
+        return Ok(result);
+    }
+    [HttpPost("login-company")]
+    public async Task<IActionResult> LoginCompany([FromBody] CompanyLoginRequestDto dto)
+    {
+        var result = await _authService.LoginCompanyAsync(dto);
         if (!result.IsSuccess)
             return Unauthorized(result);
 

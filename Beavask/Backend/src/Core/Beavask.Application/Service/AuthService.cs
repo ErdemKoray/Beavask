@@ -5,8 +5,6 @@ using Beavask.Application.Helper;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Beavask.Application.Service
 {
@@ -32,7 +30,7 @@ namespace Beavask.Application.Service
                 if (emailExists)
                     return Response<bool>.Fail("Email already in use.");
 
-                CreatePasswordHash(dto.Password, out string hash, out string salt);
+                PasswordHelper.CreatePasswordHash(dto.Password, out string hash, out string salt);
 
                 var user = new User
                 {
@@ -65,26 +63,34 @@ namespace Beavask.Application.Service
             if (user == null)
                 return Response<string>.Fail("User not found.");
 
-            if (!VerifyPassword(dto.Password, user.PasswordHash, user.PasswordSalt))
+            if (!PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash, user.PasswordSalt))
                 return Response<string>.Fail("Invalid password.");
-
             var token = _tokenGenerator.GenerateToken(user);
             return Response<string>.Success(token);
         }
-
-        private void CreatePasswordHash(string password, out string hash, out string salt)
+        public async Task<Response<string>> LoginCompanyAsync(CompanyLoginRequestDto dto)
         {
-            using var hmac = new HMACSHA256();
-            salt = Convert.ToBase64String(hmac.Key);
-            hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(password)));
+            try
+            {
+                var company = await _unitOfWork.CompanyRepository
+                    .GetSingleByConditionAsync(c => c.Username == dto.Username && c.IsActive == true);
+
+                if (company == null)
+                    return Response<string>.Fail("Company not found.");
+
+                if (!PasswordHelper.VerifyPassword(dto.Password, company.PasswordHash, company.PasswordSalt))
+                    return Response<string>.Fail("Invalid password.");
+
+                var token = _tokenGenerator.GenerateToken(company);
+                return Response<string>.Success(token);
+            }
+            catch (Exception ex)
+            {
+                return Response<string>.Fail($"An unexpected error occurred: {ex.Message}");
+            }
         }
 
-        private bool VerifyPassword(string password, string hash, string salt)
-        {
-            using var hmac = new HMACSHA256(Convert.FromBase64String(salt));
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(computedHash) == hash;
-        }
+
         public async Task<Response<string>> LoginWithGitHubAsync(GitHubLoginRequestDto dto, string clientId, string clientSecret)
         {
             try
@@ -174,96 +180,92 @@ namespace Beavask.Application.Service
         }
         public async Task<Response<bool>> RegisterCompanyAsync(CompanyCreateDto dto)
         {
-        try
-        {
-            var company = new Company
+            try
             {
-                Name = dto.Name,
-                Description = dto.Description,
-                Website = dto.Website,
-                Email = dto.Email,
-                PhoneNumber = dto.PhoneNumber,
-                AddressLine = dto.AddressLine,
-                City = dto.City,
-                Country = dto.Country,
-                PostalCode = dto.PostalCode,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = false
-            };
-            if (await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == dto.Email) != null)
-                return Response<bool>.Fail("Email already exists.");
+                var company = new Company
+                {
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Website = dto.Website,
+                    Email = dto.Email,
+                    PhoneNumber = dto.PhoneNumber,
+                    AddressLine = dto.AddressLine,
+                    City = dto.City,
+                    Country = dto.Country,
+                    PostalCode = dto.PostalCode,
+                    CreatedAt = DateTime.UtcNow,
+                    IsActive = false
+                };
+                if (await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == dto.Email) != null)
+                    return Response<bool>.Fail("Email already exists.");
 
-            var loginName = $"{dto.Name.ToLower()}_admin";
-            var password = PasswordHelper.GenerateRandomPassword();
+                await _unitOfWork.CompanyRepository.AddAsync(company);
+                await _unitOfWork.SaveChangesAsync();
 
-            company.Username = loginName;
-            PasswordHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt); 
-            company.PasswordHash = passwordHash;
-            company.PasswordSalt = passwordSalt;
+                var verificationCode = MailHelper.GenerateVerificationCode();
+                if (verificationCode == null)
+                    throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
+                else
+                {
+                    Console.WriteLine("verificataion code ",verificationCode);
+                }
+                var verification = new VerificationCode
+                {
+                    Email = dto.Email,
+                    Code = verificationCode,
+                    CreatedAt = DateTime.UtcNow
+                };
 
-            await _unitOfWork.CompanyRepository.AddAsync(company);
-            await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
+                await _unitOfWork.SaveChangesAsync();
+                Console.WriteLine($"Email: {dto.Email}");
+                Console.WriteLine($"Verification Code: {verificationCode}");
+                await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
 
-            var verificationCode = MailHelper.GenerateVerificationCode();
-            if (verificationCode == null)
-                throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
-            else
-            {
-                Console.WriteLine("verificataion code ",verificationCode);
+                return Response<bool>.Success(true);
             }
-            var verification = new VerificationCode
+            catch (Exception ex)
             {
-                Email = dto.Email,
-                Code = verificationCode,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
-            await _unitOfWork.SaveChangesAsync();
-            Console.WriteLine($"Email: {dto.Email}");
-            Console.WriteLine($"Verification Code: {verificationCode}");
-            await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
-
-            return Response<bool>.Success(true);
-        }
-        catch (Exception ex)
-        {
-            return Response<bool>.Fail($"An error occurred: {ex.Message}");
-        }
-    }
-
-    public async Task<Response<bool>> VerifyCompanyEmailAsync(string email, string code)
-    {
-        try
-        {
-            var verification = await _unitOfWork.VerificationCodeRepository
-                .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
-            if (verification == null){
-                var _company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
-                await _unitOfWork.CompanyRepository.DeleteAsync(_company);
-                return Response<bool>.Fail("Out of time or invalid verification code.");
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
-                
-            verification.IsUsed = true;
-            await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
-            await _unitOfWork.SaveChangesAsync();
-
-            var company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
-
-            if (company == null)
-                return Response<bool>.Fail("Company not found.");
-            company.IsActive = true;
-            await _unitOfWork.CompanyRepository.UpdateAsync(company);
-            var randomPassword = PasswordHelper.GenerateRandomPassword();
-            await _mailService.SendUserCredentialsAsync(company.Email, company.Username, randomPassword);
-
-            return Response<bool>.Success(true);
         }
-        catch (Exception ex)
+
+        public async Task<Response<bool>> VerifyCompanyEmailAsync(string email, string code)
         {
-            return Response<bool>.Fail($"An eror occurred : {ex.Message}");
-        }
-    }
+            try
+            {
+                var verification = await _unitOfWork.VerificationCodeRepository
+                    .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
+                if (verification == null){
+                    var _company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
+                    await _unitOfWork.CompanyRepository.DeleteAsync(_company);
+                    return Response<bool>.Fail("Out of time or invalid verification code.");
+                }
+                    
+                verification.IsUsed = true;
+                await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
+                await _unitOfWork.SaveChangesAsync();
 
+                var company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == email);
+
+                if (company == null)
+                    return Response<bool>.Fail("Company not found.");
+                var loginName = $"{company.Name.ToLower()}_admin";
+                var password = PasswordHelper.GenerateRandomPassword();
+                company.Username = loginName;
+                PasswordHelper.CreatePasswordHash(password, out var passwordHash, out var passwordSalt); 
+                company.PasswordHash = passwordHash;
+                company.PasswordSalt = passwordSalt;
+                company.IsActive = true;
+                await _unitOfWork.CompanyRepository.UpdateAsync(company);
+                await _mailService.SendUserCredentialsAsync(company.Email, company.Username, password);
+
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Response<bool>.Fail($"An eror occurred : {ex.Message}");
+            }
+        }
     }
 }
