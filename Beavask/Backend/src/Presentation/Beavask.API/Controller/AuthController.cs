@@ -66,5 +66,13 @@ public class AuthController(IAuthService authService , IConfiguration configurat
             return Ok("Email successfully verified and login credentials sent.");
         return BadRequest(result.Message);
     }
+    [HttpPost("verify-personel-email")]
+    public async Task<IActionResult> VerifyPersonelEmail(string email, string code)
+    {
+        var result = await _authService.VerifyPersonelEmailAsync(email, code);
+        if (result.IsSuccess)
+            return Ok("Email successfully verified and login credentials sent.");
+        return BadRequest(result.Message);
+    }
 }
 

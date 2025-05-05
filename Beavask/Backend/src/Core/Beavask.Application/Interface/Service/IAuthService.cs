@@ -11,6 +11,8 @@ public interface IAuthService
     Task<Response<bool>> RegisterAsync(RegisterRequestDto dto);
     Task<Response<bool>> RegisterCompanyAsync(CompanyCreateDto dto);
     Task<Response<bool>> VerifyCompanyEmailAsync(string email, string code);
+    Task<Response<bool>> VerifyPersonelEmailAsync(string email, string code);
+
     //GitHub
     Task<Response<string>> LoginWithGitHubAsync(GitHubLoginRequestDto dto, string clientId, string clientSecret);
 

@@ -40,12 +40,23 @@ namespace Beavask.Application.Service
                     Email = dto.Email,
                     PasswordHash = hash,
                     PasswordSalt = salt,
-                    IsActive = true,
+                    IsActive = false,
                     CreatedAt = DateTime.UtcNow
                 };
+                var verificationCode = MailHelper.GenerateVerificationCode();
+                if (verificationCode == null)
+                    throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
 
+                var verification = new VerificationCode
+                {
+                    Email = dto.Email,
+                    Code = verificationCode,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
                 await _unitOfWork.UserRepository.AddAsync(user);
                 await _unitOfWork.SaveChangesAsync();
+                await _mailService.SendIndividualVerificationCodeAsync(dto.Email, verificationCode);
 
                 return Response<bool>.Success(true);
             }
@@ -89,7 +100,7 @@ namespace Beavask.Application.Service
                 return Response<string>.Fail($"An unexpected error occurred: {ex.Message}");
             }
         }
-
+        
 
         public async Task<Response<string>> LoginWithGitHubAsync(GitHubLoginRequestDto dto, string clientId, string clientSecret)
         {
@@ -97,7 +108,6 @@ namespace Beavask.Application.Service
             {
                 var client = new HttpClient();
 
-                // 1. GitHub Access Token Al
                 var tokenRequest = new Dictionary<string, string>
                 {
                     { "client_id", clientId },
@@ -122,7 +132,6 @@ namespace Beavask.Application.Service
                 if (string.IsNullOrEmpty(accessToken))
                     return Response<string>.Fail("Access token değeri boş.");
 
-                // 2. GitHub User Getir
                 var userRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
                 userRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
                 userRequest.Headers.UserAgent.ParseAdd("BeavaskApp");
@@ -141,26 +150,23 @@ namespace Beavask.Application.Service
                 if (githubUser == null)
                     return Response<string>.Fail("GitHub kullanıcı bilgisi çözümlenemedi.");
 
-                // Avatar URL kontrolü ve loglama
-                var avatarUrl = githubUser.AvatarUrl ?? "https://default-avatar-url.com/default-avatar.png"; // Fallback URL
-                Console.WriteLine("Avatar URL: " + avatarUrl);  // Debug: Avatar URL'yi logla
+                var avatarUrl = githubUser.AvatarUrl ?? "https://default-avatar-url.com/default-avatar.png"; 
+                Console.WriteLine("Avatar URL: " + avatarUrl);  
                 
-                // 3. Kullanıcı DB'de var mı kontrol et
                 var existingUser = await _unitOfWork.UserRepository
                     .GetSingleByConditionAsync(u => u.UserName == githubUser.Login || u.Email == githubUser.Email);
 
                 if (existingUser == null)
                 {
-                    // Yeni kullanıcı oluştur
                     var user = new User
                     {
                         UserName = githubUser.Login,
-                        Email = githubUser.Email ?? $"{githubUser.Login}@github.local", // Eğer e-posta boşsa fallback kullan
-                        AvatarUrl = avatarUrl,  // Avatar URL'sini kaydediyoruz
+                        Email = githubUser.Email ?? $"{githubUser.Login}@github.local", 
+                        AvatarUrl = avatarUrl,  
                         CreatedAt = DateTime.UtcNow,
                         IsActive = true,
-                        PasswordHash = "github", // GitHub kullanıcı kaydı için geçici değer
-                        PasswordSalt = "github"  // GitHub kullanıcı kaydı için geçici değer
+                        PasswordHash = "github", 
+                        PasswordSalt = "github"  
                     };
 
                     await _unitOfWork.UserRepository.AddAsync(user);
@@ -169,7 +175,6 @@ namespace Beavask.Application.Service
                     existingUser = user;
                 }
 
-                // JWT Token üret
                 var jwt = _tokenGenerator.GenerateToken(existingUser);
                 return Response<string>.Success(jwt);
             }
@@ -218,8 +223,6 @@ namespace Beavask.Application.Service
 
                 await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
                 await _unitOfWork.SaveChangesAsync();
-                Console.WriteLine($"Email: {dto.Email}");
-                Console.WriteLine($"Verification Code: {verificationCode}");
                 await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
 
                 return Response<bool>.Success(true);
@@ -265,6 +268,37 @@ namespace Beavask.Application.Service
             catch (Exception ex)
             {
                 return Response<bool>.Fail($"An eror occurred : {ex.Message}");
+            }
+        }
+
+        public async Task<Response<bool>> VerifyPersonelEmailAsync(string email, string code)
+        {
+            try
+            {
+                var verificataion = await _unitOfWork.VerificationCodeRepository
+                .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
+
+                if (verificataion == null){
+                var _user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
+                await _unitOfWork.UserRepository.DeleteAsync(_user);
+                return Response<bool>.Fail("Out of time or invalid verification code.");
+                }
+                verificataion.IsUsed = true;
+                await _unitOfWork.VerificationCodeRepository.UpdateAsync(verificataion);
+                await _unitOfWork.SaveChangesAsync();
+
+                var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
+                if (user == null)
+                    return Response<bool>.Fail("User not found.");
+                user.IsActive = true;
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+                await _mailService.SendRegistrationSuccessEmailAsync(user.Email);
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }
     }
