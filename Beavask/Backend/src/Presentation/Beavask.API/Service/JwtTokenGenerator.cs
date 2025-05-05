@@ -35,7 +35,7 @@ namespace Beavask.API.Service
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public string GenerateToken(Company company)
+        public string GenerateCompanyToken(Company company)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

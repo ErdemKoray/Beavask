@@ -5,14 +5,26 @@ using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.DTOs.Repo;
+using Beavask.Application.Helper;
 
 namespace Beavask.Application.Service;
 
-public class ProjectService(IUnitOfWork unitOfWork, IMapper mapper) : IProjectService
+public class ProjectService : IProjectService
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IMapper _mapper = mapper;
-    private readonly ICurrentUserService? _currentUserService;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IRepoService _repoService;
+    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentCompanyService _currentCompany;
+    public ProjectService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService repoService, ICurrentUserService currentUser, ICurrentCompanyService currentCompany)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _repoService = repoService;
+        _currentUser = currentUser;
+        _currentCompany = currentCompany;
+    }
+    
 
     public async Task<Response<ProjectDto>> GetByIdAsync(int id)
     {
@@ -42,23 +54,6 @@ public class ProjectService(IUnitOfWork unitOfWork, IMapper mapper) : IProjectSe
         catch (Exception ex)
         {
             return Response<IEnumerable<ProjectDto>>.Fail(ex.Message);
-        }
-    }
-
-    public async Task<Response<ProjectDto>> CreateAsync(ProjectCreateDto projectCreateDto)
-    {
-        try
-        {
-            var entity = _mapper.Map<Project>(projectCreateDto);
-            await _unitOfWork.ProjectRepository.AddAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
-
-            var dto = _mapper.Map<ProjectDto>(entity);
-            return Response<ProjectDto>.Success(dto);
-        }
-        catch (Exception ex)
-        {
-            return Response<ProjectDto>.Fail(ex.Message);
         }
     }
 
@@ -101,38 +96,50 @@ public class ProjectService(IUnitOfWork unitOfWork, IMapper mapper) : IProjectSe
             return Response<bool>.Fail(ex.Message);
         }
     }
-    public async Task<Response<bool>> CreateProjectFromSingleGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo, int? userId)
+    public async Task<Response<bool>> CreateProjectFromGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo, string repoUrl)
     {
-        if (repo == null)
-            return Response<bool>.Fail("Repo bilgisi boş.");
-
-        if (string.IsNullOrWhiteSpace(repo.Name))
-            return Response<bool>.Fail("Proje adı boş olamaz.");
-
-        if (string.IsNullOrWhiteSpace(repo.RepoUrl))
-            return Response<bool>.Fail("Repo URL boş olamaz.");
-
-        if (!repo.IsCompanyProject && userId == null)
+        try
         {
-            return Response<bool>.Fail("Bireysel proje oluşturuluyor ancak kullanıcı ID bulunamadı.");
+            bool isCompanyProject = false;
+            
+
+            if (_currentUser.UserId.HasValue && _currentUser.LastName != null)
+            {
+                isCompanyProject = false;
+                var userId = _currentUser.UserId.Value;
+            }
+            else if (_currentCompany.CompanyId.HasValue)
+            {
+                isCompanyProject = true;
+                var companyId = _currentCompany.CompanyId.Value;
+            }
+
+            var repoInfo = await _repoService.GetSingleRepositoryDetailAsync(repoUrl);
+
+            if (repoInfo == null)
+            {
+                return Response<bool>.Fail("GitHub repository bilgileri alınamadı.");
+            }
+
+            var project = new Project
+            {
+                Name = repoInfo.Data.Name,
+                Description = repoInfo.Data.Description,
+                IsCompanyProject = isCompanyProject,
+                RepoUrl = repoInfo.Data.HtmlUrl,
+                UserId = isCompanyProject ? null : _currentUser.UserId,
+                CompanyId = isCompanyProject ? _currentCompany.CompanyId : null
+            };
+
+            await _unitOfWork.ProjectRepository.AddAsync(project);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Response<bool>.Success(true);
         }
-
-        var project = new Project
+        catch (Exception ex)
         {
-            Name = repo.Name,
-            Description = repo.Description ?? string.Empty,
-            RepoUrl = repo.RepoUrl,
-            CreatedAt = DateTime.UtcNow,
-            IsActive = true,
-            OwnerId = repo.IsCompanyProject ? null : userId,
-            CustomerId = null
-        };
-
-        await _unitOfWork.ProjectRepository.AddAsync(project);
-        await _unitOfWork.SaveChangesAsync();
-
-        return Response<bool>.Success(true);
+            return Response<bool>.Fail($"Error: {ex.Message}");
+        }
     }
-
 }
 

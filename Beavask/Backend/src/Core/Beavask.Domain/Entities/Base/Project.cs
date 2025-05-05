@@ -7,19 +7,22 @@ namespace Beavask.Domain.Entities.Base
     public class Project
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Name { get; set; }
+        public string? Description { get; set; }
         public string RepoUrl { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsCompanyProject { get; set; } = false;
 
         // For Personal Projects
-        public int? OwnerId { get; set; }
-        public User? Owner { get; set; }
+        public int? UserId { get; set; } = null;
+        public User? User { get; set; } = null;
 
         // For Company Projects
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
         public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
 

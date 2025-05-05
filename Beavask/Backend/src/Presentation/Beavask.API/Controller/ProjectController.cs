@@ -26,13 +26,6 @@ public class ProjectController(IProjectService projectService , ICurrentUserServ
         return result.IsSuccess ? Ok(result) : StatusCode(500, result);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ProjectCreateDto dto)
-    {
-        var result = await _projectService.CreateAsync(dto);
-        return result.IsSuccess ? Ok(result) : BadRequest(result);
-    }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] ProjectUpdateDto dto)
     {
@@ -47,19 +40,16 @@ public class ProjectController(IProjectService projectService , ICurrentUserServ
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
     
-    [HttpPost("create-single-from-github")]
-    public async Task<IActionResult> CreateProjectFromSingleGitHubRepo([FromBody] CreateProjectFromGitHubRepoDto repo)
+    [HttpPost("create-from-github")]
+    public async Task<IActionResult> CreateProjectFromGitHub([FromBody] CreateProjectFromGitHubRepoDto repo)
     {
-        var userId = currentUserService.UserId;
+        var repoUrl = repo.RepoUrl;
 
-        var result = await _projectService.CreateProjectFromSingleGitHubRepoAsync(repo, userId);
+        var response = await _projectService.CreateProjectFromGitHubRepoAsync(repo, repoUrl);
+        if (!response.IsSuccess)
+            return BadRequest(response.Message);
 
-        if (result.IsSuccess)
-            return Ok(result);
-
-        return BadRequest(result);
+        return Ok("Project created successfully.");
     }
-
-
 }
 

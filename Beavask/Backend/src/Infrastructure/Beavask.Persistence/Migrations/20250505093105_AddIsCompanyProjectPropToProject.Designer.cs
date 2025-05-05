@@ -3,6 +3,7 @@ using System;
 using Beavask.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Beavask.Persistence.Migrations
 {
     [DbContext(typeof(BeavaskDbContext))]
-    partial class BeavaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505093105_AddIsCompanyProjectPropToProject")]
+    partial class AddIsCompanyProjectPropToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -509,9 +512,6 @@ namespace Beavask.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -519,6 +519,7 @@ namespace Beavask.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -528,7 +529,11 @@ namespace Beavask.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int?>("OwnerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("RepoUrl")
                         .IsRequired()
@@ -537,16 +542,11 @@ namespace Beavask.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Projects");
                 });
@@ -1024,23 +1024,17 @@ namespace Beavask.Persistence.Migrations
 
             modelBuilder.Entity("Beavask.Domain.Entities.Base.Project", b =>
                 {
-                    b.HasOne("Beavask.Domain.Entities.Base.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
                     b.HasOne("Beavask.Domain.Entities.Base.Customer", "Customer")
                         .WithMany("Projects")
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("Beavask.Domain.Entities.Base.User", "User")
+                    b.HasOne("Beavask.Domain.Entities.Base.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Company");
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Customer");
 
-                    b.Navigation("User");
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Beavask.Domain.Entities.Base.Task", b =>

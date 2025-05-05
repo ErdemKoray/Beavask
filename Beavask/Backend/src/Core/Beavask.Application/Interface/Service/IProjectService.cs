@@ -8,10 +8,8 @@ public interface IProjectService
 {
     Task<Response<ProjectDto>> GetByIdAsync(int id);
     Task<Response<IEnumerable<ProjectDto>>> GetAllAsync();
-    Task<Response<ProjectDto>> CreateAsync(ProjectCreateDto projectCreateDto);
     Task<Response<ProjectDto>> UpdateAsync(int id, ProjectUpdateDto projectUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
-    Task<Response<bool>> CreateProjectFromSingleGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo, int? userId);
-
+    Task<Response<bool>> CreateProjectFromGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo,string repoUrl);
 }
 

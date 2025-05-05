@@ -1,4 +1,5 @@
 using Beavask.Application.Interface.Repository;
+using Beavask.Application.Interface.Service;
 
 namespace Beavask.Application.Interface;
 

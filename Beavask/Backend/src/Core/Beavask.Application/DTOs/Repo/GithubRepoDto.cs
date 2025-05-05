@@ -5,7 +5,9 @@ namespace Beavask.Application.DTOs.Repo
 {
     public class GitHubRepoDto
     {
+        [JsonPropertyName("name")]
         public string Name { get; set; }
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
         [JsonPropertyName("html_url")]
@@ -16,14 +18,6 @@ namespace Beavask.Application.DTOs.Repo
 
         [JsonPropertyName("updated_at")]
         public DateTime UpdatedAt { get; set; }
-
-        [JsonPropertyName("stargazers_count")]
-        public int StargazersCount { get; set; }
-
-        [JsonPropertyName("forks_count")]
-        public int ForksCount { get; set; }
-
-        public string Language { get; set; }
 
         [JsonPropertyName("full_name")]
         public string FullName { get; set; }

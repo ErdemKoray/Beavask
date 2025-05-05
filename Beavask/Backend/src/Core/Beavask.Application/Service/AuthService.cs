@@ -81,7 +81,7 @@ namespace Beavask.Application.Service
                 if (!PasswordHelper.VerifyPassword(dto.Password, company.PasswordHash, company.PasswordSalt))
                     return Response<string>.Fail("Invalid password.");
 
-                var token = _tokenGenerator.GenerateToken(company);
+                var token = _tokenGenerator.GenerateCompanyToken(company);
                 return Response<string>.Success(token);
             }
             catch (Exception ex)

@@ -55,6 +55,7 @@ namespace Beavask.API.Service
             {
                 var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("BeavaskApp");
+
                 var url = UrlHelper.ConvertToGitHubApiUrl(repoApiUrl);
                 var response = await client.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
@@ -73,6 +74,7 @@ namespace Beavask.API.Service
                 return Response<GitHubRepoDto>.Fail($"Error: {ex.Message}");
             }
         }
+
         public async Task<Response<List<GitHubContributorDto>>> GetRepositoryContributorsAsync(string repoWebUrl)
         {
             var apiBaseUrl = UrlHelper.ConvertToGitHubApiUrl(repoWebUrl);

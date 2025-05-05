@@ -1,31 +1,38 @@
-using System.Security.Claims;
 using Beavask.Application.Interface.Service;
+using System.Security.Claims;
 
-namespace Beavask.API.Service;
-
-public class CurrentCompanyService(IHttpContextAccessor httpContextAccessor) : ICurrentCompanyService
+namespace Beavask.API.Service
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+public class CurrentCompanyService : ICurrentCompanyService
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public int? CompanyId => 
+    public CurrentCompanyService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public int? CompanyId =>
         int.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier), out var id)
             ? id : null;
 
-    public string? CompanyName => 
+    public string? CompanyName =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 
-    public string? CompanyEmail => 
+    public string? CompanyEmail =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
 
-    public string? CompanyPhone => 
+    public string? CompanyPhone =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue("CompanyPhone");
 
-    public string? CompanyLogoUrl => 
+    public string? CompanyLogoUrl =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue("LogoUrl");
 
-    public string? CompanyWebsite => 
+    public string? CompanyWebsite =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue("CompanyWebsite");
 
-    public string? CompanyDescription => 
+    public string? CompanyDescription =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue("CompanyDescription");
+}
+
 }
