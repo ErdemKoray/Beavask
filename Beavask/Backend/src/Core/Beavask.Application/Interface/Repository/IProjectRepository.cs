@@ -4,5 +4,6 @@ namespace Beavask.Application.Interface.Repository;
 
 public interface IProjectRepository : IBaseRepository<Project, int>
 {
-    // Add any project-specific repository methods here
+    Task<bool> AskProjectNameExistsForUser(string repoUrl, int UserId);
+    Task<bool> AskProjectNameExistsForCompany(string repoUrl, int companyId);
 } 

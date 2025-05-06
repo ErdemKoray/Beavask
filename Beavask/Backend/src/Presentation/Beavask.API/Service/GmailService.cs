@@ -249,7 +249,7 @@ namespace Beavask.API.Service
                 <html>
                   <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
                     <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
-                      <div style='background-color: #10b981; padding: 30px; text-align: center;'>
+                      <div style='background-color: #facc15; padding: 30px; text-align: center;'>
                         <img src='cid:{logoCid}' alt='Beavask Logo' style='height: 90px; margin-bottom: 10px;' />
                       </div>
                       <div style='padding: 35px 30px;'>

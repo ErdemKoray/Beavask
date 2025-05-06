@@ -101,24 +101,33 @@ public class ProjectService : IProjectService
         try
         {
             bool isCompanyProject = false;
-            
 
             if (_currentUser.UserId.HasValue && _currentUser.LastName != null)
             {
                 isCompanyProject = false;
-                var userId = _currentUser.UserId.Value;
             }
             else if (_currentCompany.CompanyId.HasValue)
             {
                 isCompanyProject = true;
-                var companyId = _currentCompany.CompanyId.Value;
             }
 
             var repoInfo = await _repoService.GetSingleRepositoryDetailAsync(repoUrl);
 
-            if (repoInfo == null)
+            if (repoInfo == null || repoInfo.Data == null)
             {
-                return Response<bool>.Fail("GitHub repository bilgileri alınamadı.");
+                return Response<bool>.Fail("Repository not found");
+            }
+
+            bool projectExistsForUser = await _unitOfWork.ProjectRepository.AskProjectNameExistsForUser(repoInfo.Data.HtmlUrl, _currentUser.UserId.Value);
+            if (projectExistsForUser)
+            {
+                return Response<bool>.Fail("Repository already exists for user");
+            }
+
+            bool projectExistsForCompany = await _unitOfWork.ProjectRepository.AskProjectNameExistsForCompany(repoInfo.Data.HtmlUrl, _currentCompany.CompanyId.Value);
+            if (projectExistsForCompany)
+            {
+                return Response<bool>.Fail("Repository already exists for company");
             }
 
             var project = new Project
@@ -141,5 +150,6 @@ public class ProjectService : IProjectService
             return Response<bool>.Fail($"Error: {ex.Message}");
         }
     }
+
 }
 

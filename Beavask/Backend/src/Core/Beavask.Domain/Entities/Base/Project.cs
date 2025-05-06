@@ -21,9 +21,9 @@ namespace Beavask.Domain.Entities.Base
         public User? User { get; set; } = null;
 
         // For Company Projects
-        public int? CompanyId { get; set; }
+        public int? CompanyId { get; set; } = null;
         public Company? Company { get; set; }
-        public int? CustomerId { get; set; }
+        public int? CustomerId { get; set; } = null;
         public Customer? Customer { get; set; }
 
         public ICollection<ProjectMember> Members = new List<ProjectMember>();
