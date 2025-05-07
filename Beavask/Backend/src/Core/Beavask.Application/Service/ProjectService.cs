@@ -118,16 +118,22 @@ public class ProjectService : IProjectService
                 return Response<bool>.Fail("Repository not found");
             }
 
-            bool projectExistsForUser = await _unitOfWork.ProjectRepository.AskProjectNameExistsForUser(repoInfo.Data.HtmlUrl, _currentUser.UserId.Value);
-            if (projectExistsForUser)
+            if (_currentUser.UserId.HasValue && _currentUser.LastName != null)
             {
-                return Response<bool>.Fail("Repository already exists for user");
+                bool projectExistsForUser = await _unitOfWork.ProjectRepository.AskProjectNameExistsForUser(repoInfo.Data.HtmlUrl, _currentUser.UserId.Value);
+                if (projectExistsForUser)
+                {
+                    return Response<bool>.Fail("Repository already exists for user");
+                }
             }
 
-            bool projectExistsForCompany = await _unitOfWork.ProjectRepository.AskProjectNameExistsForCompany(repoInfo.Data.HtmlUrl, _currentCompany.CompanyId.Value);
-            if (projectExistsForCompany)
+            if (_currentCompany.CompanyId.HasValue && _currentUser.LastName == null)
             {
-                return Response<bool>.Fail("Repository already exists for company");
+                bool projectExistsForCompany = await _unitOfWork.ProjectRepository.AskProjectNameExistsForCompany(repoInfo.Data.HtmlUrl, _currentCompany.CompanyId.Value);
+                if (projectExistsForCompany)
+                {
+                    return Response<bool>.Fail("Repository already exists for company");
+                }
             }
 
             var project = new Project
