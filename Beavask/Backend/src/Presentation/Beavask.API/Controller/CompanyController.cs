@@ -44,4 +44,14 @@ public class CompanyController : ControllerBase
         var result = await _companyService.DeleteAsync(id);
         return Ok(result);
     }
+    [HttpGet("{companyId}/users")]
+    public async Task<ActionResult> GetAllUsersByCompanyIdAsync(int companyId)
+    {
+        var response = await _companyService.GetAllUsersByCompanyIdAsync(companyId);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Data);  
+        }
+        return NotFound(response.Message); 
+    }
 }

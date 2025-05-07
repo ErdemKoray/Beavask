@@ -5,13 +5,15 @@ using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.Helper;
+using Beavask.Application.DTOs.User;
 
 namespace Beavask.Application.Service;
 
-public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService) : ICompanyService
+public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper) : ICompanyService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+
 
     public async Task<Response<CompanyDto>> GetByIdAsync(int id)
     {
@@ -83,5 +85,26 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IMailService
             return Response<bool>.Fail(ex.Message);
         }
     }
+
+    public async Task<Response<IEnumerable<UserDto>>> GetAllUsersByCompanyIdAsync(int companyId)
+    {
+        try
+        {
+            var users = await _unitOfWork.UserRepository.GetAllUsersByCompanyIdAsync(companyId);
+
+            if (users == null || !users.Any())
+            {
+                return Response<IEnumerable<UserDto>>.NotFound($"No users found for company with ID {companyId}.");
+            }
+
+            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users); 
+            return Response<IEnumerable<UserDto>>.Success(userDtos);
+        }
+        catch (Exception ex)
+        {
+            return Response<IEnumerable<UserDto>>.Fail($"An error occurred while fetching users: {ex.Message}");
+        }
+    }
+
 }
 
