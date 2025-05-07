@@ -50,6 +50,11 @@ public class TaskController(ITaskService taskService) : ControllerBase
         var result = await _taskService.AssigneToUserAsync(taskId, userId);
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
-    
+    [HttpGet("project/{projectId}")]
+    public async Task<IActionResult> GetAllTaskByProjectId(int projectId)
+    {
+        var result = await _taskService.GetAllTaskByProjectIdAsync(projectId);
+        return result.IsSuccess ? Ok(result) : NotFound(result);
+    }
 }
 

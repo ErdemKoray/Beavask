@@ -4,7 +4,6 @@ using Beavask.Application.DTOs.Task;
 using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
 
-
 namespace Beavask.Application.Service;
 
 public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
@@ -115,40 +114,63 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
             return Response<bool>.Fail(ex.Message);
         }
     }
-public async Task<Response<bool>> AssigneToUserAsync(int taskId, int userId)
-{
-    try
+    public async Task<Response<bool>> AssigneToUserAsync(int taskId, int userId)
     {
-        var task = await _unitOfWork.TaskRepository.GetByIdAsync(taskId);
-        if (task == null)
+        try
         {
-            return Response<bool>.NotFound("Task not found.");
-        }
+            var task = await _unitOfWork.TaskRepository.GetByIdAsync(taskId);
+            if (task == null)
+            {
+                return Response<bool>.NotFound("Task not found.");
+            }
 
-        var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
-        if (user == null)
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return Response<bool>.NotFound("User not found.");
+            }
+
+            bool isAssigned = await _unitOfWork.TaskRepository.IsUserAssignedToTask(taskId, userId);
+            if (isAssigned)
+            {
+                return Response<bool>.Fail("User is already assigned to this task.");
+            }
+
+            task.AssignedUserId = user.Id;
+
+            await _unitOfWork.TaskRepository.UpdateAsync(task);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Response<bool>.Success(true);
+        }
+        catch (Exception ex)
         {
-            return Response<bool>.NotFound("User not found.");
+            return Response<bool>.Fail($"Error occurred: {ex.Message}");
         }
-
-        bool isAssigned = await _unitOfWork.TaskRepository.IsUserAssignedToTask(taskId, userId);
-        if (isAssigned)
-        {
-            return Response<bool>.Fail("User is already assigned to this task.");
-        }
-
-        task.AssignedUserId = user.Id;
-
-        await _unitOfWork.TaskRepository.UpdateAsync(task);
-        await _unitOfWork.SaveChangesAsync();
-
-        return Response<bool>.Success(true);
     }
-    catch (Exception ex)
+
+    public async Task<Response<IEnumerable<Domain.Entities.Base.Task>>> GetAllTaskByProjectIdAsync(int projectId)
     {
-        return Response<bool>.Fail($"Error occurred: {ex.Message}");
-    }
-}
+        try
+        {
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId);
+            if (project == null)
+            {
+                return Response<IEnumerable<Domain.Entities.Base.Task>>.NotFound($"Project with ID {projectId} not found.");
+            }
+            var tasks = await _unitOfWork.TaskRepository.GetAllByProjectIdAsync(projectId);
 
+            if (tasks == null || !tasks.Any())
+            {
+                return Response<IEnumerable<Domain.Entities.Base.Task>>.NotFound($"No tasks found for project with ID {projectId}.");
+            }
+
+            return Response<IEnumerable<Domain.Entities.Base.Task>>.Success(tasks);
+        }
+        catch (Exception ex)
+        {
+            return Response<IEnumerable<Domain.Entities.Base.Task>>.Fail($"An error occurred while fetching tasks: {ex.Message}");
+        }
+    }
 }
 
