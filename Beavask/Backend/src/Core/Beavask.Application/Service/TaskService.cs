@@ -47,16 +47,32 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
     {
         try
         {
-            var entity = _mapper.Map<Domain.Entities.Base.Task>(dto);
-            await _unitOfWork.TaskRepository.AddAsync(entity);
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(dto.ProjectId);
+            
+            if (project == null)
+            {
+                return Response<TaskDto>.NotFound($"Project with ID {dto.ProjectId} not found.");
+            }
+
+            bool isTitleExists = await _unitOfWork.TaskRepository.IsTaskTitleExistsAsync(dto.Title, dto.ProjectId);
+            if (isTitleExists)
+            {
+                return Response<TaskDto>.Fail($"A task with the title '{dto.Title}' already exists for this project.");
+            }
+
+            var task = _mapper.Map<Domain.Entities.Base.Task>(dto);
+            task.ProjectId = dto.ProjectId;
+
+            await _unitOfWork.TaskRepository.AddAsync(task);
             await _unitOfWork.SaveChangesAsync();
 
-            var taskDto = _mapper.Map<TaskDto>(entity);
+            var taskDto = _mapper.Map<TaskDto>(task); 
+            
             return Response<TaskDto>.Success(taskDto);
         }
         catch (Exception ex)
         {
-            return Response<TaskDto>.Fail(ex.Message);
+            return Response<TaskDto>.Fail($"An error occurred while creating the task: {ex.Message}");
         }
     }
 
@@ -99,5 +115,40 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
             return Response<bool>.Fail(ex.Message);
         }
     }
+public async Task<Response<bool>> AssigneToUserAsync(int taskId, int userId)
+{
+    try
+    {
+        var task = await _unitOfWork.TaskRepository.GetByIdAsync(taskId);
+        if (task == null)
+        {
+            return Response<bool>.NotFound("Task not found.");
+        }
+
+        var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            return Response<bool>.NotFound("User not found.");
+        }
+
+        bool isAssigned = await _unitOfWork.TaskRepository.IsUserAssignedToTask(taskId, userId);
+        if (isAssigned)
+        {
+            return Response<bool>.Fail("User is already assigned to this task.");
+        }
+
+        task.AssignedUserId = user.Id;
+
+        await _unitOfWork.TaskRepository.UpdateAsync(task);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Response<bool>.Success(true);
+    }
+    catch (Exception ex)
+    {
+        return Response<bool>.Fail($"Error occurred: {ex.Message}");
+    }
+}
+
 }
 

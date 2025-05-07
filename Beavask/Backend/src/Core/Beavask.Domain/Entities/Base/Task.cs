@@ -24,8 +24,9 @@ namespace Beavask.Domain.Entities.Base
         public int ProjectId { get; set; }
         public Project Project { get; set; }
 
+        public int? CreatorId { get; set; }
         public int? AssignedUserId { get; set; }
-        public User AssignedUser { get; set; }
+        public User? AssignedUser { get; set; }
 
         public ICollection<TimeTracking> TimeTrackings = new List<TimeTracking>();
         

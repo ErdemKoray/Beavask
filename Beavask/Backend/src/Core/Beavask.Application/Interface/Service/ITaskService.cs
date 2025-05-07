@@ -9,5 +9,6 @@ public interface ITaskService
     Task<Response<TaskDto>> CreateAsync(TaskCreateDto dto);
     Task<Response<TaskDto>> UpdateAsync(int id, TaskUpdateDto dto);
     Task<Response<bool>> DeleteAsync(int id);
+    Task<Response<bool>> AssigneToUserAsync(int taskId, int userId);
 }
 

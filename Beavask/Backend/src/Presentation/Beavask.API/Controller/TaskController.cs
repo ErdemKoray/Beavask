@@ -44,5 +44,12 @@ public class TaskController(ITaskService taskService) : ControllerBase
         var result = await _taskService.DeleteAsync(id);
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
+    [HttpPost("{taskId}/assign/{userId}")]
+    public async Task<IActionResult> AssignToUser(int taskId, int userId)
+    {
+        var result = await _taskService.AssigneToUserAsync(taskId, userId);
+        return result.IsSuccess ? Ok(result) : NotFound(result);
+    }
+    
 }
 

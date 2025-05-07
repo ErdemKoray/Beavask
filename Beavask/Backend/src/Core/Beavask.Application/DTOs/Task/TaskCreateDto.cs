@@ -10,5 +10,4 @@ public class TaskCreateDto
     public TaskPriority Priority { get; set; }
     public Domain.Enums.TaskStatus Status { get; set; }
     public int ProjectId { get; set; }
-    public int? AssignedUserId { get; set; }
 }
