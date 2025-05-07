@@ -13,13 +13,14 @@ namespace Beavask.Application.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IMailService _mailService;
+        private readonly ICurrentCompanyService _currentCompanyService;
 
-
-        public AuthService(IUnitOfWork unitOfWork, ITokenGenerator tokenGenerator, IMailService mailService)
+        public AuthService(IUnitOfWork unitOfWork, ITokenGenerator tokenGenerator, IMailService mailService, ICurrentCompanyService currentCompanyService)
         {
             _unitOfWork = unitOfWork;
             _tokenGenerator = tokenGenerator;
             _mailService = mailService;
+            _currentCompanyService = currentCompanyService;
         }
 
         public async Task<Response<bool>> RegisterAsync(RegisterRequestDto dto)
@@ -294,6 +295,32 @@ namespace Beavask.Application.Service
                 await _unitOfWork.UserRepository.UpdateAsync(user);
                 await _unitOfWork.SaveChangesAsync();
                 await _mailService.SendRegistrationSuccessEmailAsync(user.Email);
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
+            }
+        }
+
+        public async Task<Response<bool>> ChangeCompanyPasswordAsync(ChangeCompanyPasswordRequestDto dto)
+        {
+            try
+            {
+                if (dto.NewPassword != dto.ConfirmNewPassword)
+                    return Response<bool>.Fail("New password and confirmation do not match.");
+
+                var company = _unitOfWork.CompanyRepository
+                    .GetSingleByConditionAsync(c => c.Id == _currentCompanyService.CompanyId && c.IsActive == true).Result;
+                if (company == null)
+                    return Response<bool>.Fail("Company not found.");
+
+                if (!PasswordHelper.VerifyPassword(dto.OldPassword, company.PasswordHash, company.PasswordSalt))
+                    return Response<bool>.Fail("Invalid old password.");
+
+                await _unitOfWork.CompanyRepository.UpdateAsync(company);
+                await _unitOfWork.SaveChangesAsync();
+
                 return Response<bool>.Success(true);
             }
             catch (Exception ex)

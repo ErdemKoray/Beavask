@@ -74,5 +74,13 @@ public class AuthController(IAuthService authService , IConfiguration configurat
             return Ok("Email successfully verified and login credentials sent.");
         return BadRequest(result.Message);
     }
+    [HttpPost("change-company-password")]
+    public async Task<IActionResult> ChangeCompanyPassword([FromBody] ChangeCompanyPasswordRequestDto dto)
+    {
+        var result = await _authService.ChangeCompanyPasswordAsync(dto);
+        if (result.IsSuccess)
+            return Ok("Password successfully changed.");
+        return BadRequest(result.Message);
+    }
 }
 
