@@ -1,16 +1,16 @@
-<div class="bv-u-container">
-  <div class="bv-u-body">
-    <div class="bv-u-header">
-      <div class="bv-u-header-container">
+<div class="bv-u-container d-flex justify-content-center bv-shadow-2">
+  <div class="bv-u-body d-flex flex-column bv-shadow-2">
+    <div class="bv-u-header d-flex justify-content-center align-items-center">
+      <div class="bv-u-header-container d-flex justify-content-center align-items-center">
         <div class="header-img-none">
           <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3">
             <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
           </svg>
         </div>
       </div>
-      <div class="profile-img-container">
-        <img [src]="avatarUrl" class="user-avatar" alt="User Avatar">
-        <div class="profile-img-none">
+      <div (click)="toggleProfileModal()" data-modal="profile" class="profile-img-container bv-radius-round d-flex justify-content-center align-items-center">
+        <img [src]="avatarUrl" class="user-avatar bv-transition d-flex justify-content-center align-items-center bv-radius-round" alt="User Avatar">
+        <div class="profile-img-none bv-radius-round d-flex justify-content-center align-items-center">
           <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#e3e3e3">
             <path d="M440-440ZM120-120q-33 0-56.5-23.5T40-200v-480q0-33 23.5-56.5T120-760h126l74-80h240v80H355l-73 80H120v480h640v-360h80v360q0 33-23.5 56.5T760-120H120Zm640-560v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM440-260q75 0 127.5-52.5T620-440q0-75-52.5-127.5T440-620q-75 0-127.5 52.5T260-440q0 75 52.5 127.5T440-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Z" />
           </svg>
@@ -18,17 +18,26 @@
       </div>
     </div>
 
-    <div class="bv-u-main">
+    <div class="bv-u-main d-flex flex-row justify-content-between">
       <div class="bv-u-main-left">
         <div class="bv-uml-content">
-          <div class="bv-lc-about">
-            <h3>{{ user.fullName }}</h3>
-            <p>{{ user.email }}</p>
-            <p><strong>Role:</strong> {{ user.role }}</p>
-            <p><strong>Projects:</strong> {{ user.totalProjects }}</p>
-            <p><strong>Tasks:</strong> {{ user.totalTasks }}</p>
+          <div class="bv-lc-about bv-gap">
+            <div class="bv-a-h">{{ 'userprofile.about' | translate }}</div>
+            <div class="bv-a-ih"><strong>{{"userprofile.userRole"|translate}}</strong> <div class="bv-a-i">{{ user.role }}</div></div>
+            <div class="bv-a-ih"><strong>{{"userprofile.totalProjects"|translate}}</strong> <div class="bv-a-i">{{ user.totalProjects }}</div></div>
+            <div class="bv-a-ih"><strong>{{"userprofile.totalTasks"|translate}}</strong> <div class="bv-a-i">{{ user.totalTasks }}</div></div>
           </div>
+          <div class="bv-lc-contact bv-gap">
+            <div  class="bv-a-h">{{ 'userprofile.contact' | translate }}</div>
+            <div class="bv-a-ih" ><strong title="{{'userprofile.userEmail'|translate}}"><i class="fa-solid fa-envelope"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
+            <div class="bv-a-ih" ><strong title="{{'userprofile.userPhone'|translate}}"><i class="fa-solid fa-phone"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
+            <div class="bv-a-ih" ><strong title="{{'userprofile.userLinkedln'|translate}}"><i class="fa-brands fa-linkedin"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
 
+          </div>
+          <div class="bv-lc-team bv-gap">
+            <div  class="bv-a-h">{{ 'userprofile.userTeam' | translate }}</div>
+           
+          </div>
         </div>
       </div>
       <div class="bv-u-main-right">
@@ -41,4 +50,27 @@
   </div>
 </div>
 
+
+<div class="bv-view-photo" *ngIf="userProfileView">
+  <div class="bv-v-top bv-v-c">
+    <div (click)="toggleProfileModal()" class="bv-vt-close">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+   
+      <div class="bv-vca-edit">
+        <i class="fa-solid fa-pen"></i>
+     
+    </div>
+  </div>
+  
+  <div  class="bv-v-body  bv-v-c">
+    <div class="bv-v-container">
+      <div class="bv-vc-image">
+        <img [src]="avatarUrl"  alt="User Avatar">
+      </div>
+     
+    </div>
+
+  </div>
+</div>
 

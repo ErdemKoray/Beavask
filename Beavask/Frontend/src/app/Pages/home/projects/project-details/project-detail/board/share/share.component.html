@@ -1,0 +1,23 @@
+<div class="share-backdrop" (click)="hide()">
+    <div class="share-panel" (click)="$event.stopPropagation()">
+      <header class="share-head">
+        <span>Share</span>
+        <button class="icon-btn" (click)="hide()">✕</button>
+      </header>
+  
+      <div class="share-link">
+        <input [value]="url" readonly />
+        <button class="btn btn--primary" (click)="copy()">
+          {{ copied ? 'Copied!' : 'Copy' }}
+        </button>
+      </div>
+  
+      <div class="share-grid">
+        <button class="share-tile"><i class="fa-brands fa-slack"></i><span>Slack</span></button>
+        <button class="share-tile"><i class="fa-brands fa-discord"></i><span>Discord</span></button>
+        <button class="share-tile"><i class="fa-brands fa-linkedin"></i><span>LinkedIn</span></button>
+        <button class="share-tile"><i class="fa-regular fa-envelope"></i><span>Email</span></button>
+      </div>
+    </div>
+  </div>
+  

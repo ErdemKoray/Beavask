@@ -20,8 +20,9 @@
   },
   "project": {
     "createProject": "Proje Oluştur",
-    "projectName": "Proje Adı",
-    "projectKey": "Proje Kodu",
+    "githubProjectLink": "Github Proje Bağlantısı",
+    "projectName": "Github Proje Adı",
+    "projectKey": "Proje Etiketi",
     "projectDescription": "Proje Açıklaması",
     "startDate": "Başlangıç Tarihi",
     "endDate": "Bitiş Tarihi",
@@ -30,7 +31,7 @@
     "priority": "Öncelik",
     "status": "Durum",
     "attachment": "Dosya Eki",
-    "projectNamePlaceholder": "Örn: Pazarlama Lansmanı",
+    "projectNamePlaceholder": "Örn: github.com/../..",
     "projectKeyPlaceholder": "Örn: MKT",
     "projectDescriptionPlaceholder": "Proje hakkında yazın...",
     "bugTracking": "Hata Takibi"
@@ -48,5 +49,22 @@
   "button": {
     "create": "Oluştur",
     "cancel": "İptal"
+  },
+  "home":{
+    "viewAllProjects": "Tüm Projeleri Gör"
+  },
+  "userprofile": {
+    "about": "Hakkında",
+    "userProfile": "User Profile",
+    "userName": "User Name",
+    "userEmail": "User Email",
+    "userPhone": "User Phone",
+    "userAddress": "User Address",
+    "userRole": "User Role",
+    "userStatus": "User Status",
+    "userProfilePicture": "User Profile Picture",
+    "userBio": "User Bio",
+    "updateProfile": "Update Profile",
+    "changePassword": "Change Password"
   }
 }

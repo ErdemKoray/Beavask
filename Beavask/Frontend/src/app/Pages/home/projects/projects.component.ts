@@ -1,124 +1,58 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../components/toast/toast.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { SortPipe } from '../../../common/pipe/sort.pipe';
 import { GithubrepoService } from '../../../common/services/projects/githubrepo.service';
 import { GithubRepo } from '../../../common/model/githubrepo.model';
+import { Project } from '../../../common/model/project.model';
+import { ProjectsService } from '../../../common/services/projects/projects.service';
 
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SortPipe,DatePipe], 
+  imports: [ReactiveFormsModule, CommonModule, SortPipe, DatePipe,RouterLink], 
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
-export class ProjectsComponent implements AfterViewInit {
+export class ProjectsComponent implements OnInit {
+
   constructor(
     private router: Router,
     private toast: ToastService,
     private githubRepoService: GithubrepoService,
+    private projectService: ProjectsService,
   ) {}
 
-  githubrepo : GithubRepo[] = [];
-  getProjectRepos() {
-    this.githubRepoService.getGithubRepos().subscribe({
-      next:(response) => {
-        console.log(response.data);
-       this.toast.show({
-          title: 'Success!',
-          message: `Fetched ${response.data.length} repositories from Github.`
-        });
-        this.githubrepo = response.data
-        console.log(this.githubrepo);
-      },
-      error:(err) => {
-        this.toast.show({
-          title: 'Error',
-          message: 'Failed to fetch Github repositories.'
-        });
-      }
-    });
-    
+  ngOnInit(): void {
+    this.getMyProjects(); 
   }
-
  
   sortKey: string = 'id'; 
   sortDirection: 'asc' | 'desc' = 'asc'; 
 
-   items = [
-    {
-      id: 9852,
-      requestedBy: {
-        name: 'Debra J. Wilson',
-        avatar: 'assets/images/debra.jpg'
-      },
-      subject: 'Your item has been updated!',
-      assignee: {
-        avatar: 'assets/images/user1.jpg'
-      },
-      priority: 'High',
-      status: 'Open',
-      createdDate: '01/04/2017',
-      dueDate: '21/05/2017'
-    },
-    {
-      id: 9501,
-      requestedBy: {
-        name: 'Amy R. Barnaby',
-        avatar: 'assets/images/amy.jpg'
-      },
-      subject: 'Homeworth for your property increased',
-      assignee: {
-        avatar: 'assets/images/user2.jpg'
-      },
-      priority: 'Low',
-      status: 'Open',
-      createdDate: '01/04/2017',
-      dueDate: '21/05/2017'
-    },
-    {
-       id: 9600,
-       requestedBy: {
-         name: 'Charles K. Davis',
-         avatar: 'assets/images/charles.jpg'
-       },
-       subject: 'Project proposal review',
-       assignee: {
-         avatar: 'assets/images/user3.jpg'
-       },
-       priority: 'Medium',
-       status: 'Closed',
-       createdDate: '15/03/2017',
-       dueDate: '30/04/2017'
-     },
-     {
-       id: 9123,
-       requestedBy: {
-         name: 'Debra J. Wilson',
-         avatar: 'assets/images/debra.jpg'
-       },
-       subject: 'Meeting minutes required',
-       assignee: {
-         avatar: 'assets/images/user1.jpg'
-       },
-       priority: 'High',
-       status: 'Pending',
-       createdDate: '10/04/2017',
-       dueDate: '12/04/2017'
-     }
-   
-  ];
+
+  items: Project[] = [];
+
+  getMyProjects(): void {
+    this.projectService.getAll().subscribe(response => {
+      if (response?.data) {
+        this.items = response.data;
+        console.log(this.items)
+      }
+    });
+  }
   searchProject(): void {
     const searchValue = this.searchForm.value.searchname?.toLowerCase() ?? '';
-
+  
+    // Filtered items based on search input
     const result = this.originalItems.filter(item =>
-      item.subject.toLowerCase().includes(searchValue) ||
-      item.requestedBy.name.toLowerCase().includes(searchValue)
+      item.name.toLowerCase().includes(searchValue) ||
+      item.description.toLowerCase().includes(searchValue)
     );
-
+  
     if (result.length === 0) {
       this.items = [];
       this.toast.show({
@@ -133,35 +67,14 @@ export class ProjectsComponent implements AfterViewInit {
       });
     }
   }
-
-  // Github projelerini aramak için
-  searchpProject(): void {
-    const searchValue = this.searchPForm.value.searchpname?.toLowerCase() ?? '';
-
-    const result = this.originalpItems.filter(item =>
-      item.name.toLowerCase().includes(searchValue)
-    );
-
-    if (result.length === 0) {
-      this.githubrepo = [];
-      this.toast.show({
-        title: 'No Results',
-        message: `No repositories found for "${searchValue}".`
-      });
-    } else {
-      this.githubrepo = result;
-      this.toast.show({
-        title: 'Success!',
-        message: `${result.length} repositories found.`
-      });
-    }
-  }
+  
+  
 
  
 
   
   private originalItems: any[] = [...this.items];
-  private originalpItems: any[] = [...this.githubrepo];
+ 
 
 
  searchForm = new FormGroup({
@@ -178,27 +91,13 @@ export class ProjectsComponent implements AfterViewInit {
     }
   }
 
-  onSearchpInputChange(event: any): void {
-    if (!event.target.value) {
-      this.githubrepo = [...this.originalpItems]; // Arama sıfırlandığında orijinal Github verisini geri yükle
-    }
-  }
+
 
   goToDetail(projectId?: number): void {
     const path = projectId ? `/project-detail/${projectId}` : '/project-detail/board';
     this.router.navigate([path]);
   }
 
-  ngAfterViewInit(): void {
-    const tooltipTriggerList = Array.from(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    );
-    tooltipTriggerList.forEach((tooltipTriggerEl: any) => {
-      new (window as any).bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    this.getProjectRepos();
-  }
 
 
  

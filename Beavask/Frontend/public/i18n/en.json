@@ -21,7 +21,8 @@
   },
   "project": {
     "createProject": "Create Project",
-    "projectName": "Project Name",
+    "githubProjectLink": "Github Project Link",
+    "projectName": "Github Project Name",
     "projectKey": "Project Key",
     "projectDescription": "Description",
     "startDate": "Start Date",
@@ -31,7 +32,7 @@
     "priority": "Priority",
     "status": "Status",
     "attachment": "Attachment",
-    "projectNamePlaceholder": "e.g. Marketing Launch",
+    "projectNamePlaceholder": "e.g. github.com/../..",
     "projectKeyPlaceholder": "e.g. MKT",
     "projectDescriptionPlaceholder": "Write about the project...",
     "bugTracking": "Bug Tracking"
@@ -51,6 +52,7 @@
     "cancel": "Cancel"
   },
   "home": {
+    "welcome":"Welcome",
     "yourWork": "Your work",
     "viewAllProjects": "View all projects",
     "workedOn": "Worked on",
@@ -68,6 +70,25 @@
     "next": "Next",
     "pageInfo": "Page: {{ currentPage }} of {{ totalPages }}",
     "paginationInfo": "Showing {{ currentItemsRange }} items"
+  },
+  "userprofile": {
+    "about": "About",
+    "userProfile": "User Profile",
+    "userName": "User Name",
+    "contact":"Contact",
+    "userEmail": "User Email",
+    "userTeam":"User Team",
+    "userLinkedln":"User Linkedln",
+    "userPhone": "User Phone",
+    "userAddress": "User Address",
+    "userRole": "User Role",
+    "userStatus": "User Status",
+    "userProfilePicture": "User Profile Picture",
+    "userBio": "User Bio",
+    "updateProfile": "Update Profile",
+    "changePassword": "Change Password",
+    "totalProjects": "Total Projects",
+    "totalTasks": "Total Tasks"
   }
 
 

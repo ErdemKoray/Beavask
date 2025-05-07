@@ -1,77 +1,37 @@
 .navbar {
-    background-color: var(--main-white-color);
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    width: 100%;
     z-index: 1;
-}
-
-.bv-img {
-    position: absolute;
-    left: 25%; 
+    padding: 0px;
+    box-shadow: 0 0 3px var(--shadow-d);
 }
 
 .bv-img img {
-    background-color:  var(--main-white-color);
     height: 60px; 
     width: auto;
     display: block;
     cursor: pointer;
 }
-
-.nv-bv li {
-    background-color: var(--main-white-color);
-}
-
-.bv-account {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--main-white-color);
-    position: absolute;
-    right: 25%;
-    color:var(--button-dark-white-color);
-    gap: 10px;
-    cursor: pointer;
- 
-}
 .bv-account svg{
-    fill: var(--button-dark-white-color);
-  
+    fill: var(--text-xsw);
 }
 .bv-hamb{
     display: none;
 }
 .nav-link{
-    color: var(--text-dark-white-color);
-    margin-left: 10px;
-    transition: box-shadow 0.2s ease-in,background-color 0.2s ease-in;
-    border-radius: 4px;
+    color: var(--text-xsw);
 }
 .nav-link:hover{
-    
-    background-color: var(--button-lwhite-white-color);
-   
-
-
+    background-color: var(--button-xsw);
 }
 .bv-nav-create-project .nav-link{
-  cursor: pointer;
-    margin-left: 5px;
-    background-color: var(--button-dark-white-color);
-    border-radius: 8px;
-    color: var(--text-lwhite-white-color);
-    transition: all 0.2s ease-in;
+    cursor: pointer;
+    background-color: var(--button-xsd);
+    color: var(--text-xsd);
     font-weight: 500;
 }
 
 .bv-nav-create-project:hover .nav-link{
-    background-color: var(--card-blue-white-color);
-    color: var(--text-dark-white-color);
-    box-shadow: 0 0x 6px var(--shadow-03blue-white-color);
-    z-index: 8;
-
+    background-color: var(--button-lcl);
+    color: var(--text-lw);
 }
 
 .bv-dropdown {
@@ -85,51 +45,36 @@
     top: 110%;
     left: -50%;
     width: 350px;
-    background-color: var(--dropdown-white-color); 
-    border-radius: 6px;
-    color: var(--text-dark-white-color);
-    box-shadow: 0 0 3px var(--shadow-dark-white-color);  
+    background-color: var(--card-xsw); 
+    color: var(--text-xsw);
+    box-shadow: 0 0 3px var(--shadow-d);  
     z-index: 1000;
-    transition: 0.3s ease-in-out;
 }
 
 .dropdown-item {
+    width: 100%;
     padding: 16px 24px; 
-    display: flex;
-    justify-content: start;
-    align-items: center;
     height: 48px; 
     font-size: 15px;  
     font-weight: 900;
-    transition: all 0.2s ease-in-out;
 }
 
 .dropdown-item:hover {
-    background-color: var(--dropdownh-d-white-color);
+    background-color: var(--card-lw);
 }
 
-.di-projects {
-    height: 48px;
-}
 
 .di-line {
-    display: flex;
-    justify-self: center;
-    align-items: center;
-    border-top: 1px solid #e0e0e0;  
-    width: 85%;
+    border-top: 1px solid var(--border-sd);  
+    width: 90%;
     margin: 10px auto;
 }
 
 .bv-dropdown-recent-projects-item {
-    display: flex;
-    justify-content: start;
-    align-items: center;
     height: 48px;
     width: 100%;
     font-size: 15px;
     font-weight: 500; 
-    transition: all 0.2s ease-in-out;
     padding-left: 0px; 
 }
 
@@ -157,27 +102,18 @@
 .profile-dropdown{
     max-width: 200px;
 }
-.nav-theme{
-    transition: all 0.2s ease-in;
-}
 .nav-theme:hover{
 rotate: 45deg;
 }
 
-
 .bv-userprofile img{
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
     background-color: var(--card-sblue-white-color);
     color: var(--text-dark-white-color);
     font-size: 20px; 
     font-weight: 600; 
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
 }
 
 
@@ -286,7 +222,7 @@ rotate: 45deg;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--modal-dark-white-color); 
+    background-color: var(--shadow-d); 
     z-index: 2000;
     justify-content: center;
     align-items: center;  
@@ -297,7 +233,7 @@ rotate: 45deg;
 .bv-cp-container {
   
     padding: 30px; 
-    background-color: var(--main-light-white-color);
+    background-color: var(--body-xsw);
     z-index: 2001;
     width: 50%;
     max-width: 600px; 
@@ -317,25 +253,25 @@ rotate: 45deg;
     width: 8px;
 }
 .bv-cp-container::-webkit-scrollbar-thumb {
-    background-color: var(--border-sdark-white-color); 
+    background-color: var(--border-xsw); 
     border-radius: 6px;
 }
 .bv-cp-container::-webkit-scrollbar-track {
-    background: var(--card-sblue-white-color);
+    background: var(--card-sw);
 }
 
 
 .bv-cp-header {
     padding-bottom: 20px; 
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-sdark-white-color); 
+    border-bottom: 1px solid var(--border-xsw); 
     text-align: center;
     width: 100%;
 }
 
 .bv-cp-header h2 {
     margin: 0; 
-    color: var(--text-dark-white-color); 
+    color: var(--text-xsw); 
     font-size: 24px; 
     font-weight: bold;
 }
@@ -374,7 +310,7 @@ rotate: 45deg;
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 0; 
-    color: var(--text-dark-white-color); 
+    color: var(--text-xsw); 
     width: 100%;
 }
 
@@ -383,12 +319,12 @@ rotate: 45deg;
 .bv-cr-text-group select {
     padding: 10px;
     border-radius: 4px;
-    border: 1.5px solid var(--border-blue-white-color);
+    border: 1.5px solid var(--border-xsw);
     font-size: 14px;
-    background-color: var(--card-sblue-white-color);
+    background-color: var(--card-sw);
     font-family: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    color: var(--text-dark-white-color); 
+    color: var(--text-xsw); 
     width: 100%;
     box-sizing: border-box; 
 }
@@ -411,24 +347,24 @@ rotate: 45deg;
 .bv-cr-text-group textarea:focus-visible,
 .bv-cr-text-group select:focus-visible {
     outline: none;
-    border-color: var(--border-dark-white-color);
-    box-shadow: var(--shadow-blue-white-color) 0px 0px 5px 1px;
-    color: var(--text-dark-white-color); 
+    border-color: var(--border-w);
+    box-shadow: var(--shadow-d) 0px 0px 5px 1px;
+    color: var(--text-xsw); 
 }
 
 /* Placeholder Stilleri */
 .bv-cr-text-group input::placeholder,
 .bv-cr-text-group textarea::placeholder {
-    color: var(--text-bwhite-white-color);
+    color: var(--text-sw);
     font-weight: normal;
 }
 
 .bv-cr-text-group input[type="file"] {
     padding: 8px;
     font-weight: normal;
-    color: var(--text-dark-white-color);
-    background-color: var(--card-sblue-white-color);
-    border: 1.5px solid var(--border-blue-white-color); 
+    color: var(--text-xsw);
+    background-color: var(--card-lcl);
+    border: 1.5px solid var(--border-lcl); 
 }
 
 
@@ -443,8 +379,8 @@ rotate: 45deg;
 
 .bv-cp-submit {
 
-    background-color: var(--button-dark-white-color);
-    color: var(--text-white-white-color); 
+    background-color: var(--button-xsw);
+    color: var(--text-xsw); 
     border: none;
     border-radius: 8px;
     width: 120px;
@@ -459,7 +395,7 @@ rotate: 45deg;
 }
 
 .bv-cp-submit:hover:not([disabled]) {
-    box-shadow: 0 4px 8px var(--shadow-03dark-white-color); 
+    box-shadow: 0 4px 8px var(--shadow-d); 
 }
 
 .bv-cp-submit:disabled {
@@ -470,9 +406,9 @@ rotate: 45deg;
 
 .bv-cp-close {
     
-    background-color: var(--button-blue-white-color);
-    color: var(--text-dark-white-color); 
-    border: 1px solid var(--border-blue-white-color); 
+    background-color: var(--button-lcl);
+    color: var(--text-cl); 
+    border: 1px solid var(--border-lcl); 
     border-radius: 8px;
     width: 120px;
     height: 40px;
@@ -487,7 +423,7 @@ rotate: 45deg;
 }
 
 .bv-cp-close:hover {
-    box-shadow: 0 4px 8px var(--shadow-03blue-white-color); 
+    box-shadow: 0 4px 8px var(--shadow-d); 
 }
 
 
@@ -541,3 +477,42 @@ rotate: 45deg;
         font-size: 20px; 
     }
 }
+
+
+.loader-cp{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .loader:after{
+    content: '';
+    position: absolute;
+    inset: 8px;
+    margin: auto;
+    background: #222b32;
+     border-radius: 50%;
+  }
+  .loader:before{
+    content: '';
+    position: absolute;
+    inset: 0px;
+    margin: auto;
+    background: var(--text-lw);
+    animation: crlMugLoader 2s linear infinite alternate;
+  }
+  @keyframes crlMugLoader {
+    0%  ,10% { transform: translateY(64px) }
+    90% , 100% { transform: translateY(0px) }
+  }
+      

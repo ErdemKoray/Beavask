@@ -1,10 +1,10 @@
 <div class="bv-login-body">
-  <div class="bv-login-container">
+  <div class="bv-login-container d-flex flex-column justify-content-center align-items-center">
     <div class="bv-logo">
-      <img *ngIf="!darkMode" src="iconbeavask.png" alt="Logo">
-      <img *ngIf="darkMode" src="Beavaskpink.png" alt="Logo">
+      <img *ngIf="!darkMode" src="iconbeavas.png" alt="Logo">
+      <img *ngIf="darkMode" src="Beavaskgreen.png" alt="Logo">
     </div>
-    <div class="bv-form-container">
+    <div class="bv-form-container d-flex flex-column justify-content-center align-items-center">
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <div class="form-group bv-text-group">
           <label for="exampleInputEmail1">Email address</label>
@@ -15,7 +15,7 @@
           <input formControlName="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
         </div>
 
-        <div class="form-group form-check bv-checkbox">
+        <div class="form-group form-check bv-checkbox gap-3 d-flex align-items-center justify-content-start">
           <input formControlName="rememberMe" type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Keep me signed in</label>
         </div>
@@ -29,29 +29,28 @@
           </div>
         </div>
 
-        <div class="bv-login-options">
-          <button type="submit" [disabled]="loginForm.invalid || isLoading" class="bv-submit">
+      
+        <div class="bv-login-options d-flex justify-content-between">
+          <button type="submit" [disabled]="loginForm.invalid || isLoading" class="bv-submit bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center">
             <div *ngIf="isLoading" class="loader">Loading...</div>
             <span *ngIf="!isLoading">Submit</span>
           </button>
+          <div class="bv-login-option-button bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center" (click)="loginWithGoogle()">
+            <div class="bv-login-logo d-flex justify-content-center align-items-center">
+              <i class="fa-brands fa-google"></i>
+            </div>
+            <div class="bv-login-text">Google</div>
+          </div>
+  
+          <div class="bv-login-option-button bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center" (click)="loginWithGithub()">
+            <div class="bv-login-logo d-flex justify-content-center align-items-center">
+              <i class="fa-brands fa-github"></i>
+            </div>
+            <div class="bv-login-text">GitHub</div>
+          </div>
         </div>
       </form>
 
-      <div class="bv-login-options">
-        <div class="bv-login-option-button" (click)="loginWithGoogle()">
-          <div class="bv-login-logo">
-            <!-- Google SVG Icon -->
-          </div>
-          <div class="bv-login-text">Google</div>
-        </div>
-
-        <div class="bv-login-option-button" (click)="loginWithGithub()">
-          <div class="bv-login-logo">
-            <!-- GitHub SVG Icon -->
-          </div>
-          <div class="bv-login-text">GitHub</div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

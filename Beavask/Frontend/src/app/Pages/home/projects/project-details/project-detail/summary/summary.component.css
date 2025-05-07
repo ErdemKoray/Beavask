@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 30px;
   height: 100%;
-  background-color: var(--body-white-color);
+  background-color: var(--main-xsw);
 }
 
 /* Üst istatistik kutuları */
@@ -19,12 +19,11 @@
 
 .bv-summary-card {
   flex: 1 1 200px;
-  background-color: var(--card-white-color);
+  background-color: var(--card-xsw);
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 0 0 var(--shadow-dark-white-color);
   text-align: center;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
   max-height: 120px;
 }
 
@@ -32,7 +31,7 @@
   font-size: 28px;
   margin: 0;
   font-weight: 500;
-  color: var(--main-color-dark);
+  color: var(--text-xsw);
 }
 
 .bv-summary-card p {
@@ -42,7 +41,7 @@
 
 .bv-summary-card span {
   font-size: 12px;
-  color: var(--text-bwhite-white-color);
+  color: var(--text-lw);
 }
 
 
@@ -56,12 +55,12 @@
 
 
 .bv-summary-box {
-  background-color: var(--main-white-color);
+  background-color: var(--body-xsw);
   border-radius: 8px;
   padding: 20px;
   height: auto;
   min-height: 200px;
-  box-shadow: 0 1px 6px var(--shadow-dark-white-color);
+  box-shadow: 0 1px 6px var(--shadow-d);
 }
 
 .bv-summary-box:nth-child(1) :nth-child(3) {
@@ -74,7 +73,7 @@
   font-size: 18px;
   margin-bottom: 15px;
   font-weight: 600;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 
 
@@ -103,7 +102,7 @@
   gap: 8px;
   font-size: 14px;
   margin-bottom: 5px;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 
 .bv-status-dot {
@@ -129,12 +128,12 @@
 .bv-no-activity {
   font-size: 16px;
   font-weight: 500;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 
 .bv-activity-helper {
   font-size: 13px;
-  color: var(--text-bwhite-white-color);
+  color: var(--text-lw);
 }
 
 /* Görev türleri */
@@ -144,13 +143,13 @@
 
   gap: 10px;
   margin-bottom: 12px;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 
 .bv-summary-type-bar {
   flex: 1;
   height: 8px;
-  background-color: var(--card-white-color);
+  background-color: var(--card-w);
   border-radius: 4px;
   overflow: hidden;
   position: relative;

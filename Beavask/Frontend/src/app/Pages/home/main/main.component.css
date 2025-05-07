@@ -4,23 +4,14 @@
 .bv-home-container {
 
   padding: 32px;
-  background-color: var(--card-swhite-color);
-  color: var(--text-dark-white-color);
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  flex-direction: column;
+  background-color: var(--body-xsw);
+  color: var(--text-xsw);
   gap: 32px;
   max-width: 1200px; 
   margin: 0 auto; 
   margin-top: 5vh;
   height: 100vh;
-  box-shadow:0px 0px 5px var(--border-sdark-white-color);
-}
-
-.bv-home-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  box-shadow:0px 0px 5px var(--shadow-d);
 }
 
 .bv-home-title {
@@ -32,58 +23,46 @@
 .bv-home-link {
   height: 40px;
   padding: 8px;
-  border-radius: 8px;
-  background-color: var(--card-dark-white-color);
-  color: var(--text-lwhite-white-color);
+  background-color: var(--button-xsd);
+  color: var(--text-xsd);
   font-size: 16px;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
   font-weight: 500;
 }
 .bv-home-link:hover {
-  background-color: var(--card-blue-white-color);
-  color: var(--text-dark-white-color);
-  box-shadow: 0 0x 6px var(--shadow-03blue-white-color);
+  background-color: var(--button-lcl);
+  color: var(--text-sw);
+  box-shadow: 0 0px 6px var(--shadow-d);
   
 }
 .bv-home-projects {
-  display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  justify-content: start; 
 }
 
 .bv-home-project-card {
-  background-color: var(--card-lblue-white-color);
-  border-radius: 8px;
+  background-color: var(--card-d)!important;
   padding: 16px;
   width: 260px;
-  display: flex;
-  gap: 12px;
-  box-shadow: 0 5x 2px var(--shadow-dark-white-color);
-  transition: all 0.2s ease-in-out;
+  border-left:6px solid var(--border-cl);
   cursor: pointer;
 }
 
 .bv-home-project-card:hover {
-  box-shadow: inset 0 0 6px var(--shadow-03blue-white-color);
+  transform: translateX(5px);
 }
 
 .bv-home-project-icon {
   width: 40px;
   height: 40px;
-  background-color:var( --main-white-color);
-  border-radius: 8px;
+  background-color:var( --body-xld);
 }
 
 .bv-home-project-info h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-fdark-white-color);
+  color: var(--text-sd);
 
 }
 
@@ -92,13 +71,12 @@
   padding: 0;
   margin: 4px 0 0 0;
   font-size: 13px;
-  color: var(--text-bwhite-white-color);
+  color: var(--text-ld);
 }
 
 .bv-home-tabs {
-  display: flex;
   gap: 24px;
-  border-bottom: 1px solid var(--main-xsdark-white-color);
+  border-bottom: 1px solid var(--border-lw);
   padding-bottom: 8px;
 }
 
@@ -106,51 +84,39 @@
   cursor: pointer;
   padding-bottom: 6px;
   font-size: 14px;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
   transition: all 0.1s ease-in;
   padding: 5px;
 }
 .bv-tab:hover {
   
-  border-bottom: 2px solid var(--text-dark-white-color);
+  border-bottom: 2px solid var(--border-lw);
  
 
 }
 .bv-tab.active {
-  border-bottom: 2px solid var(--text-dark-white-color);
+  border-bottom: 2px solid var(--border-lw);
   font-weight: bold;
 }
 
-.bv-home-activity {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
 .bv-activity-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 6px 10px;
-  transition: all 0.2s ease-in-out;
   cursor: pointer;
   
 }
 .bv-activity-item:nth-child(odd){
-  background-color: var(--card-lblue-white-color);
-
-
+  background-color: var(--card-scl);
   transition: all 0.2s ease-in-out;
 }
 
 .bv-activity-item:hover {
-  box-shadow: inset 0 0 9px var(--shadow-03blue-white-color);
+  box-shadow: inset 0 0 9px var(--shadow-d);
 }
 
 .bv-activity-icon {
   width: 30px;
   height: 30px;
-  background-color: var(--main-white-color);
+  background-color: var(--body-xld);
   border-radius: 4px;
   margin-right: 16px;
 }
@@ -166,7 +132,7 @@
 
 .bv-activity-subtitle {
   font-size: 12px;
-  color: var(--text-dark-white-color);
+  color: var(--text-sw);
   font-weight: 700;
 }
 
@@ -176,7 +142,7 @@
   flex-direction: column;
   align-items: flex-end;
   font-size: 12px;
-  color: var(--text-dark-white-color);;
+  color: var(--text-lw);;
 }
 
 .bv-activity-user {
@@ -212,9 +178,9 @@
 
 .bv-pagination-btn:hover,
 .bv-pagination-page:hover:not([disabled]) {
-  background-color: var(--button-blue-white-color);
-  border-color: var(--border-blue-white-color);
-  color: var(--text-dark-white-color);
+  background-color: var(--button-ld);
+  border-color: var(--border-d);
+  color: var(--text-d);
 }
 
 .bv-pagination-btn:disabled,
@@ -224,21 +190,21 @@
 }
 
 .bv-pagination-page.active {
-  background-color: var(--button-dark-white-color); 
-  color: var(--button-white-white-color);
-  border-color: var(--border-dark-white-color);
+  background-color: var(--button-d); 
+  color: var(--text-d);
+  border-color: var(--border-cl);
   font-weight: bold;
 }
 
 .bv-pagination-info {
     margin-left: 15px; 
     font-size: 0.9em;
-    color: var(--text-fdark-white-color);
+    color: var(--text-xsw);
 }
 
 .bv-no-results {
     text-align: center;
     padding: 20px;
-    color: var(--text-bwhite-white-color);
+    color: var(--text-xsw);
     font-style: italic;
 }

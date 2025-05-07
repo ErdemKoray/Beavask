@@ -1,4 +1,4 @@
-<div class="bv-team-container">
+<div class="bv-team-container d-flex flex-column bv-shadow-2">
     <!-- Team Banner -->
     <div class="bv-team-header">
       <img [src]="headerImagePath" alt="Team Banner" class="bv-team-banner" />
@@ -9,12 +9,12 @@
     </div>
   
     <!-- Main Body -->
-    <div class="bv-team-main">
+    <div class="bv-team-main d-flex flex-row">
       
       <div class="bv-team-left">
         <h3>Team Members</h3>
-            <div  (click)="gotoprofile()" class="bv-team-member" *ngFor="let member of members">
-              <img [src]="member.profileImagePath || 'assets/default-profile.png'" class="bv-team-member-img" />
+            <div  (click)="gotoprofile()" class="bv-team-member bv-transition d-flex align-items-center bv-radius-3" *ngFor="let member of members">
+              <img [src]="member.profileImagePath || 'assets/default-profile.png'" class="bv-team-member-img bv-radius-round" />
               <div class="bv-team-member-info">
                 <span class="bv-member-name">{{ member.firstName }} {{ member.lastName }}</span>
                 <span class="bv-member-role">{{ member.role }}</span>
@@ -39,7 +39,7 @@
      
         <div class="bv-team-section">
           <h3>Team Activity</h3>
-          <div class="bv-activity-log" *ngFor="let act of activities">
+          <div class="bv-activity-log bv-radius-2" *ngFor="let act of activities">
             <div class="bv-activity-user">{{ act.userName }}</div>
             <div class="bv-activity-desc">{{ act.description }}</div>
             <div class="bv-activity-time">{{ act.createdAt | date:'short' }}</div>

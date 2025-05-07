@@ -4,7 +4,7 @@
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background-color: var(--body-white-color); /* Açık gri arka plan */
+    background-color: var(--body-xsw); /* Açık gri arka plan */
     padding: 20px;
     text-align: center;
   }

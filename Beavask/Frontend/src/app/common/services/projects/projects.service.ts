@@ -19,9 +19,6 @@ export class ProjectsService {
     return this.apiService.getById(this.endpoint, id);
   }
 
-  create(auth: Project) {
-    return this.apiService.create(this.endpoint, auth);
-  }
 
   update(id: number, auth: Project) {
     return this.apiService.update(this.endpoint, id, auth);
