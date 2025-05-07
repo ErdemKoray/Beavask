@@ -149,27 +149,27 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
         }
     }
 
-    public async Task<Response<IEnumerable<Domain.Entities.Base.Task>>> GetAllTaskByProjectIdAsync(int projectId)
+    public async Task<Response<IEnumerable<TaskDto>>> GetAllTaskByProjectIdAsync(int projectId)
     {
         try
         {
             var project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId);
             if (project == null)
             {
-                return Response<IEnumerable<Domain.Entities.Base.Task>>.NotFound($"Project with ID {projectId} not found.");
+                return Response<IEnumerable<TaskDto>>.NotFound($"Project with ID {projectId} not found.");
             }
             var tasks = await _unitOfWork.TaskRepository.GetAllByProjectIdAsync(projectId);
 
             if (tasks == null || !tasks.Any())
             {
-                return Response<IEnumerable<Domain.Entities.Base.Task>>.NotFound($"No tasks found for project with ID {projectId}.");
+                return Response<IEnumerable<TaskDto>>.NotFound($"No tasks found for project with ID {projectId}.");
             }
-
-            return Response<IEnumerable<Domain.Entities.Base.Task>>.Success(tasks);
+            var taskDtos = _mapper.Map<IEnumerable<TaskDto>>(tasks);
+            return Response<IEnumerable<TaskDto>>.Success(taskDtos);
         }
         catch (Exception ex)
         {
-            return Response<IEnumerable<Domain.Entities.Base.Task>>.Fail($"An error occurred while fetching tasks: {ex.Message}");
+            return Response<IEnumerable<TaskDto>>.Fail($"Error occurred: {ex.Message}");
         }
     }
 }

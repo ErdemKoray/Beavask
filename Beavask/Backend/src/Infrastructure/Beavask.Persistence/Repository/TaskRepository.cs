@@ -1,3 +1,4 @@
+using Beavask.Application.DTOs.Task;
 using Beavask.Application.Interface.Repository;
 using Beavask.Domain.Entities.Base;
 using Beavask.Infrastructure.Persistence;
@@ -31,10 +32,26 @@ public class TaskRepository : BaseRepository<Beavask.Domain.Entities.Base.Task, 
         return taskExists;
     }
 
-    public async Task<IEnumerable<Domain.Entities.Base.Task>> GetAllByProjectIdAsync(int projectId)
+    public async Task<IEnumerable<TaskDto>> GetAllByProjectIdAsync(int projectId)
     {
-        return await _context.Tasks
-            .Where(t => t.ProjectId == projectId && t.IsActive == true)  // Aktif olan görevleri filtreliyoruz
+        var tasks = await _context.Tasks
+            .Where(t => t.ProjectId == projectId && t.IsActive == true)
+            .Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                CreatedAt = t.CreatedAt,
+                UpdatedAt = t.UpdatedAt,
+                StartDate = t.StartDate,
+                DueDate = t.DueDate,
+                CompletedDate = t.CompletedDate,
+                Priority = t.Priority,
+                Status = t.Status,
+                ProjectId = t.ProjectId,
+                AssignedUserId = t.AssignedUserId
+            })
             .ToListAsync();
+            return tasks;
     }
 } 

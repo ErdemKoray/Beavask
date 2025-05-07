@@ -10,6 +10,6 @@ public interface ITaskService
     Task<Response<TaskDto>> UpdateAsync(int id, TaskUpdateDto dto);
     Task<Response<bool>> DeleteAsync(int id);
     Task<Response<bool>> AssigneToUserAsync(int taskId, int userId);
-    Task<Response<IEnumerable<Domain.Entities.Base.Task>>> GetAllTaskByProjectIdAsync(int projectId);
+    Task<Response<IEnumerable<TaskDto>>> GetAllTaskByProjectIdAsync(int projectId);
 }
 
