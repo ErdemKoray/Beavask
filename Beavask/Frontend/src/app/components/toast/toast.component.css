@@ -10,10 +10,10 @@
 
 .bv-toast {
   width: 300px;
-  background-color: var(--card-sblue-white-colo);
+  background-color: var(--card-xsw);
   border-radius: 8px;
-  color: var(--text-dark-white-color);
-  box-shadow: 0 4px 6px var( --shadow-dark-white-color);
+  color: var(--text-xsw);
+  box-shadow: 0 4px 6px var( --shadow-d);
   animation: toastIn 0.3s ease forwards;
   overflow: hidden;
 }
@@ -33,8 +33,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--card-lblue-white-color);
-  color: var(--text-dark-white-color);
+  background-color: var(--card-xsw);
+  color: var(--text-xsw);
   padding: 10px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -49,7 +49,7 @@
 .bv-toast-body {
   padding: 10px;
   font-size: 14px;
-  background-color: var(--card-sblue-white-color);
+  background-color: var(--card-lw);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -57,7 +57,7 @@
 .bv-toast-close {
   background: none;
   border: none;
-  color: var(--card-lblue-white-color);
+  color: var(--card-xsw);
   font-size: 18px;
   cursor: pointer;
 }

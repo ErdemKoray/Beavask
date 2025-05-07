@@ -1,32 +1,28 @@
 import { Injectable } from '@angular/core';
 import { GenericHttpsService } from '../generic-https.service';
 import { Task } from '../../model/task.model';
+import { HttpClient } from '@angular/common/http';
+import { CreateTaskModel } from './taskModel/createTask.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
 
-  constructor(private apiService:GenericHttpsService<Task>) { }
+  constructor(private _http:HttpClient) { }
 
   private endpoint = "task";
 
-  getAll(){
-    return this.apiService.getAll(this.endpoint);
-  }
-  getById(id: number) {
-    return this.apiService.getById(this.endpoint, id);
-  }
+    create(model: CreateTaskModel) {
+      return this._http.post<any>(this.endpoint, model);
+    }
+    getAll() {
+      return this._http.get<Task[]>(this.endpoint);
+    }
 
-  create(auth: Task) {
-    return this.apiService.create(this.endpoint, auth);
-  }
+    getById(id: number) {
+      return this._http.get<Task>(`${this.endpoint}/${id}`);
+    }
 
-  update(id: number, auth: Task) {
-    return this.apiService.update(this.endpoint, id, auth);
-  }
-
-  delete(id: number) {
-    return this.apiService.delete(this.endpoint, id);
-  }
+    
 }

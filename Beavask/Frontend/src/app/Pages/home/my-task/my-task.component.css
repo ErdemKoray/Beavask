@@ -1,27 +1,19 @@
 
 .bv-mp-container {
   height: 85vh;
-  display: flex;
-  justify-content: center;
 }
 .bv-mp-body {
   margin-top: 5vh;
   width: 100%;
   max-width: 1200px;
   padding: 40px 20px;
-  background-color: var(--main-white-color);
-  box-shadow: 0px 0px 5px var(--border-sdark-white-color);
+  background-color: var(--body-xsw);
 }
-.bv-mp-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
+
 .bv-mp-h-title {
   font-size: 32px;
   font-weight: bold;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 .bv-mp-h-a-filter {
   display: flex;
@@ -30,63 +22,57 @@
 }
 
 .bv-mp-h-a-filter select{
-    color: var(--text-dark-white-color);
+    color: var(--text-xsw);
 }
 .bv-mp-h-a-input {
   height: 40px;
   padding: 0 12px;
-  border: 1px solid var(--border-sdark-white-color);
-  border-radius: 4px;
+  border: 1px solid var(--border-xsw);
   outline: none;
-  background: var(--main-white-color);
+  background: var(--card-xsw);
   font-size: 14px;
 }
 .bv-mp-h-a-button {
-  background-color: var(--button-dark-white-color);
-  color: var(--main-white-color);
+  background-color: var(--button-sd);
+  color: var(--text-xsw);
   border: none;
-  border-radius: 4px;
   width: 40px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 .bv-mp-h-a-button:hover {
-  background-color: var(--button-blue-white-color);
+  background-color: var(--button-cl);
 }
 .bv-mp-section {
   margin-top: 30px;
 }
 .bv-mp-grid {
   overflow-x: auto;
-  background-color: var(--main-white-color);
-  border-radius: 8px;
+  background-color: var(--card-xsw);
 }
 .bv-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Segoe UI', sans-serif;
   font-size: 14px;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 .bv-table th,
 .bv-table td {
   padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid var(--border-sdark-white-color);
+  border-bottom: 1px solid var(--border-lw);
   white-space: nowrap;
   cursor: pointer;
 }
 .bv-table thead {
-  background-color: var(--card-swhite-color);
+  background-color: var(--card-lw);
 }
 .bv-project-item:hover {
-  background-color: var(--card-lblue-white-color);
+  background-color: var(--card-ld);
 }
 .bv-badge {
   padding: 4px 8px;
-  border-radius: 12px;
   font-weight: 600;
-  color: var(--main-white-color);
+  color: var(--card-xsw);
   font-size: 12px;
   text-transform: capitalize;
   display: inline-block;
@@ -102,7 +88,6 @@
 }
 .bv-status {
   padding: 4px 10px;
-  border-radius: 10px;
   font-size: 12px;
   font-weight: bold;
   color: white;

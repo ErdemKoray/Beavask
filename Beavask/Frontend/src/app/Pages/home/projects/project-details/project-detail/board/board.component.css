@@ -1,16 +1,10 @@
 .bv-b-container{
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+    background-color: var(--body-xsw);
 }
 
 .bv-b-header{
-    display: flex;
-    justify-content: start;
     width: 80%;
 }
 
@@ -22,25 +16,31 @@
 }
 
 .bv-b-actions div{
-    background-color: var(--button-dark-white-color);
-    width: 40px;
-    height: 40px;
+    background-color: var(--button-xsd);
+    width: 45px;
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 4px;
+    border-radius: 50%;
     transition: transform 0.1s ease-in;
     cursor: pointer;
+    transition: all 0.1s ease-in;
 }
 
 .bv-b-actions div:hover {
     transform: translateY(-4px);
+    background-color: var(--button-cl);
+   
+}
+.bv-b-actions div:hover svg{
+    fill: var(--button-xsw);
 }
 
 .bv-b-title{
     font-size: 28px;
     font-weight: bolder;
-    color: #494945;
+    color: var(--text-w);
 }
 
 .bv-b-body{
@@ -56,34 +56,43 @@
 }
 .bv-b-op-search input{
     width: 200px;
-height: 40px;
-border-radius: 4px 0px 0px 4px;
-background-color: #ffffff;
-border: 1px solid #c9c9c4;
+    height: 40px;
+    border-radius: 4px 0px 0px 4px;
+    background-color: var(--card-lw);
+    border: 0px;
+    color: var(--text-xsw);
 }
 
 .bv-b-op-search input:focus{
 
     outline: none;
-    border: 1px solid var(--text-dark-white-color);
-    box-shadow: 0 0 2px var(--shadow-dark-white-color);
- 
+    border: 0px solid var(--text-xsw);
+    box-shadow: none;
+    color: var(--text-xsw);
+
 }
+
+
 .bv-b-s-button{
-    background-color:var(--button-dark-white-color);
+   
+    background-color:var(--card-lw);
+
     width: 40px;
     height: 40px;
     border: none;
     border-radius: 0px 4px 4px 0px;
+}
 
+.bv-b-s-button svg{
+    fill: var(--text-xsw);
 }
 
 .bv-b-task-body{
     margin-top: 20px;
     display: flex;
     gap: 10px;
-    border-bottom: 2px solid var(--border-sdark-white-color) ; 
-  border-top: 2px solid var(--border-sdark-white-color) ;
+    border-bottom: 1px solid var(--border-xsw) ; 
+  border-top: 1px solid var(--border-xsw) ;
     padding: 20px 0px 20px 0px;
 }
 
@@ -109,11 +118,24 @@ border: 1px solid #c9c9c4;
 }
 
 .bv-b-task-done{
-    background-color: var(--status-color-sgreen);
+    background-color: var(--card-w);
+    box-shadow: var(--shadow-xsw) 0px 0px 3px 1px;
 }
 .bv-b-task-current{
     background-color: var(--status-color-sblue);
 }
+
+
+input.view-text-focus:focus {
+    border: 2px solid var(--card-sdark-white-color) !important;
+    outline: none;          
+    background-color: var(--card-sdark-white-color);
+    color: #f1f1ec;
+    border-radius: 4px;
+    transition: all .1s ease-in;
+  }
+    
+
 .bv-b-ti-header{
     cursor: pointer;
     display: flex;
@@ -121,12 +143,13 @@ border: 1px solid #c9c9c4;
     align-items: center;
     height: 25px;
     margin: 20px;
-    color:#f3f3f2;
+    color:var(--text-xsw);
     font-weight: bold;
 }
 
 .bv-b-ci{
-    margin: 5px;
+    margin-top: 3px;
+    padding: 4px;
     height: 30px;
     display: flex;
     align-items: center;
@@ -134,22 +157,22 @@ border: 1px solid #c9c9c4;
     gap: 20px;
     cursor: pointer;
     opacity: 0%;
-    color: #f1f1ec;
-    transition: display 0.5s ease-in-out;
-    transition: background-color 0.1s ease-in;
+    color: var(--text-xsw);
+    transition: background-color 0.1s ease-in, display 0.5s ease-in-out;
+
 }
 
 .bv-b-ci svg{
     margin-left: 5px;
 }
 .bv-b-ci:hover{
-    background-color: #494945ad;
+    background-color: var(--card-sw);
    
     border-radius: 2px;
 }
 
 .bv-b-ti-options:hover{
-    background-color: #494945ad;
+    background-color: var(--card-sw);
    
     border-radius: 2px;
     
@@ -167,19 +190,101 @@ border: 1px solid #c9c9c4;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--button-dark-white-color);
+    background-color: var(--button-d);
     border-radius: 3px;
     border: none;
     transition: all 0.1s ease-in;
 }
 .bv-b-task-add-button:hover{
-    box-shadow: 0px 0px 3px var(--shadow-dark-white-color);
+    box-shadow: 0px 0px 3px var(--shadow-d);
 }
 
 
 
+.bv-b-ti-body {
+    padding: 10px;
+    max-width: 400px;
+    height: 320px; 
+    overflow-y: auto;
+    scroll-behavior: smooth; 
+    position: relative;
+    box-sizing: border-box;
+}
+
+.bv-b-ti-body::-webkit-scrollbar {
+    width: 6px; /* Thin scrollbar */
+}
+
+.bv-b-ti-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1); /* Subtle scrollbar thumb */
+    border-radius: 10px;
+}
+
+.bv-b-ti-body::-webkit-scrollbar-track {
+    background: transparent; /* Hide track */
+}
+
+.bv-task-card {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    border-radius: 6px;
+    background-color: var(--card-xsw);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: var(--text-xsw);
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in;
+    margin-top: 16px;
+}
+
+.bv-task-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 0px 2px var(--shadow-d) !important;
+}
+
+.bv-task-header {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--text-sw);
+}
+
+.bv-task-desc {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.bv-task-status {
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--text-sw);
+    margin-top: auto;
+}
+
+/* Add a subtle gradient effect to the bottom of the body */
+.bv-b-ti-body::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    pointer-events: none; /* Keeps it from blocking interaction */
+}
 
 
+.view-text {
+    cursor: pointer;
+    padding: 2px 4px;
+  }
+  
+  input {
+    padding: 2px 4px;
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
 
 
 
@@ -424,11 +529,3 @@ border: 1px solid #c9c9c4;
     
 }
 
-
-
-@media screen and (max-width:768px) {
-    
-    .bv-cp-container{
-        width: 100%;
-    }
-}

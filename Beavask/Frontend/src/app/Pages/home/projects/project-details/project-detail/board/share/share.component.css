@@ -1,0 +1,61 @@
+/* backdrop */
+.share-backdrop{
+    position:fixed; inset:0;
+    display:flex; justify-content:center; align-items:center;
+    background:var(--shadow-d);
+    z-index:1200;
+  }
+  
+  /* panel */
+  .share-panel{
+    width:320px; max-width:90%;
+    background:var(--body-xsw);
+    border-radius: 4px;
+    box-shadow:0 10px 30px var(--shadow-d);
+    padding:16px 20px; display:flex; flex-direction:column; gap:16px;
+  }
+  
+  /* header */
+  .share-head{display:flex; justify-content:space-between; align-items:center; font-weight:600}
+  .icon-btn{background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-xsw)}
+  .share-head span{
+    font-size:14px; color:var(--text-xsw); font-weight:600;
+    text-transform:capitalize; display:inline-block; padding:4px 8px;
+    border-radius:12px; background:var(--card-lcl)
+  }
+  /* link row */
+  .share-link{display:flex; gap:8px}
+  .share-link input{
+    flex:1; background:var(--card-sw);
+    border:1px solid var(--border-xsw);
+    border-radius:4px; padding:6px 8px; font-size:13px;
+    color:var(--text-xsw)
+  }
+  .btn{cursor:pointer; border-radius:4px; padding:6px 12px; border:none}
+  .btn--primary{background:var(--button-sw); color:var(--text-xsw);
+  }
+  
+  /* icons */
+  .share-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+  .share-tile{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    background:var(--card-lcl);
+    border:none;
+    border-radius:4px; 
+    padding:10px 4px; 
+    cursor:pointer; 
+    font-size:12px;
+    color:var(--text-xsw);
+    transition:.15s
+  }
+  .share-tile i{
+    font-size:18px
+  }
+  .share-tile:hover{
+    background:var(--card-lcl); 
+    color:#fff
+  }
+  

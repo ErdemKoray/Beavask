@@ -2,8 +2,8 @@
     position: relative;
     height: 100%;
     width: 100%;
-    background-color: var(--body-white-color);
-    border-right: 4px solid var(--border-sdark-white-color);
+    background-color: var(--body-xsw);
+
 }
 .bv-pn-container{
     width: 100%;
@@ -58,7 +58,7 @@
 .bv-pn-planning a{
     text-decoration: none;
     font-weight: bold;
-    color: var(--text-dark-white-color);
+    color: var(--text-xsw);
 }
 
 
@@ -67,12 +67,12 @@
 }
 
 .bv-pn-logo svg{
-    fill: var(--text-dark-white-color);
+    fill: var(--text-xsw);
 }
 
 .active-link{
     width: 100%;
-    background-color:var(--border-sdark-white-color);
+    background-color:var(--button-d);
 }
 
 .active-link a{
@@ -83,8 +83,8 @@
 }
 
 .bv-pn-planning li:hover{
-    background-color: var(--main-sdark-white-color);
+    background-color: var(--button-lw);
 }
 .active-link:hover{
-    background-color: var(--main-sdark-white-color)!important;
+    background-color: var(--button-lw)!important;
 }

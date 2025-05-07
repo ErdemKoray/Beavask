@@ -1,16 +1,16 @@
 
 
-<div class="bv-home-container">
+<div class="bv-home-container bv-shadow-2 d-flex flex-column">
 
   <div class="bv-home-section">
-    <div class="bv-home-header">
+    <div class="bv-home-header d-flex justify-content-between align-items-center">
       <span class="bv-home-title">Your work</span>
-      <a href="/projects" class="bv-home-link">{{'viewAllProjects' | translate}}</a>
+      <a href="/projects" class="bv-home-link d-flex justify-content-center align-items-center bv-radius-4 bv-transition">{{'viewAllProjects' | translate}}</a>
     </div>
 
-    <div class="bv-home-projects">
-      <div class="bv-home-project-card" *ngFor="let project of recentProjects">
-        <div class="bv-home-project-icon"></div>
+    <div class="bv-home-projects d-flex justify-content-start">
+      <div class="bv-home-project-card d-flex bv-shadow-1 bv-transition gap-3 bv-radius-3" *ngFor="let project of recentProjects">
+        <div class="bv-home-project-icon bv-radius-4"></div>
         <div class="bv-home-project-info">
           <h3>{{ project.name }}</h3>
           <ul>
@@ -22,17 +22,17 @@
     </div>
   </div>
 
-  <div class="bv-home-tabs">
+  <div class="bv-home-tabs d-flex">
     <span class="bv-tab" [class.active]="activeTab === 'worked'" (click)="setTab('worked')">Worked on</span>
     <span class="bv-tab" [class.active]="activeTab === 'viewed'" (click)="setTab('viewed')">Viewed</span>
     <span class="bv-tab" [class.active]="activeTab === 'assigned'" (click)="setTab('assigned')">Assigned to me</span>
     <span class="bv-tab" [class.active]="activeTab === 'starred'" (click)="setTab('starred')">Starred</span>
   </div>
 
-  <div class="bv-home-activity">
+  <div class="bv-home-activity d-flex flex-column gap-3">
 
     <div *ngIf="activeTab === 'worked'">
-      <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+      <div class="bv-activity-item bv-transition d-flex justify-content-between align-items-center" *ngFor="let activity of displayedActivities">
         <div class="bv-activity-details">
           <span class="bv-activity-title">{{ activity.title }}</span>
           <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
@@ -59,7 +59,7 @@
     </div>
 
     <div *ngIf="activeTab === 'viewed'">
-       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+       <div class="bv-activity-item bv-transition d-flex justify-content-between align-items-center" *ngFor="let activity of displayedActivities">
          <div class="bv-activity-details">
            <span class="bv-activity-title">{{ activity.title }}</span>
            <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
@@ -86,7 +86,7 @@
     </div>
 
     <div *ngIf="activeTab === 'assigned'">
-       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+       <div class="bv-activity-item bv-transition d-flex justify-content-between align-items-center" *ngFor="let activity of displayedActivities">
          <div class="bv-activity-details">
            <span class="bv-activity-title">{{ activity.title }}</span>
            <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>
@@ -113,7 +113,7 @@
     </div>
 
     <div *ngIf="activeTab === 'starred'">
-       <div class="bv-activity-item" *ngFor="let activity of displayedActivities">
+       <div class="bv-activity-item bv-transition d-flex justify-content-between align-items-center" *ngFor="let activity of displayedActivities">
          <div class="bv-activity-details">
            <span class="bv-activity-title">{{ activity.title }}</span>
            <span class="bv-activity-subtitle">{{ activity.code }} • {{ activity.project }}</span>

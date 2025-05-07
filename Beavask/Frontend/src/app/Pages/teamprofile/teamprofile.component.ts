@@ -25,7 +25,7 @@ export class TeamprofileComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.teamId = +params['id']; // 'id' parametresi
 
-      // API'den veriyi al
+
       this.getTeamDetail();
     });
   }

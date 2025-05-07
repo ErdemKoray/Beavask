@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, ViewChild, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,12 +7,21 @@ import { Team } from '../../common/model/team.model';
 import { ThemeService } from '../../common/services/theme/theme.service';
 import { Profile } from '../../common/services/profile/profile.model';
 import { AuthprofileService } from '../../common/services/profile/authprofile.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { LangService } from '../../common/services/lang/lang.service';
+import { CreatprojectService } from '../../common/services/projects/creatproject.service';
+import { cProject } from '../../common/services/projects/creatproject.model';
+
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,RouterLink,TranslateModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    TranslateModule
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -31,7 +40,8 @@ export class NavbarComponent implements OnInit {
       private teamService: TeamService,
       private themeService: ThemeService,
       private profileService: AuthprofileService,
-      private langService: LangService
+      private langService: LangService,
+      private createPApi:CreatprojectService
     ) {
       this.currentLang = this.langService.getCurrentLanguage();
       this.router.events.subscribe(event => {
@@ -64,16 +74,7 @@ export class NavbarComponent implements OnInit {
 
 
 form = new FormGroup({
-  projectName: new FormControl('', Validators.required),
-  projectKey: new FormControl('', [Validators.required, Validators.maxLength(5)]),
-  projectDescription: new FormControl(''),
-  startDate: new FormControl('', Validators.required),
-  endDate: new FormControl('', Validators.required),
-  lead: new FormControl('', Validators.required),
-  type: new FormControl('Scrum', Validators.required),
-  priority: new FormControl('Medium', Validators.required),
-  status: new FormControl('Draft', Validators.required),
-  projectFile: new FormControl(null)
+  projectName: new FormControl('', Validators.required)
 });
 
   
@@ -84,6 +85,8 @@ form = new FormGroup({
   isDropdownOpen = false;
   isModalDropdownOpen = false;
   isCreateProjectOpen = false;
+  isCreateProjectLoad = false;
+
   isTeamDropdownOpen = false;
   isTaskDropdownOpen = false;
   isProfileDropdownOpen= false;
@@ -226,7 +229,25 @@ form = new FormGroup({
   gotomyactivities() {
     this.router.navigate(['/myactivities']);
   }
- 
+  createProjectGithub() {
+
+    if (this.form.valid) {
+      const cproject: cProject | any= {
+        repoUrl: this.form.value.projectName
+      };
+      console.log(this.form.value);
+      this.isCreateProjectLoad = true;
+      this.createPApi.create(cproject).subscribe(response => {
+        console.log(response);
+        setTimeout(() => {
+          this.isCreateProjectLoad = false;
+        }, 2000);
+      });
+      this.form.reset();
+      this.toggleCreateProject();
+      this.isCreateProjectLoad = false;
+    }
+  }
   choiseoption(option: any) {
     const optionsElement = document.querySelector('#options');
     if (optionsElement) {

@@ -57,7 +57,7 @@ export const routes: Routes = [
                canActivate: [AuthGuard],
                 children:[
                     {
-                        path:"board",
+                        path:"board/:projectId",
                         loadComponent:()=>import('./Pages/home/projects/project-details/project-detail/board/board.component').then(m=>m.BoardComponent),
                        canActivate: [AuthGuard] 
                     },
@@ -67,7 +67,7 @@ export const routes: Routes = [
                        canActivate: [AuthGuard] 
                     },
                     {
-                        path:"timeline",
+                        path:"timeline/:projectId",
                         loadComponent:()=>import('./Pages/home/projects/project-details/project-detail/timeline/timeline.component').then(m=>m.TimelineComponent),
                        canActivate: [AuthGuard] 
                     }

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthprofileService } from '../../common/services/profile/authprofile.service';
 import { Profile } from '../../common/services/profile/profile.model';
+import { LangService } from '../../common/services/lang/lang.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface UserProfile {
   id: number;
@@ -24,16 +26,24 @@ interface ActivityItem {
 @Component({
   selector: 'app-userprofile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateModule],
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css'
 })
 
-export class UserprofileComponent {
+export class UserprofileComponent implements OnInit {
   user!: UserProfile;
+
+
+  userProfileView=false;
   activities: ActivityItem[] = [];
-  constructor(private profileService:AuthprofileService ) { }
-  ngOnInit(): void {
+  constructor(private profileService:AuthprofileService,private langService: LangService ) {
+  
+   }
+
+  ngOnInit() {
+    const currentLang = this.langService.getCurrentLanguage();
+    this.langService.setLanguage(currentLang);
     this.getUserInfo(); 
     this.user = {
       id: 1,
@@ -85,4 +95,23 @@ export class UserprofileComponent {
         }
       });
     }
+
+    @HostListener("document:keydown.escape",['$event'])
+    @HostListener("document:click",['$event'])
+    handleClickOutside(event:MouseEvent){
+      const target = event.target as HTMLElement;
+
+      if (
+        this.userProfileView &&
+        !target.closest('.bv-v-c') &&
+        !target.closest('[data-modal="profile"]')
+      ) {
+        this.userProfileView = false;
+      }
+    }
+    toggleProfileModal(): void {
+      this.userProfileView = !this.userProfileView;
+    }
+  
+    
 }

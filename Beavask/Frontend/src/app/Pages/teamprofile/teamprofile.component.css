@@ -2,15 +2,11 @@
 .bv-team-container {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--main-white-color);
-  color: var(--text-dark-white-color);
+  background-color: var(--body-xsw);
+  color: var(--text-xsw);
   max-width: 1200px; 
   margin: 0 auto; 
   margin-top: 5vh;
-  box-shadow:0px 0px 5px var(--border-sdark-white-color);
-
 }
 
 .bv-team-header {
@@ -18,7 +14,7 @@
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background-color: var(--main-lwhite-white-color);
+  background-color: var(--body-xsw);
 }
 
 .bv-team-banner {
@@ -33,7 +29,7 @@
   top: 50%;
   left: 40px;
   transform: translateY(-50%);
-  color: var(--main-white-color);
+  color: var(--text-xsw);
 }
 
 .bv-team-info h2 {
@@ -47,31 +43,26 @@
 }
 
 .bv-team-main {
-  display: flex;
   height: calc(100% - 220px);
 }
 
 .bv-team-left {
   width: 30%;
   padding: 20px;
-  border-right: 1px solid var(--card-lblue-white-color);
-  background-color: var(--card-sblue-white-color);
+  border-right: 1px solid var(--border-xsw);
+  background-color: var(--card-sw);
   overflow-y: auto;
 }
 .bv-team-left h3{
   font-weight: 500;
-  color: var(--text-dark-white-color);
+  color: var(--text-xsw);
 }
 .bv-team-member {
   cursor: pointer;
-  display: flex;
-  align-items: center;
   margin-bottom: 16px;
   padding: 10px;
-  background-color: var(--card-white-color);
-  border-radius: 6px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  background-color: var(--card-d);
+  border-left: 5px solid var(--border-cl);
 }
 
 .bv-team-member:hover {
@@ -82,7 +73,6 @@
 .bv-team-member-img {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
 }
@@ -95,11 +85,12 @@
   display: block;
   font-weight: 600;
   max-width: 176px;
+  color: var(--text-xsd);
 }
 
 .bv-member-role {
   font-size: 13px;
-  color: var(--text-bwhite-white-color);
+  color: var(--text-ld);
   font-weight: 500;
 }
 
@@ -128,17 +119,17 @@
 
 .bv-task-card,
 .bv-activity-log {
-  background-color: var(--card-lblue-white-color);
+  background-color: var(--card-d);
   margin-bottom: 12px;
   padding: 12px 16px;
-  border-left: 4px solid var(--border-dark-white-color);
-  border-radius: 4px;
+  border-left: 4px solid var(--border-cl);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
 }
 
 .bv-task-title {
   font-weight: 600;
   margin-bottom: 4px;
+  color: var(--text-xsd);
 }
 
 .bv-task-user,
@@ -147,7 +138,7 @@
 .bv-activity-desc,
 .bv-activity-time {
   font-size: 14px;
-  color: var(--text-dark-white-color);
+  color: var(--text-sd);
 }
 
 .bv-activity-user {
@@ -156,5 +147,5 @@
 
 .bv-activity-time {
   font-size: 12px;
-  color: var(--text-bwhite-white-color);
+  color: var(--text-ld);
 }

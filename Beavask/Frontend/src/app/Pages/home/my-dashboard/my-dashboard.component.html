@@ -1,24 +1,24 @@
-<div class="bv-summary-container">
+<div class="bv-summary-container d-flex flex-column gap-4">
 
     
-    <div class="bv-summary-top-cards">
-  <div class="bv-summary-card bv-summary-box" (click)="gotofiltertask('Closed')">
-    <div class="bv-sc-header">5</div>
+    <div class="bv-summary-top-cards d-flex justify-content-between flex-wrap gap-4">
+  <div class="bv-summary-card bv-radius-4 bv-summary-box" (click)="gotofiltertask('Closed')">
+    <div class="bv-sc-header bv-transition">5</div>
     <p>Tasks Completed</p>
     <span>this week</span>
   </div>
-  <div class="bv-summary-card bv-summary-box">
-    <div class="bv-sc-header">3</div>
+  <div class="bv-summary-card bv-radius-4 bv-summary-box">
+    <div class="bv-sc-header bv-transition">3</div>
     <p>Tasks Created</p>
     <span>this week</span>
   </div>
-  <div class="bv-summary-card bv-summary-box">
-    <div class="bv-sc-header">2</div>
+  <div class="bv-summary-card bv-radius-4 bv-summary-box">
+    <div class="bv-sc-header bv-transition">2</div>
     <p>In Progress</p>
     <span>currently working on</span>
   </div>
-  <div class="bv-summary-card bv-summary-box">
-    <div class="bv-sc-header">1</div>
+  <div class="bv-summary-card bv-radius-4 bv-summary-box">
+    <div class="bv-sc-header bv-transition">1</div>
     <p>Due Today</p>
     <span>don’t forget!</span>
   </div>
@@ -60,7 +60,7 @@
    
       <div class="bv-summary-box">
         <h4>Task Distribution</h4>
-        <div class="bv-sb-taskd-body">
+        <div class="bv-sb-taskd-body d-flex justify-content-between align-items-center flex-wrap gap-4">
 
             <div class="bv-summary-status-chart">
               <canvas id="statusChart"></canvas>
