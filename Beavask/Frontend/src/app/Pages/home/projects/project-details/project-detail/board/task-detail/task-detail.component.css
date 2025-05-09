@@ -248,6 +248,8 @@ input.view-text-focus:focus {
 
 /* Backdrop */
 .modal-backdrop {
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   inset: 0;
   background: var(--modal-dark-white-color);
@@ -353,3 +355,4 @@ input.view-text-focus:focus {
     border-top: 1px solid var(--border-sw);
   }
 }
+

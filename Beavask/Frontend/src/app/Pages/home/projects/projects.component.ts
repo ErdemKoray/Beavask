@@ -35,22 +35,33 @@ export class ProjectsComponent implements OnInit {
 
 
   items: Project[] = [];
+  private originalItems: any[] = [...this.items];
 
   getMyProjects(): void {
     this.projectService.getAll().subscribe(response => {
       if (response?.data) {
         this.items = response.data;
-        console.log(this.items)
+        this.originalItems = [...this.items]; // Orijinal öğeleri kaydet
+        console.log(this.items);
       }
     });
   }
+  
+
+
   searchProject(): void {
     const searchValue = this.searchForm.value.searchname?.toLowerCase() ?? '';
   
-    // Filtered items based on search input
+    // Eğer arama kutusu boşsa, orijinal öğelere dön
+    if (!searchValue) {
+      this.items = [...this.originalItems]; // Arama sıfırlandığında orijinal öğeleri geri yükle
+      return;
+    }
+  
+    // Arama yapılan değerle eşleşen öğeleri filtrele
     const result = this.originalItems.filter(item =>
       item.name.toLowerCase().includes(searchValue) ||
-      item.description.toLowerCase().includes(searchValue)
+      (item.description && item.description.toLowerCase().includes(searchValue)) // Description null veya undefined ise, geçerli arama yapılmasın
     );
   
     if (result.length === 0) {
@@ -68,12 +79,11 @@ export class ProjectsComponent implements OnInit {
     }
   }
   
-  
 
  
 
   
-  private originalItems: any[] = [...this.items];
+
  
 
 

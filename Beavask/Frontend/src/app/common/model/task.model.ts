@@ -12,10 +12,10 @@ export interface Task {
   title: string;
   description: string;
   createdAt: Date;
-  updatedAt?: Date;
-  startDate?: Date;
-  dueDate?: Date;
-  completedDate?: Date;
+  updatedAt?: Date | null;
+  startDate?: Date | null;
+  dueDate?: Date | null;
+  completedDate?: Date | null;
   priority: TaskPriority;
   status: TaskStatus;
   projectId: number;

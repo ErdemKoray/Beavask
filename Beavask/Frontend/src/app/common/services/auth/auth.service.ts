@@ -30,7 +30,7 @@ export class AuthService {
   login(auth:any): Observable<ApiResponse<string>> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<ApiResponse<string>>(
-      `${this.baseUrl}/login`,
+      `${this.baseUrl}/login-personal`,
       auth,
       { headers }
     );

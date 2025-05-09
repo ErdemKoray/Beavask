@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { AfterViewChecked, AfterViewInit, Component, HostListener, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InlineEditComponent } from './inline-edit/inline-edit.component';
@@ -6,79 +6,73 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { ShareModalComponent } from './share/share.component';
 import { ProjectsService } from '../../../../../../common/services/projects/projects.service';
 import { ActivatedRoute } from '@angular/router';
+import { TaskService } from '../../../../../../common/services/task/task.service';
+import { CreateTaskModel } from '../../../../../../common/services/task/taskModel/createTask.model';
+import { ToastService } from '../../../../../../components/toast/toast.service';
+import { TaskPriority ,mapPriority} from '../../../../../../common/model/taskPriority.model';
+import { Task } from '../../../../../../common/model/task.model';
+import { TaskStatus ,mapStatus} from '../../../../../../common/model/taskStatus.model';
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-  priority: string;
-  dueDate: Date;
-  color: string;
-  assignee: string;
-  comments?: Comment[];
-}
-interface Column {
-  id: number;
-  title: string;
-  tasks?: Task[];
 
-}
+
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule,FormsModule,InlineEditComponent,TaskDetailComponent,ShareModalComponent],
+  imports: [CommonModule,FormsModule,TaskDetailComponent,ShareModalComponent,TitleCasePipe],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })
 export class BoardComponent implements AfterViewInit {
 
- projectId: number= 0;
-  
+
+  projectId: number= 0;
+  taskdetailmodalid=0;
+  isCreateTaskOpen: boolean = false;
   shareVisible = false;
   currentTaskUrl = 'https://example.com/task/CCS-3';
-isCreateProjectOpen = false;
-activeDetail=false
+  isCreateProjectOpen = false;
+  activeDetail=false
+  taskPriorities = Object.values(TaskPriority).filter(value => typeof value === 'number') as number[];
+  taskStatus = Object.values(TaskPriority).filter(value => typeof value !== 'number'); 
+  
+  taskModel: CreateTaskModel = {
+    title: '',
+    description: '',
+    startDate: new Date(),
+    dueDate: new Date(),
+    priority: 0,
+    status: 0,
+    projectId: this.projectId,
+    assignedUserId: 0
+  };
+
+  tasks: Task[] = [];
+  column: { [key: string]: Task[] } = {
+    NotStarted: [],
+    InProgress: [],
+    Blocked: [],
+    OnHold: [],
+    Cancelled: [],
+    Completed: []
+  };
 
  
-  constructor(private apiProject:ProjectsService,private route:ActivatedRoute) { }
+  constructor(private apiProject:ProjectsService,
+    private apiTask:TaskService,
+    private route:ActivatedRoute,
+    private toastServices:ToastService) { }
 
   ngAfterViewInit() {
+ 
     this.getProjectDetail();
+    this.getProjectTasks()
   }
 
-  columns: Column[] = [
-    { id: 1, title: 'To Do', tasks: [
-      { id: 1, title: 'Task 1', description: 'Description 1', status: 'To Do', priority: 'High', dueDate: new Date(), color: 'var(--status-color-red)',assignee: 'User 1', },
-      { id: 2, title: 'Task 2', description: 'Description 2', status: 'To Do', priority: 'Medium', dueDate: new Date(),color:'var(--status-color-red)', assignee: 'User 2',},
-      { id: 5, title: 'Task 2', description: 'Description 2', status: 'To Do', priority: 'Medium', dueDate: new Date(),color:'var(--status-color-red)', assignee: 'User 2',},
-      { id: 4, title: 'Task 2', description: 'Description 2', status: 'To Do', priority: 'Medium', dueDate: new Date(),color:'var(--status-color-red)', assignee: 'User 2',}
-    ] },
-    { id: 2, title: 'In Progress' 
-        
-        , tasks: [
-          { id: 3, title: 'Task 3', description: 'Description 3', status: 'In Progress', priority: 'Low', dueDate: new Date(), color: 'var(--status-color-blue)', assignee: 'User 3' },
-          { id: 4, title: 'Task 4', description: 'Description 4', status: 'In Progress', priority: 'High', dueDate: new Date(), color: 'var(--status-color-blue)', assignee: 'User 4' }
-        ]
-    },
-    { id: 3, title: 'Done' ,tasks: [
-      { id: 5, title: 'Task 5', description: 'Description 5', status: 'Done', priority: 'Medium', dueDate: new Date(),  color: 'var(--status-color-sdgreen)',assignee: 'User 5' },
-      { id: 6, title: 'Task 6', description: 'Description 6', status: 'Done', priority: 'Low', dueDate: new Date(), color: 'var(--status-color-sdgreen)', assignee: 'User 6' }
-    ] 
-    }
-  ];
 
-  onTitleChange(col: Column, newTitle: string) {
-    col.title = newTitle || 'Untitled';
-   
-  }
 
-  addColumn() {
-    const nextId = Math.max(...this.columns.map(c => c.id)) + 1;
-    this.columns.push({ id: nextId, title: 'New Column' });
-  }
-  
+
+
   
   
   
@@ -89,13 +83,15 @@ activeDetail=false
 
 //GENEL FONKSİYONLAR BÖLÜMÜ
 showShare() { this.shareVisible = true; }
-  toggleCreateTaskBoard() {
+  toggleCreateProjectBoard() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;
     
   }
   
-  toggleTaskDetail() {
+  toggleTaskDetail(id:number) {
     this.activeDetail = !this.activeDetail;
+    this.taskdetailmodalid=id;
+    console.log(this.taskdetailmodalid)
     
   }
 
@@ -105,17 +101,155 @@ showShare() { this.shareVisible = true; }
 
   getProjectDetail() {
     this.route.params.subscribe(params => {
-      this.projectId = +params['projectId']; 
+      this.projectId = params['projectId']; 
       console.log(this.projectId)
     }
   );
     this.apiProject.getById(this.projectId).subscribe((response) => {
       if (response?.data) {
-        console.log(response.data);
+       
       }
     });
   }
 
+  
+  getProjectTasks() {
+    this.projectId = Number(this.projectId); 
+    this.apiTask.getAllTasks(this.projectId).subscribe(
+      {
+        next: (res) => {
+          this.tasks = this.formatTasks(res.data); 
+          this.groupTasksByStatus();
+          
+        },
+        error: (err) => {
+       
+        }
+      }
+    );
+  
+  }
+
+  
+  formatTasks(tasks: any[]): Task[] {
+    return tasks.map(task => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      createdAt: new Date(task.createdAt),  
+      updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+      startDate: task.startDate ? new Date(task.startDate) : null,
+      dueDate: task.dueDate ? new Date(task.dueDate) : null,
+      completedDate: task.completedDate ? new Date(task.completedDate) : null,
+      priority: mapPriority(task.priority), 
+      status: mapStatus(task.status),  
+      projectId: task.projectId,
+      assignedUserId: task.assignedUserId || undefined, 
+      assignedUser: task.assignedUser || undefined 
+    }));
+  }
+
+  
+  getStatusString(status: TaskStatus): string {
+    return TaskStatus[status]; 
+  }
+
+ 
+  getPriorityString(priority: TaskPriority): string {
+    return TaskPriority[priority];
+  }
+
+  
+  groupTasksByStatus() {
+    // Her bir statüye göre görevleri sıfırla (column[status] her zaman boş olmalı)
+    Object.keys(this.column).forEach(status => {
+      this.column[status] = [];
+    });
+  
+    // Her bir görevi statüsüne göre doğru sütuna yerleştiriyoruz
+    this.tasks.forEach(task => {
+      // Status'a göre doğru sütuna yerleştiriyoruz
+      switch (task.status) {
+        case 0:
+          this.column['NotStarted'].push(task);
+          break;
+        case 1:
+          this.column['InProgress'].push(task);
+          break;
+        case 2:
+          this.column['Blocked'].push(task);
+          break;
+        case 3:
+          this.column['OnHold'].push(task);
+          break;
+        case 4:
+          this.column['Cancelled'].push(task);
+          break;
+        case 5:
+          this.column['Completed'].push(task);
+          break;
+        default:
+          console.log('Unknown status', task.status);
+          break;
+      }
+    });
+  
+    // Konsola gruplandırılmış görevleri yazdıralım
+    console.log(this.column); // Gruplandırılmış görevleri kontrol ediyoruz
+  }
+  
+
+
+
+  onCreateTask() {
+    if (this.taskModel.title && this.taskModel.description) {
+      this.taskModel.projectId = Number(this.projectId); 
+      this.taskModel.priority = Number(this.taskModel.priority);
+      this.taskModel.status = Number(this.taskModel.status);
+      this.taskModel.startDate= new Date(this.taskModel.startDate);
+      this.taskModel.dueDate= new Date(this.taskModel.dueDate);
+     
+      this.apiTask.create(this.taskModel).subscribe(
+        { next:(res) => {
+           this.toastServices.show(
+             {title:'success',message:'Task created successfully!',
+   
+             });
+           this.resetForm();
+           this.toggleCreateTaskBoard();
+         },
+         error:(err) => {
+           this.toastServices.show(
+             {title:'error',message:'Error creating task!:' + err.message,
+   
+             });
+         }}
+       );
+    } else {
+      // Eğer başlık veya açıklama boşsa kullanıcıyı bilgilendirebiliriz
+      alert("Title and Description are required.");
+    }
+  }
+
+  // Task formunu sıfırlama fonksiyonu
+  resetForm() {
+    this.taskModel = {
+      title: '',
+      description: '',
+      startDate: new Date(),
+      dueDate: new Date(),
+      priority: 0,
+      status: 0,
+      projectId: 0,
+      assignedUserId: 0
+    };
+  }
+
+  // Modal açma/kapama fonksiyonu
+  toggleCreateTaskBoard() {
+    this.isCreateTaskOpen = !this.isCreateTaskOpen;
+    this.resetForm(); 
+  }
   //API İLE İLGİLİ FONKSİYONLAR BÖLÜMÜ
 
 

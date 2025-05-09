@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LangService } from '../../common/services/lang/lang.service';
 import { CreatprojectService } from '../../common/services/projects/creatproject.service';
 import { cProject } from '../../common/services/projects/creatproject.model';
+import { ToastService } from '../toast/toast.service';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class NavbarComponent implements OnInit {
       private themeService: ThemeService,
       private profileService: AuthprofileService,
       private langService: LangService,
-      private createPApi:CreatprojectService
+      private createPApi:CreatprojectService,
+      private toastService:ToastService
     ) {
       this.currentLang = this.langService.getCurrentLanguage();
       this.router.events.subscribe(event => {
@@ -236,13 +238,22 @@ form = new FormGroup({
         repoUrl: this.form.value.projectName
       };
       console.log(this.form.value);
-      this.isCreateProjectLoad = true;
-      this.createPApi.create(cproject).subscribe(response => {
-        console.log(response);
-        setTimeout(() => {
-          this.isCreateProjectLoad = false;
-        }, 2000);
-      });
+
+      this.createPApi.create(cproject).subscribe({
+        next:(response) => {
+        console.log(response);    
+        this.toastService.show({
+          title:'success',
+          message:'Project added successfully'
+        });
+      },error:(err)=>{
+        this.toastService.show({
+          title:'error',
+          message:'The link entered was not found'
+        });
+      }
+    
+    });
       this.form.reset();
       this.toggleCreateProject();
       this.isCreateProjectLoad = false;

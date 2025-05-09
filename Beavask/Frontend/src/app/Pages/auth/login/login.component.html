@@ -1,4 +1,4 @@
-<div class="bv-login-body">
+<div class="bv-login-body" *ngIf="showLogin" [@slideUp] >
   <div class="bv-login-container d-flex flex-column justify-content-center align-items-center">
     <div class="bv-logo">
       <img *ngIf="!darkMode" src="iconbeavas.png" alt="Logo">
@@ -9,17 +9,25 @@
         <div class="form-group bv-text-group">
           <label for="exampleInputEmail1">Email address</label>
           <input formControlName="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <!-- Email validasyon hataları -->
+          <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" class="text-danger">
+            <small class="bv-valid" *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</small>
+            <small class="bv-valid" *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address.</small>
+          </div>
         </div>
+        
         <div class="form-group bv-text-group">
           <label for="exampleInputPassword1">Password</label>
           <input formControlName="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <!-- Password validasyon hataları -->
+          <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="text-danger">
+            <small class="bv-valid" *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
+            <small class="bv-valid" *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters.</small>
+          </div>
         </div>
-
-        <div class="form-group form-check bv-checkbox gap-3 d-flex align-items-center justify-content-start">
-          <input formControlName="rememberMe" type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Keep me signed in</label>
-        </div>
-
+        
+      
+        
         <div class="bv-check2">
           <div class="bv-forgot-password">
             Forgot Password
@@ -28,20 +36,20 @@
             Create Account
           </div>
         </div>
-
       
         <div class="bv-login-options d-flex justify-content-between">
           <button type="submit" [disabled]="loginForm.invalid || isLoading" class="bv-submit bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center">
             <div *ngIf="isLoading" class="loader">Loading...</div>
             <span *ngIf="!isLoading">Submit</span>
           </button>
+      
           <div class="bv-login-option-button bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center" (click)="loginWithGoogle()">
             <div class="bv-login-logo d-flex justify-content-center align-items-center">
               <i class="fa-brands fa-google"></i>
             </div>
             <div class="bv-login-text">Google</div>
           </div>
-  
+      
           <div class="bv-login-option-button bv-transition gap-3 bv-radius-5 d-flex justify-content-center align-items-center" (click)="loginWithGithub()">
             <div class="bv-login-logo d-flex justify-content-center align-items-center">
               <i class="fa-brands fa-github"></i>
@@ -50,9 +58,7 @@
           </div>
         </div>
       </form>
-
     </div>
   </div>
 </div>
-
 <app-toast></app-toast>

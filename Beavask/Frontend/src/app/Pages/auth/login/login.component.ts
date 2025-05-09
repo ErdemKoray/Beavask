@@ -5,12 +5,24 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 import { ToastService } from '../../../components/toast/toast.service';
 import { CommonModule } from '@angular/common';
 import { ToastComponent } from '../../../components/toast/toast.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ToastComponent, ReactiveFormsModule,],
+  imports: [CommonModule, ToastComponent, ReactiveFormsModule],
   templateUrl: './login.component.html',
+  animations: [
+    trigger('slideUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(100%)' }),  // Başlangıçta eleman aşağıda
+        animate('0.5s ease-out', style({ transform: 'translateY(0)' }))  // Yukarı doğru kayarak geliyor
+      ]),
+      transition(':leave', [
+        animate('0.5s ease-in', style({ transform: 'translateY(100%)' }))  // Çıkarken aşağıya kayıyor
+      ])
+    ])
+  ],
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
@@ -25,14 +37,19 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
+  showLogin = false;
+  showRegister = true;
+
   ngOnInit(): void {
+    this.showLogin = true;
+    this.showRegister = false;
+  
     this.darkMode = localStorage.getItem('theme') === 'dark';
     
     // Form ve validasyonlar
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      email: ['', [Validators.required, Validators.email]],  
+      password: ['', [Validators.required, Validators.minLength(6)]], 
     });
   }
 
@@ -53,14 +70,14 @@ export class LoginComponent implements OnInit {
       this.toastService.show({ title: 'Error', message: 'Please fill all fields correctly.' });
       return;
     }
-
-    this.isLoading = true;
+  
+    this.isLoading = true; // Yükleme işlemi başladığında
     const { email, password } = this.loginForm.value;
-
-    // Login API çağrısı
+  
+    // Giriş API çağrısı
     this.authService.login({ email, password }).subscribe({
       next: (res) => {
-        this.isLoading = false;
+        this.isLoading = false; // Yükleme işlemi bittiğinde
         if (res.isSuccess) {
           this.toastService.show({ title: 'Success', message: 'Login Successful' });
           localStorage.setItem('jwtToken', res.data);  
@@ -70,14 +87,22 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.isLoading = false;
-        this.toastService.show({ title: 'Error', message: err.error.message });
+        this.isLoading = false; // Hata durumunda yükleme işlemi bitti
+        // err.error kontrolü yaparak null veya undefined olma durumunu ele alıyoruz
+        const errorMessage = err.error.message || 'An unexpected error occurred';
+        this.toastService.show({ title: 'Error', message: errorMessage });
       }
     });
   }
+  
 
-  // Kayıt sayfasına yönlendirme
-  goToRegister(): void {
-    this.router.navigate(['/register']);
+
+
+  goToRegister() {
+    this.showLogin = false;
+    this.showRegister = true;
+    setTimeout(() => {
+      this.router.navigate(['/register'])
+     }, 1000);
   }
 }

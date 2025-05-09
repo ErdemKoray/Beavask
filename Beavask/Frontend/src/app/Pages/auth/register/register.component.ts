@@ -5,12 +5,23 @@ import { ToastService } from '../../../components/toast/toast.service';
 import { AuthService } from '../../../common/services/auth/auth.service';
 import { ToastComponent } from '../../../components/toast/toast.component';
 import { CommonModule } from '@angular/common';
-
+import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [ToastComponent, CommonModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)' }),
+        animate('0.5s ease-out', style({ transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('0.5s ease-in', style({ transform: 'translateY(-100%)' }))
+      ])
+    ])
+  ],
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
@@ -18,6 +29,8 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   darkMode = false;
   isLoading = false;
+  showLogin = false;
+  showRegister = true;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +41,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     // Dark mode kontrolü
+    this.showLogin = false;
+    this.showRegister = true;
+  
     this.darkMode = localStorage.getItem('theme') === 'dark';
 
     // Form oluşturma ve validasyonlar
@@ -87,7 +103,16 @@ export class RegisterComponent implements OnInit {
   }
 
   // Giriş sayfasına yönlendirme
-  gotologin(): void {
-    this.router.navigate(['/login']);
+
+
+  goToLogin() {
+
+    this.showRegister = false;
+    this.showLogin = true;
+   setTimeout(() => {
+    this.router.navigate(['/login'])
+   }, 1000);
   }
+  
 }
+2
