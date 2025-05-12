@@ -16,24 +16,25 @@ public class ProjectRepository : BaseRepository<Project, int>, IProjectRepositor
 
     public async Task<bool> AskProjectNameExistsForCompany(string repoUrl, int companyId)
     {
-        // DbContext üzerinden Projects tablosuna sorgu oluşturuyoruz
         var project = await dbContext.Projects
-            .Where(p => p.RepoUrl == repoUrl && p.CompanyId == companyId && p.IsActive == true) // Repo URL, CompanyId ve IsActive true olmalı
-            .FirstOrDefaultAsync(); // İlk eşleşen projeyi al
-
-        // Eğer proje bulunursa ve tüm koşullar sağlanmışsa, true döner, aksi halde false
+            .Where(p => p.RepoUrl == repoUrl && p.CompanyId == companyId && p.IsActive == true)
+            .FirstOrDefaultAsync();
         return project != null; 
     }
 
-
     public async Task<bool> AskProjectNameExistsForUser(string repoUrl, int UserId)
     {
-        // DbContext üzerinden Projects tablosuna sorgu oluşturuyoruz
         var projectExists = await dbContext.Projects
-            .Where(p => p.RepoUrl == repoUrl && p.UserId == UserId && p.IsActive == true) // Repo URL, UserId ve IsActive true olmalı
-            .AnyAsync(); // Sadece var olup olmadığını kontrol et
-
-        return projectExists; // true/false döndür
+            .Where(p => p.RepoUrl == repoUrl && p.UserId == UserId && p.IsActive == true)
+            .AnyAsync();
+        return projectExists;
     }
 
+    public async Task<List<Project>> GetAllProjectsByCompanyId(int companyId)
+    {
+        var projects = await dbContext.Projects
+            .Where(p => p.CompanyId == companyId)
+            .ToListAsync();
+        return projects;
+    }
 } 

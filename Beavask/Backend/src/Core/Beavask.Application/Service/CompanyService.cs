@@ -9,10 +9,11 @@ using Beavask.Application.DTOs.User;
 
 namespace Beavask.Application.Service;
 
-public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper) : ICompanyService
+public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService repoService) : ICompanyService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly IRepoService _repoService = repoService;
 
 
     public async Task<Response<CompanyDto>> GetByIdAsync(int id)
@@ -86,23 +87,63 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper) : ICompanySe
         }
     }
 
-    public async Task<Response<IEnumerable<UserDto>>> GetAllUsersByCompanyIdAsync(int companyId)
+    public async Task<Response<IEnumerable<UserBirefForCompany>>> GetAllUsersByCompanyIdAsync(int companyId)
     {
         try
         {
-            var users = await _unitOfWork.UserRepository.GetAllUsersByCompanyIdAsync(companyId);
-
-            if (users == null || !users.Any())
+            var companyProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(companyId);
+            if (companyProjects == null || !companyProjects.Any())
             {
-                return Response<IEnumerable<UserDto>>.NotFound($"No users found for company with ID {companyId}.");
+                return Response<IEnumerable<UserBirefForCompany>>.Success(new List<UserBirefForCompany>());
             }
 
-            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users); 
-            return Response<IEnumerable<UserDto>>.Success(userDtos);
+            var userBriefs = new List<UserBirefForCompany>();
+            foreach(var project in companyProjects)
+            {
+                if (string.IsNullOrEmpty(project.RepoUrl))
+                    continue;
+
+                var contributors = await _repoService.GetRepositoryContributorsAsync(project.RepoUrl);
+                if(contributors?.Data == null)
+                    continue;
+
+                foreach(var contributor in contributors.Data)
+                {
+                    if (string.IsNullOrEmpty(contributor.Username))
+                        continue;
+
+                    var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.UserName == contributor.Username);
+                    if (user == null)
+                    {
+                        var unregisteredUser = new UserBirefForCompany
+                        {
+                            Username = contributor.Username,
+                            Email = "",
+                            IsRegistered = false,
+                            IsAssignedToCompany = false
+                        };
+                        userBriefs.Add(unregisteredUser);
+                        continue;
+                    }
+
+                    var userBrief = new UserBirefForCompany
+                    {
+                        Id = user.Id,
+                        Username = user.UserName,
+                        Email = user.Email,
+                        IsRegistered = true,
+                        IsAssignedToCompany = user.CompanyId == companyId
+                    };
+                    userBrief.IsRegistered = true;
+                    userBrief.IsAssignedToCompany = user.CompanyId == companyId;
+                    userBriefs.Add(userBrief);
+                }
+            }
+            return Response<IEnumerable<UserBirefForCompany>>.Success(userBriefs);
         }
         catch (Exception ex)
         {
-            return Response<IEnumerable<UserDto>>.Fail($"An error occurred while fetching users: {ex.Message}");
+            return Response<IEnumerable<UserBirefForCompany>>.Fail($"An error occurred while fetching users: {ex.Message}");
         }
     }
 

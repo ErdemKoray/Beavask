@@ -75,7 +75,7 @@ namespace Beavask.API.Service
             }
         }
 
-        public async Task<Response<List<GitHubContributorDto>>> GetRepositoryContributorsAsync(string repoWebUrl)
+        public async Task<Response<IEnumerable<GitHubContributorDto>>> GetRepositoryContributorsAsync(string repoWebUrl)
         {
             var apiBaseUrl = UrlHelper.ConvertToGitHubApiUrl(repoWebUrl);
             var contributorsApiUrl = $"{apiBaseUrl}/contributors";
@@ -85,7 +85,7 @@ namespace Beavask.API.Service
 
             var response = await client.GetAsync(contributorsApiUrl);
             if (!response.IsSuccessStatusCode)
-                return Response<List<GitHubContributorDto>>.Fail("Could not fetch contributors.");
+                return Response<IEnumerable<GitHubContributorDto>>.Fail("Could not fetch contributors.");
 
             var content = await response.Content.ReadAsStringAsync();
             var contributors = JsonSerializer.Deserialize<List<GitHubContributorDto>>(content, new JsonSerializerOptions
@@ -108,7 +108,7 @@ namespace Beavask.API.Service
                 contributor.IsRegistered = registeredUsernames.Contains(contributor.Username);
             }
 
-            return Response<List<GitHubContributorDto>>.Success(contributors);
+            return Response<IEnumerable<GitHubContributorDto>>.Success(contributors);
         }
     }
 }

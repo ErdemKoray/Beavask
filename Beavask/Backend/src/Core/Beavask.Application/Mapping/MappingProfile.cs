@@ -85,6 +85,12 @@ public class MappingProfile : Profile
         CreateMap<UserUpdateDto, User>();
         CreateMap<User, UserDto>();
         CreateMap<UserWithTeamAndCompanyDto,UserDto>();
+        CreateMap<User, UserBirefForCompany>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName ?? string.Empty))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email ?? string.Empty))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.IsRegistered, opt => opt.MapFrom(src => true))
+            .ForMember(dest => dest.IsAssignedToCompany, opt => opt.MapFrom(src => src.CompanyId.HasValue));
 
         //Milestone Entity
         CreateMap<Milestone, MilestoneDto>().ReverseMap();
