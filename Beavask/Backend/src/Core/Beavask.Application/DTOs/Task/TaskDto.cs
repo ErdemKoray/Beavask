@@ -16,4 +16,5 @@ public class TaskDto
     public Domain.Enums.TaskStatus Status { get; set; }
     public int ProjectId { get; set; }
     public int? AssignedUserId { get; set; }
+    public int CreatorId { get; set; }
 }

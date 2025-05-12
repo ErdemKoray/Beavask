@@ -6,10 +6,11 @@ using Beavask.Application.Interface;
 
 namespace Beavask.Application.Service;
 
-public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
+public class TaskService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService) : ITaskService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public async Task<Response<TaskDto>> GetByIdAsync(int id)
     {
@@ -61,6 +62,7 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper) : ITaskService
 
             var task = _mapper.Map<Domain.Entities.Base.Task>(dto);
             task.ProjectId = dto.ProjectId;
+            task.CreatorId = _currentUserService.UserId;
 
             await _unitOfWork.TaskRepository.AddAsync(task);
             await _unitOfWork.SaveChangesAsync();
