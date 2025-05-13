@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using Beavask.Persistence.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<ICurrentCompanyService, CurrentCompanyService>();
 builder.Services.AddScoped<IRepoService, RepoService>();
 builder.Services.AddScoped<IMailService, GmailMailService>();
+builder.Services.AddScoped<Beavask.Application.Interface.Logging.ILogger, DatabaseLogger>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));

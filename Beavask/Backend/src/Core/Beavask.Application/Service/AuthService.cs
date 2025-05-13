@@ -3,25 +3,23 @@ using Beavask.Application.DTOs.Auth;
 using Beavask.Application.DTOs.Company;
 using Beavask.Application.Helper;
 using Beavask.Application.Interface;
+using Beavask.Application.Interface.Logging;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
 
 namespace Beavask.Application.Service
 {
-    public class AuthService : IAuthService
+    public class AuthService(IUnitOfWork unitOfWork, 
+    ITokenGenerator tokenGenerator, IMailService mailService,
+     ICurrentCompanyService currentCompanyService,
+      ICurrentUserService currentUserService, ILogger logger) : IAuthService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ITokenGenerator _tokenGenerator;
-        private readonly IMailService _mailService;
-        private readonly ICurrentCompanyService _currentCompanyService;
-
-        public AuthService(IUnitOfWork unitOfWork, ITokenGenerator tokenGenerator, IMailService mailService, ICurrentCompanyService currentCompanyService)
-        {
-            _unitOfWork = unitOfWork;
-            _tokenGenerator = tokenGenerator;
-            _mailService = mailService;
-            _currentCompanyService = currentCompanyService;
-        }
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+        private readonly ITokenGenerator _tokenGenerator = tokenGenerator;
+        private readonly IMailService _mailService = mailService;
+        private readonly ICurrentCompanyService _currentCompanyService = currentCompanyService;
+        private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly ILogger _logger = logger;
 
         public async Task<Response<bool>> RegisterAsync(RegisterRequestDto dto)
         {
@@ -29,7 +27,10 @@ namespace Beavask.Application.Service
             {
                 var emailExists = await _unitOfWork.UserRepository.ExistsAsync(u => u.Email == dto.Email);
                 if (emailExists)
+                {
+                    await _logger.LogWarning("Registration attempt failed: Email already in use", context: dto.Email);
                     return Response<bool>.Fail("Email already in use.");
+                }
 
                 PasswordHelper.CreatePasswordHash(dto.Password, out string hash, out string salt);
 
@@ -46,7 +47,10 @@ namespace Beavask.Application.Service
                 };
                 var verificationCode = MailHelper.GenerateVerificationCode();
                 if (verificationCode == null)
+                {
+                    await _logger.LogError("Registration failed: Verification code generation failed", context: dto.Email);
                     throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
+                }
 
                 var verification = new VerificationCode
                 {
@@ -59,26 +63,48 @@ namespace Beavask.Application.Service
                 await _unitOfWork.SaveChangesAsync();
                 await _mailService.SendIndividualVerificationCodeAsync(dto.Email, verificationCode);
 
+                await _logger.LogInformation("User registration successful", context: dto.Email);
                 return Response<bool>.Success(true);
             }
             catch (Exception ex)
             {
+                await _logger.LogError("Registration failed", ex, context: dto.Email);
                 return Response<bool>.Fail(ex.InnerException?.Message ?? ex.Message);
             }
         }
 
         public async Task<Response<string>> LoginAsync(LoginRequestDto dto)
         {
-            var user = await _unitOfWork.UserRepository
-                .GetSingleByConditionAsync(u => u.Email == dto.Email);
+            try
+            {
+                var user = await _unitOfWork.UserRepository
+                    .GetSingleByConditionAsync(u => u.Email == dto.Email);
 
-            if (user == null)
-                return Response<string>.Fail("User not found.");
+                if (user == null)
+                {
+                    await _logger.LogWarning("Login attempt failed: User not found", context: dto.Email);
+                    return Response<string>.Fail("User not found.");
+                }
 
-            if (!PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash, user.PasswordSalt))
-                return Response<string>.Fail("Invalid password.");
-            var token = _tokenGenerator.GenerateToken(user);
-            return Response<string>.Success(token);
+                if (!PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash, user.PasswordSalt))
+                {
+                    await _logger.LogWarning("Login attempt failed: Invalid password", context: dto.Email, userId: user?.Id);
+                    return Response<string>.Fail("Invalid password.");
+                }
+
+                var token = _tokenGenerator.GenerateToken(user);
+                await _logger.LogInformation("User successfully logged in", context: user.Email, userId: user.Id);
+                return Response<string>.Success(token);
+            }
+            catch (Exception ex)
+            {
+                var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == dto.Email);
+                if (user == null)
+                    await _logger.LogError("Login failed: User not found", ex, context: dto.Email, userId: user?.Id);
+                else
+                    await _logger.LogError("Login failed", ex, context: dto.Email, userId: user.Id);
+                return Response<string>.Fail("An error occurred during login.");
+            }
         }
         public async Task<Response<string>> LoginCompanyAsync(CompanyLoginRequestDto dto)
         {
@@ -88,16 +114,28 @@ namespace Beavask.Application.Service
                     .GetSingleByConditionAsync(c => c.Username == dto.Username && c.IsActive == true);
 
                 if (company == null)
+                {
+                    await _logger.LogWarning("Company login attempt failed: Company not found", context: dto.Username, companyId: company?.Id);
                     return Response<string>.Fail("Company not found.");
+                }
 
                 if (!PasswordHelper.VerifyPassword(dto.Password, company.PasswordHash, company.PasswordSalt))
+                {
+                    await _logger.LogWarning("Company login attempt failed: Invalid password", context: dto.Username, companyId: company.Id);
                     return Response<string>.Fail("Invalid password.");
+                }
 
                 var token = _tokenGenerator.GenerateCompanyToken(company);
+                await _logger.LogInformation("Company successfully logged in", context: company.Username, companyId: company.Id);
                 return Response<string>.Success(token);
             }
             catch (Exception ex)
             {
+                var company = await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Username == dto.Username);
+                if (company == null)
+                    await _logger.LogError("Company login failed: Company not found", ex, context: dto.Username, companyId: company?.Id);
+                else
+                    await _logger.LogError("Company login failed", ex, context: dto.Username, companyId: company.Id);
                 return Response<string>.Fail($"An unexpected error occurred: {ex.Message}");
             }
         }
@@ -124,14 +162,20 @@ namespace Beavask.Application.Service
 
                 var response = await client.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
+                {
+                    await _logger.LogError("GitHub access token request failed", context: dto.Code);
                     return Response<string>.Fail("GitHub access token alınamadı.");
+                }
 
                 var content = await response.Content.ReadAsStringAsync();
                 var tokenJson = System.Text.Json.JsonDocument.Parse(content);
                 var accessToken = tokenJson.RootElement.GetProperty("access_token").GetString();
 
                 if (string.IsNullOrEmpty(accessToken))
+                {
+                    await _logger.LogError("Empty GitHub access token received", context: dto.Code);
                     return Response<string>.Fail("Access token değeri boş.");
+                }
 
                 var userRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
                 userRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
@@ -139,20 +183,24 @@ namespace Beavask.Application.Service
 
                 var userResponse = await client.SendAsync(userRequest);
                 if (!userResponse.IsSuccessStatusCode)
+                {
+                    await _logger.LogError("GitHub user info request failed", context: dto.Code);
                     return Response<string>.Fail("GitHub kullanıcısı alınamadı.");
+                }
 
                 var userJson = await userResponse.Content.ReadAsStringAsync();
                 var githubUser = System.Text.Json.JsonSerializer.Deserialize<GitHubUserDto>(userJson, new System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
-                Console.WriteLine($"Avatar URL: {githubUser.AvatarUrl}");
                 
                 if (githubUser == null)
+                {
+                    await _logger.LogError("Failed to deserialize GitHub user data", context: dto.Code);
                     return Response<string>.Fail("GitHub kullanıcı bilgisi çözümlenemedi.");
+                }
 
-                var avatarUrl = githubUser.AvatarUrl ?? "https://default-avatar-url.com/default-avatar.png"; 
-                Console.WriteLine("Avatar URL: " + avatarUrl);  
+                var avatarUrl = githubUser.AvatarUrl ?? "https://default-avatar-url.com/default-avatar.png";
                 
                 var existingUser = await _unitOfWork.UserRepository
                     .GetSingleByConditionAsync(u => u.UserName == githubUser.Login || u.Email == githubUser.Email);
@@ -172,15 +220,18 @@ namespace Beavask.Application.Service
 
                     await _unitOfWork.UserRepository.AddAsync(user);
                     await _unitOfWork.SaveChangesAsync();
+                    await _logger.LogInformation("New user created via GitHub login", context: user.Email, userId: user.Id);
 
                     existingUser = user;
                 }
 
                 var jwt = _tokenGenerator.GenerateToken(existingUser);
+                await _logger.LogInformation("User successfully logged in via GitHub", context: existingUser.Email, userId: existingUser.Id);
                 return Response<string>.Success(jwt);
             }
             catch (Exception ex)
             {
+                await _logger.LogError("GitHub login failed", ex, context: dto.Code);
                 return Response<string>.Fail($"Hata: {ex.Message}");
             }
         }
@@ -202,19 +253,24 @@ namespace Beavask.Application.Service
                     CreatedAt = DateTime.UtcNow,
                     IsActive = false
                 };
+
                 if (await _unitOfWork.CompanyRepository.GetSingleByConditionAsync(c => c.Email == dto.Email) != null)
+                {
+                    await _logger.LogWarning("Company registration attempted with existing email", context: dto.Email);
                     return Response<bool>.Fail("Email already exists.");
+                }
 
                 await _unitOfWork.CompanyRepository.AddAsync(company);
                 await _unitOfWork.SaveChangesAsync();
+                await _logger.LogInformation("New company registered", context: company.Email, companyId: company.Id);
 
                 var verificationCode = MailHelper.GenerateVerificationCode();
                 if (verificationCode == null)
-                    throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
-                else
                 {
-                    Console.WriteLine("verificataion code ",verificationCode);
+                    await _logger.LogError("Failed to generate verification code", context: company.Email, companyId: company.Id);
+                    throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
                 }
+
                 var verification = new VerificationCode
                 {
                     Email = dto.Email,
@@ -225,11 +281,13 @@ namespace Beavask.Application.Service
                 await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
                 await _unitOfWork.SaveChangesAsync();
                 await _mailService.SendVerificationCodeAsync(dto.Email, verificationCode);
+                await _logger.LogInformation("Verification code sent to company", context: company.Email, companyId: company.Id);
 
                 return Response<bool>.Success(true);
             }
             catch (Exception ex)
             {
+                await _logger.LogError("Company registration failed", ex, context: dto.Email);
                 return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }
@@ -276,29 +334,38 @@ namespace Beavask.Application.Service
         {
             try
             {
-                var verificataion = await _unitOfWork.VerificationCodeRepository
-                .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
+                var verification = await _unitOfWork.VerificationCodeRepository
+                    .GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
 
-                if (verificataion == null){
-                var _user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
-                await _unitOfWork.UserRepository.DeleteAsync(_user);
-                return Response<bool>.Fail("Out of time or invalid verification code.");
+                if (verification == null)
+                {
+                    var _user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
+                    await _unitOfWork.UserRepository.DeleteAsync(_user);
+                    await _logger.LogWarning("Invalid verification code attempt", context: email);
+                    return Response<bool>.Fail("Out of time or invalid verification code.");
                 }
-                verificataion.IsUsed = true;
-                await _unitOfWork.VerificationCodeRepository.UpdateAsync(verificataion);
+
+                verification.IsUsed = true;
+                await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
                 await _unitOfWork.SaveChangesAsync();
 
                 var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
                 if (user == null)
+                {
+                    await _logger.LogError("User not found during email verification", context: email);
                     return Response<bool>.Fail("User not found.");
+                }
+
                 user.IsActive = true;
                 await _unitOfWork.UserRepository.UpdateAsync(user);
                 await _unitOfWork.SaveChangesAsync();
                 await _mailService.SendRegistrationSuccessEmailAsync(user.Email);
+                await _logger.LogInformation("Personnel email verified successfully", context: email, userId: user.Id);
                 return Response<bool>.Success(true);
             }
             catch (Exception ex)
             {
+                await _logger.LogError("Personnel email verification failed", ex, context: email);
                 return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }
@@ -308,23 +375,40 @@ namespace Beavask.Application.Service
             try
             {
                 if (dto.NewPassword != dto.ConfirmNewPassword)
+                {
+                    await _logger.LogWarning("Password change failed - passwords do not match", 
+                        context: $"CompanyId: {_currentCompanyService.CompanyId}");
                     return Response<bool>.Fail("New password and confirmation do not match.");
+                }
 
-                var company = _unitOfWork.CompanyRepository
-                    .GetSingleByConditionAsync(c => c.Id == _currentCompanyService.CompanyId && c.IsActive == true).Result;
+                var company = await _unitOfWork.CompanyRepository
+                    .GetSingleByConditionAsync(c => c.Id == _currentCompanyService.CompanyId && c.IsActive == true);
                 if (company == null)
+                {
+                    await _logger.LogWarning("Password change failed - company not found", 
+                        context: $"CompanyId: {_currentCompanyService.CompanyId}");
                     return Response<bool>.Fail("Company not found.");
+                }
 
                 if (!PasswordHelper.VerifyPassword(dto.OldPassword, company.PasswordHash, company.PasswordSalt))
+                {
+                    await _logger.LogWarning("Password change failed - invalid old password", 
+                        context: $"CompanyId: {_currentCompanyService.CompanyId}");
                     return Response<bool>.Fail("Invalid old password.");
+                }
 
                 await _unitOfWork.CompanyRepository.UpdateAsync(company);
                 await _unitOfWork.SaveChangesAsync();
 
+                await _logger.LogInformation("Company password changed successfully", 
+                    context: $"CompanyId: {_currentCompanyService.CompanyId}", 
+                    companyId: company.Id);
                 return Response<bool>.Success(true);
             }
             catch (Exception ex)
             {
+                await _logger.LogError("Password change failed", ex, 
+                    context: $"CompanyId: {_currentCompanyService.CompanyId}");
                 return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }

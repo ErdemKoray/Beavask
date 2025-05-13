@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Beavask.Domain.Entities.Base
 {
@@ -9,8 +9,14 @@ namespace Beavask.Domain.Entities.Base
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // User - Log one-to-many relationship
-        public required User User { get; set;}
-        public int UserId { get; set; }
+        // User
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+
+        // Company 
+        public int? CompanyId { get; set; }
+        [ForeignKey("CompanyId")]
+        public Company? Company { get; set; }
     }
 }
