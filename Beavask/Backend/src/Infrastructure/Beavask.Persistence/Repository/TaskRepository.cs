@@ -41,4 +41,12 @@ public class TaskRepository : BaseRepository<Beavask.Domain.Entities.Base.Task, 
         return tasks;
     }
 
+    public async Task<IEnumerable<Domain.Entities.Base.Task>> GetAllByUserIdAsync(int userId)
+    {
+        var tasks = await _context.Tasks
+            .Where(t => t.AssignedUserId == userId && t.IsActive == true)
+            .ToListAsync();
+
+        return tasks;
+    }
 } 

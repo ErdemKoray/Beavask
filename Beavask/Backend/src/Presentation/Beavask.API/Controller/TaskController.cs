@@ -56,5 +56,11 @@ public class TaskController(ITaskService taskService) : ControllerBase
         var result = await _taskService.GetAllTaskByProjectIdAsync(projectId);
         return result.IsSuccess ? Ok(result) : NotFound(result);
     }
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetAllTaskByUserId(int userId)
+    {
+        var result = await _taskService.GetAllTaskByUserIdAsync(userId);
+        return result.IsSuccess ? Ok(result) : NotFound(result);
+    }
 }
 

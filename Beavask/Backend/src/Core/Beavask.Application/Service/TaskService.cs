@@ -174,5 +174,28 @@ public class TaskService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserSer
             return Response<IEnumerable<TaskDto>>.Fail($"Error occurred: {ex.Message}");
         }
     }
+
+    public async Task<Response<IEnumerable<TaskDto>>> GetAllTaskByUserIdAsync(int userId)
+    {
+        try
+        {
+           var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+           if (user == null)
+           {
+                return Response<IEnumerable<TaskDto>>.NotFound($"User with ID {userId} not found.");
+           }
+           var tasks = await _unitOfWork.TaskRepository.GetAllByUserIdAsync(userId);
+           if (tasks == null || !tasks.Any())
+           {
+                return Response<IEnumerable<TaskDto>>.NotFound($"No tasks found for user with ID {userId}.");
+           }
+           var taskDtos = _mapper.Map<IEnumerable<TaskDto>>(tasks);
+           return Response<IEnumerable<TaskDto>>.Success(taskDtos);
+        }
+        catch (Exception ex)
+        {
+            return Response<IEnumerable<TaskDto>>.Fail($"Error occurred: {ex.Message}");
+        }
+    }
 }
 

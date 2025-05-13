@@ -111,5 +111,6 @@ public class MappingProfile : Profile
         CreateMap<Domain.Entities.Base.Task, TaskDto>().ReverseMap();
         CreateMap<TaskCreateDto, Domain.Entities.Base.Task>();
         CreateMap<TaskUpdateDto, Domain.Entities.Base.Task>();     
+        CreateMap<TaskDto,Domain.Entities.Base.Task>();
     }
 }

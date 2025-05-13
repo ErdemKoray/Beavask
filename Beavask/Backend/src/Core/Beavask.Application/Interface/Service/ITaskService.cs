@@ -11,5 +11,6 @@ public interface ITaskService
     Task<Response<bool>> DeleteAsync(int id);
     Task<Response<bool>> AssigneToUserAsync(int taskId, int userId);
     Task<Response<IEnumerable<TaskDto>>> GetAllTaskByProjectIdAsync(int projectId);
+    Task<Response<IEnumerable<TaskDto>>> GetAllTaskByUserIdAsync(int userId);
 }
 
