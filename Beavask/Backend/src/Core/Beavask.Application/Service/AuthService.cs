@@ -397,6 +397,10 @@ namespace Beavask.Application.Service
                     return Response<bool>.Fail("Invalid old password.");
                 }
 
+                PasswordHelper.CreatePasswordHash(dto.NewPassword, out string newHash, out string newSalt);
+                company.PasswordHash = newHash;
+                company.PasswordSalt = newSalt;
+
                 await _unitOfWork.CompanyRepository.UpdateAsync(company);
                 await _unitOfWork.SaveChangesAsync();
 
