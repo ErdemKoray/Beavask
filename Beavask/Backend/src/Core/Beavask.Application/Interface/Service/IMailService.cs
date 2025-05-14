@@ -1,3 +1,5 @@
+using Beavask.Application.DTOs.Auth;
+
 namespace Beavask.Application.Interface.Service
 {
     public interface IMailService
@@ -6,5 +8,7 @@ namespace Beavask.Application.Interface.Service
         Task SendUserCredentialsAsync(string toEmail, string loginName, string password);
         Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode);
         Task SendRegistrationSuccessEmailAsync(string toEmail);
+        Task SendProjectInvitationAsync(ProjectInvitationRequest request);
+
     }
 }

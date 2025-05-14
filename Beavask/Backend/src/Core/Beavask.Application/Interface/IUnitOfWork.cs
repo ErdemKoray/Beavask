@@ -29,6 +29,7 @@ public interface IUnitOfWork
     IProjectMemberRepository ProjectMemberRepository { get; }
     ICommentRepository CommentRepository { get; }
     IVerificationCodeRepository VerificationCodeRepository { get; }
+    IInvitationTokenRepository InvitationTokenRepository { get; }
     
     Task<int> SaveChangesAsync();
 }

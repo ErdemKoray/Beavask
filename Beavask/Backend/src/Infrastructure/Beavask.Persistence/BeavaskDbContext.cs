@@ -31,6 +31,7 @@ namespace Beavask.Infrastructure.Persistence
         public DbSet<User> Users { get; set; }
         public DbSet<UserContact> UserContacts { get; set; }
         public DbSet<VerificationCode> VerificationCodes { get; set; }
+        public DbSet<InvitationToken> InvitationTokens { get; set; }
 
         // Relationships klasöründeki entity'ler
         public DbSet<ProjectMember> ProjectMembers { get; set; }

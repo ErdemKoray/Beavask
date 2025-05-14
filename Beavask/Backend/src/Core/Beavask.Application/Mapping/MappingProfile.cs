@@ -1,4 +1,5 @@
 using AutoMapper;
+using Beavask.Application.DTOs.Auth;
 using Beavask.Application.DTOs.Company;
 using Beavask.Application.DTOs.Customer;
 using Beavask.Application.DTOs.Event;
@@ -112,5 +113,14 @@ public class MappingProfile : Profile
         CreateMap<TaskCreateDto, Domain.Entities.Base.Task>();
         CreateMap<TaskUpdateDto, Domain.Entities.Base.Task>();     
         CreateMap<TaskDto,Domain.Entities.Base.Task>();
+
+        //InvitationToken Entity
+        CreateMap<ProjectInvitationRequest, InvitationToken>()
+        .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.ToEmail))
+        .ForMember(dest => dest.Token, opt => opt.Ignore())
+        .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+        .ForMember(dest => dest.ExpiresAt, opt => opt.Ignore())
+        .ForMember(dest => dest.IsUsed, opt => opt.Ignore())
+        .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

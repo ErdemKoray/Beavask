@@ -1,4 +1,9 @@
+using AutoMapper;
+using Beavask.Application.DTOs.Auth;
+using Beavask.Application.Helper;
+using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
+using Beavask.Domain.Entities.Base;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -8,13 +13,19 @@ namespace Beavask.API.Service
     public class GmailMailService : IMailService
     {
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICurrentCompanyService _currentCompanyService;
 
-        public GmailMailService(IConfiguration configuration)
+        public GmailMailService(IConfiguration configuration, IMapper mapper, IUnitOfWork unitOfWork, ICurrentCompanyService currentCompanyService)
         {
             _configuration = configuration;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _currentCompanyService = currentCompanyService;
         }
 
-        public async Task SendVerificationCodeAsync(string toEmail, string verificationCode)
+        public async System.Threading.Tasks.Task SendVerificationCodeAsync(string toEmail, string verificationCode)
         {
             try
             {
@@ -83,7 +94,7 @@ namespace Beavask.API.Service
                 throw;
             }
         }
-        public async Task SendUserCredentialsAsync(string toEmail, string loginName, string password)
+        public async System.Threading.Tasks.Task SendUserCredentialsAsync(string toEmail, string loginName, string password)
         {
             try
             {
@@ -153,7 +164,7 @@ namespace Beavask.API.Service
                 throw;
             }
         }
-        public async Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode)
+        public async System.Threading.Tasks.Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode)
         {
             try
             {
@@ -222,7 +233,7 @@ namespace Beavask.API.Service
                 throw;
             }
         }
-        public async Task SendRegistrationSuccessEmailAsync(string toEmail)
+        public async System.Threading.Tasks.Task SendRegistrationSuccessEmailAsync(string toEmail)
         {
             try
             {
@@ -284,6 +295,87 @@ namespace Beavask.API.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] Failed to send registration success email: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async System.Threading.Tasks.Task SendProjectInvitationAsync(ProjectInvitationRequest request)
+        {
+            try
+            {
+                var token = InvitationTokenHelper.GenerateToken();
+
+                var invitation = _mapper.Map<InvitationToken>(request);
+                invitation.Token = token;
+                invitation.CreatedAt = InvitationTokenHelper.GetCreatedDate();
+                invitation.ExpiresAt = InvitationTokenHelper.GetExpiryDate(2);
+                invitation.CompanyId = _currentCompanyService.CompanyId ?? throw new InvalidOperationException("Company ID is not available.");
+                invitation.IsUsed = false;
+
+                await _unitOfWork.InvitationTokenRepository.AddAsync(invitation);
+
+                var fromEmail = _configuration["Mail:Username"];
+                var password = _configuration["Mail:Password"];
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(fromEmail, password),
+                    EnableSsl = true
+                };
+
+                var logoPath = _configuration["Logo:Path"];
+                var logoCid = "logo_cid";
+
+                string baseUrl = "http://localhost:4200";
+                string newUserLink = $"{baseUrl}/invite/join?token={token}&mode=new";
+                string existingUserLink = $"{baseUrl}/invite/join?token={token}&mode=existing";
+
+                string bodyHtml = $@"
+                <html>
+                  <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
+                    <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
+                      <div style='background-color: #facc15; padding: 30px; text-align: center;'>
+                        <img src='cid:{logoCid}' alt='Beavask Logo' style='height: 90px; margin-bottom: 10px;' />
+                      </div>
+                      <div style='padding: 35px 30px;'>
+                        <h2 style='color: #111827;'>You're Invited to Beavask</h2>
+                        <p style='font-size: 16px; color: #4b5563;'>
+                            <strong>{request.CompanyName}</strong> has invited you to collaborate on the GitHub project <strong>{request.ProjectName}</strong> via Beavask.
+                        </p>
+                        <div style='margin-top: 30px;'>
+                          <a href='{newUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I'm New to Beavask</a>
+                          <p style='text-align: center; font-size: 14px; color: #6b7280;'>or</p>
+                          <a href='{existingUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #10b981; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I Already Have an Account</a>
+                        </div>
+                        <p style='margin-top: 30px; font-size: 14px; color: #6b7280;'>If you didn't expect this email, you can ignore it.</p>
+                        <p style='margin-top: 20px; font-size: 14px; color: #6b7280;'>Thank you,<br/>The Beavask Team</p>
+                      </div>
+                    </div>
+                  </body>
+                </html>";
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(fromEmail, "Beavask"),
+                    Subject = $"You're invited to join {request.CompanyName} on Beavask",
+                    Body = bodyHtml,
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(request.ToEmail);
+
+                var logoAttachment = new Attachment(logoPath)
+                {
+                    ContentId = logoCid,
+                    ContentDisposition = { Inline = true }
+                };
+                mailMessage.Attachments.Add(logoAttachment);
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to send project invitation email: {ex.Message}");
                 throw;
             }
         }

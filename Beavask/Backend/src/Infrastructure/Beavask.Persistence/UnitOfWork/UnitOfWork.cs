@@ -83,7 +83,9 @@ public class UnitOfWork : IUnitOfWork
 
     private IVerificationCodeRepository? _verificationCodeRepository;
     public IVerificationCodeRepository VerificationCodeRepository => _verificationCodeRepository ??= new VerificationCodeRepository(_context);
-    
+
+    private IInvitationTokenRepository? _invitationTokenRepository;
+    public IInvitationTokenRepository InvitationTokenRepository => _invitationTokenRepository ??= new InvitationTokenRepository(_context);
 
     public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
 }
