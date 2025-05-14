@@ -44,6 +44,7 @@ public class CompanyController : ControllerBase
         var result = await _companyService.DeleteAsync(id);
         return Ok(result);
     }
+    
     [HttpGet("{companyId}/users")]
     public async Task<ActionResult> GetAllUsersByCompanyIdAsync(int companyId)
     {
@@ -53,5 +54,12 @@ public class CompanyController : ControllerBase
             return Ok(response.Data);  
         }
         return NotFound(response.Message); 
+    }
+
+    [HttpGet("{companyId}/projects")]
+    public async Task<ActionResult> GetAllProjectsByCompanyIdAsync(int companyId)
+    {
+        var response = await _companyService.GetAllProjectsByCompanyIdAsync();
+        return Ok(response.Data);
     }
 }

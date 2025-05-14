@@ -3,18 +3,19 @@ using Beavask.Application.Common;
 using Beavask.Application.DTOs.Company;
 using Beavask.Application.Interface.Service;
 using Beavask.Application.Interface;
-using Beavask.Domain.Entities.Base;
-using Beavask.Application.Helper;
 using Beavask.Application.DTOs.User;
+using Beavask.Application.DTOs.Project;
+using Beavask.Application.Interface.Logging;
 
 namespace Beavask.Application.Service;
 
-public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService repoService) : ICompanyService
+public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService repoService, ICurrentCompanyService currentCompanyService, ILogger logger) : ICompanyService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
     private readonly IRepoService _repoService = repoService;
-
+    private readonly ICurrentCompanyService _currentCompanyService = currentCompanyService;
+    private readonly ILogger _logger = logger;
 
     public async Task<Response<CompanyDto>> GetByIdAsync(int id)
     {
@@ -159,6 +160,23 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
         catch (Exception ex)
         {
             return Response<IEnumerable<UserBirefForCompany>>.Fail($"An error occurred while fetching users: {ex.Message}");
+        }
+    }
+
+    public async Task<Response<IEnumerable<ProjectDto>>> GetAllProjectsByCompanyIdAsync()
+    {
+        try
+        {
+            await _logger.LogInformation("Getting all projects for company {CompanyId}", _currentCompanyService.CompanyId?.ToString());
+            var projects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(_currentCompanyService.CompanyId ?? throw new Exception("Company not found"));
+            var dtos = _mapper.Map<IEnumerable<ProjectDto>>(projects);
+            await _logger.LogInformation("Successfully retrieved projects for company {CompanyId}", companyId: _currentCompanyService.CompanyId);
+            return Response<IEnumerable<ProjectDto>>.Success(dtos);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error getting projects for company", ex, _currentCompanyService.CompanyId?.ToString());
+            return Response<IEnumerable<ProjectDto>>.Fail(ex.Message);
         }
     }
 
