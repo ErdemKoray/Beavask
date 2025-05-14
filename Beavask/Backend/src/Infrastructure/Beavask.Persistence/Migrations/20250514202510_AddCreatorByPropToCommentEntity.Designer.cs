@@ -3,6 +3,7 @@ using System;
 using Beavask.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Beavask.Persistence.Migrations
 {
     [DbContext(typeof(BeavaskDbContext))]
-    partial class BeavaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514202510_AddCreatorByPropToCommentEntity")]
+    partial class AddCreatorByPropToCommentEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +40,12 @@ namespace Beavask.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -50,14 +59,11 @@ namespace Beavask.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TaskId");
 
                     b.ToTable("Comments");
                 });
@@ -981,21 +987,19 @@ namespace Beavask.Persistence.Migrations
 
             modelBuilder.Entity("Beavask.Domain.Entities.Base.Comment", b =>
                 {
+                    b.HasOne("Beavask.Domain.Entities.Base.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId");
+
                     b.HasOne("Beavask.Domain.Entities.Base.Task", "Task")
                         .WithMany()
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Beavask.Domain.Entities.Base.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Task");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Beavask.Domain.Entities.Base.Dependency", b =>

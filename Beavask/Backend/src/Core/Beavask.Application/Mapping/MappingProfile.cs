@@ -1,5 +1,6 @@
 using AutoMapper;
 using Beavask.Application.DTOs.Auth;
+using Beavask.Application.DTOs.Comment;
 using Beavask.Application.DTOs.Company;
 using Beavask.Application.DTOs.Customer;
 using Beavask.Application.DTOs.Event;
@@ -127,5 +128,10 @@ public class MappingProfile : Profile
         .ForMember(dest => dest.ExpiresAt, opt => opt.Ignore())
         .ForMember(dest => dest.IsUsed, opt => opt.Ignore())
         .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        //Comment Entity
+        CreateMap<CommentCreateDto, Comment>();
+        CreateMap<Comment, CommentDto>();
+        CreateMap<Comment, CommentCreateDto>();
     }
 }
