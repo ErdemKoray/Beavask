@@ -2,7 +2,7 @@ using Beavask.Domain.Entities.Base;
 
 namespace Beavask.Application.Interface.Repository;
 
-public interface IInvitationTokenRepository
+public interface IInvitationTokenRepository : IBaseRepository<InvitationToken, int>
 {
 System.Threading.Tasks.Task AddAsync(InvitationToken token);
 System.Threading.Tasks.Task<InvitationToken?> GetByTokenAsync(string token);

@@ -416,5 +416,23 @@ namespace Beavask.Application.Service
                 return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }
+        public async System.Threading.Tasks.Task AcceptInvitationAsync(string token, int userId)
+        {
+            var invitation = await _unitOfWork.InvitationTokenRepository.GetByTokenAsync(token);
+
+            if (invitation == null)
+                throw new Exception("Invitation not found.");
+            if (invitation.IsUsed)
+                throw new Exception("Invitation already used.");
+            if (invitation.ExpiresAt < DateTime.UtcNow)
+                throw new Exception("Invitation expired.");
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId) ?? throw new Exception("User not found.");
+            user.CompanyId = invitation.CompanyId;
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+
+            invitation.IsUsed = true;
+            await _unitOfWork.InvitationTokenRepository.UpdateAsync(invitation);
+        }
     }
 }

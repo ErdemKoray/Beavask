@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Beavask.Persistence.Repository
 {
-    public class InvitationTokenRepository : IInvitationTokenRepository
+    public class InvitationTokenRepository : BaseRepository<InvitationToken, int>, IInvitationTokenRepository
     {
         private readonly BeavaskDbContext _context;
 
-        public InvitationTokenRepository(BeavaskDbContext context)
+        public InvitationTokenRepository(BeavaskDbContext context) : base(context)
         {
             _context = context;
         }

@@ -7,9 +7,10 @@ namespace Beavask.API.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService , IConfiguration configuration) : ControllerBase
+public class AuthController(IAuthService authService , IConfiguration configuration , ICurrentUserService currentUserService) : ControllerBase
 {
     private readonly IAuthService _authService = authService;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
     private readonly IConfiguration? _configuration;
 
     [HttpPost("login-personal")]
@@ -82,5 +83,16 @@ public class AuthController(IAuthService authService , IConfiguration configurat
             return Ok("Password successfully changed.");
         return BadRequest(result.Message);
     }
+    [HttpPost("accept")]
+    public async Task<IActionResult> AcceptInvitation([FromBody] AcceptInvitationRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Token))
+            return BadRequest("Token is required.");
+
+        await _authService.AcceptInvitationAsync(request.Token , _currentUserService.UserId.Value);
+
+        return Ok(new { message = "You have been added to the company." });
+    }
+
 }
 
