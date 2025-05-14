@@ -91,13 +91,29 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
     {
         try
         {
+            var users = await _unitOfWork.UserRepository.GetAllUsersByCompanyIdAsync(companyId);
             var companyProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(companyId);
             if (companyProjects == null || !companyProjects.Any())
             {
                 return Response<IEnumerable<UserBirefForCompany>>.Success(new List<UserBirefForCompany>());
             }
 
+            var uniqueUsernames = new HashSet<string>();
             var userBriefs = new List<UserBirefForCompany>();
+
+            foreach (var user in users)
+            {
+                uniqueUsernames.Add(user.UserName);
+                userBriefs.Add(new UserBirefForCompany
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Email = user.Email,
+                    IsRegistered = true,
+                    IsAssignedToCompany = true
+                });
+            }
+
             foreach(var project in companyProjects)
             {
                 if (string.IsNullOrEmpty(project.RepoUrl))
@@ -109,37 +125,36 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
 
                 foreach(var contributor in contributors.Data)
                 {
-                    if (string.IsNullOrEmpty(contributor.Username))
+                    if (string.IsNullOrEmpty(contributor.Username) || uniqueUsernames.Contains(contributor.Username))
                         continue;
 
+                    uniqueUsernames.Add(contributor.Username);
                     var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.UserName == contributor.Username);
+                    
                     if (user == null)
                     {
-                        var unregisteredUser = new UserBirefForCompany
+                        userBriefs.Add(new UserBirefForCompany
                         {
                             Username = contributor.Username,
                             Email = "",
                             IsRegistered = false,
                             IsAssignedToCompany = false
-                        };
-                        userBriefs.Add(unregisteredUser);
+                        });
                         continue;
                     }
 
-                    var userBrief = new UserBirefForCompany
+                    userBriefs.Add(new UserBirefForCompany
                     {
                         Id = user.Id,
                         Username = user.UserName,
                         Email = user.Email,
                         IsRegistered = true,
                         IsAssignedToCompany = user.CompanyId == companyId
-                    };
-                    userBrief.IsRegistered = true;
-                    userBrief.IsAssignedToCompany = user.CompanyId == companyId;
-                    userBriefs.Add(userBrief);
+                    });
                 }
             }
-            return Response<IEnumerable<UserBirefForCompany>>.Success(userBriefs);
+            var sortedUserBriefs = userBriefs.OrderBy(u => u.Id).ToList();
+            return Response<IEnumerable<UserBirefForCompany>>.Success(sortedUserBriefs);
         }
         catch (Exception ex)
         {
