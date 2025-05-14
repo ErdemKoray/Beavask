@@ -10,6 +10,8 @@ namespace Beavask.Domain.Entities.Base
         public string Title { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; }
 
         // User - Team one-to-many relationship 
         public ICollection<User> TeamMembers { get; set; } = new List<User>();

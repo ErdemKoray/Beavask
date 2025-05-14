@@ -72,4 +72,18 @@ public class TeamController : ControllerBase
         var result = await _teamService.GetEventsByTeamIdAsync(teamId);
         return Ok(result);
     }
+
+    [HttpPost("company/create-team")]
+    public async Task<ActionResult<Response<TeamDto>>> CreateTeamForCompany(TeamCreateDto teamCreate)
+    {
+        var result = await _teamService.CreateTeamForCompanyAsync(teamCreate);
+        return Ok(result);
+    }
+
+    [HttpGet("company/{companyId}")]
+    public async Task<ActionResult<Response<TeamDto>>> GetTeamByCompanyId(int companyId)
+    {
+        var result = await _teamService.GetTeamByCompanyIdAsync(companyId);
+        return Ok(result);
+    }   
 }

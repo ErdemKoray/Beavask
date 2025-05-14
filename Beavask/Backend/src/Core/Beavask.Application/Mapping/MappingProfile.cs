@@ -37,7 +37,12 @@ public class MappingProfile : Profile
         
         // Team Entity
         CreateMap<Team, TeamDto>().ReverseMap();
-        CreateMap<TeamCreateDto, Team>();
+        CreateMap<TeamCreateDto, Team>()
+        .ForMember(dest => dest.CompanyId, opt => opt.Ignore())
+        .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+        .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+        .ForMember(dest => dest.TeamMembers, opt => opt.Ignore())
+        .ForMember(dest => dest.Events, opt => opt.Ignore());
         CreateMap<TeamUpdateDto, Team>();
         CreateMap<Team, TeamWithMembersDto>();
 

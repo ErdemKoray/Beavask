@@ -6,13 +6,16 @@ using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.DTOs.User;
 using Beavask.Application.DTOs.Event;
+using Beavask.Application.Interface.Logging;
 
 namespace Beavask.Application.Service;
 
-public class TeamService(IUnitOfWork unitOfWork, IMapper mapper) : ITeamService
+public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompanyService currentCompanyService, ILogger logger) : ITeamService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentCompanyService _currentCompanyService = currentCompanyService;
+    private readonly ILogger _logger = logger;
 
     public async Task<Response<TeamDto>> GetByIdAsync(int id)
     {
@@ -138,5 +141,46 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper) : ITeamService
         
         var dtos = _mapper.Map<IEnumerable<EventDto>>(events);
         return Response<IEnumerable<EventDto>>.Success(dtos);
+    }
+
+    public async Task<Response<TeamDto>> CreateTeamForCompanyAsync(TeamCreateDto teamCreateDto)
+    {
+        try
+        {
+            var existingTeam = await _unitOfWork.TeamRepository.GetSingleByConditionAsync(t => t.CompanyId == _currentCompanyService.CompanyId);
+            if (existingTeam != null)
+                return Response<TeamDto>.Fail("Team already exists");
+
+            var _team = _mapper.Map<Team>(teamCreateDto);
+            _team.CompanyId = _currentCompanyService.CompanyId;
+            await _unitOfWork.TeamRepository.AddAsync(_team);
+            await _unitOfWork.SaveChangesAsync();
+            await _logger.LogInformation("Team created successfully", context: _currentCompanyService.CompanyId.ToString());
+            var dto = _mapper.Map<TeamDto>(_team);
+            return Response<TeamDto>.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error creating team", ex, context: _currentCompanyService.CompanyId.ToString());
+            return Response<TeamDto>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<TeamDto>> GetTeamByCompanyIdAsync(int companyId)
+    {
+        try
+        {
+            var team = await _unitOfWork.TeamRepository.GetSingleByConditionAsync(t => t.CompanyId == companyId);
+            if (team == null)
+                return Response<TeamDto>.NotFound();
+
+            var dto = _mapper.Map<TeamDto>(team);
+            return Response<TeamDto>.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error getting team by company id", ex, context: companyId.ToString());
+            return Response<TeamDto>.Fail(ex.Message);
+        }
     }
 }

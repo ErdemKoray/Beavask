@@ -14,6 +14,8 @@ public interface ITeamService
     Task<Response<TeamDto>> UpdateAsync(int id, TeamUpdateDto teamUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
 
+    Task<Response<TeamDto>> CreateTeamForCompanyAsync(TeamCreateDto teamCreateDto);
+    Task<Response<TeamDto>> GetTeamByCompanyIdAsync(int companyId);
     Task<Response<TeamWithMembersDto>> GetTeamWithMembersAsync(int teamId);
     Task<Response<IEnumerable<UserDto>>> GetMembersByTeamIdAsync(int teamId);
     Task<Response<IEnumerable<EventDto>>> GetEventsByTeamIdAsync(int teamId);
