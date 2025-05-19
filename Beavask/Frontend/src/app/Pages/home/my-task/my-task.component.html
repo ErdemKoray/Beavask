@@ -21,7 +21,6 @@
       </div>
     </div>
 
-   
     <div class="bv-mp-section">
       <div class="bv-mp-grid bv-radius-4">
         <table class="bv-table">
@@ -29,7 +28,7 @@
             <tr>
               <th>ID</th>
               <th>Project</th>
-              <th>Subject</th>
+              <th>Title</th>
               <th>Priority</th>
               <th>Status</th>
               <th>Due Date</th>
@@ -37,12 +36,20 @@
           </thead>
           <tbody>
             <tr class="bv-project-item bv-transition" *ngFor="let task of filteredTasks">
-              <td>#{{ task.id }}</td>
-              <td>{{ task.project }}</td>
-              <td>{{ task.subject }}</td>
-              <td><span class="bv-badge bv-radius-6 bv-{{ task.priority | lowercase }}">{{ task.priority }}</span></td>
-              <td><span class="bv-status bv-radius-5 bv-status-{{ task.status | lowercase }}">{{ task.status }}</span></td>
-              <td>{{ task.dueDate }}</td>
+              <td>{{ task.id }}</td>
+              <td>{{  projectMap[task.projectId] }}</td>
+              <td>{{ task.title }}</td>
+              <td>
+                <span class="bv-badge bv-radius-6 bv-{{ getPriorityClass(task.priority) }}">
+                  {{ getPriorityLabel(task.priority) }}
+                </span>
+              </td>
+              <td>
+                <span class="bv-status bv-radius-5 bv-status-{{ getStatusClass(task.status) }}">
+                  {{ getStatusLabel(task.status) }}
+                </span>
+              </td>
+              <td>{{ task.dueDate | date: 'shortDate' }}</td>
             </tr>
           </tbody>
         </table>

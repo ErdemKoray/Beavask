@@ -9,13 +9,13 @@
     </div>
 
     <div class="bv-home-projects d-flex justify-content-start">
-      <div class="bv-home-project-card d-flex bv-shadow-1 bv-transition gap-3 bv-radius-3" *ngFor="let project of recentProjects">
+      <div class="bv-home-project-card d-flex bv-shadow-1 bv-transition gap-3 bv-radius-3" routerLink="project-detail/board/{{project.id}}" [queryParams]="{ projectId: project.id }" *ngFor="let project of recentProjects">
         <div class="bv-home-project-icon bv-radius-4"></div>
         <div class="bv-home-project-info">
           <h3>{{ project.name }}</h3>
           <ul>
-            <li>My open issues: {{ project.openIssues }}</li>
-            <li>Done issues: {{ project.doneIssues }}</li>
+            <li>My open issues: {{ project.description }}</li>
+            <li>Done issues: {{ project.createdAt|date }}</li>
           </ul>
         </div>
       </div>

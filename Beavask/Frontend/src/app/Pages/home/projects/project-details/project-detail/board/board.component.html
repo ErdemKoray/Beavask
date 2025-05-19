@@ -18,8 +18,12 @@
   </div>
 
 
-
-<app-task-detail [taskD]="tasks[taskdetailmodalid]" *ngIf="activeDetail"></app-task-detail>
+<app-task-detail 
+  *ngIf="activeDetail" 
+  [taskD]="taskDetail"
+  (taskUpdated)="onTaskUpdated($event)"
+   (taskDeleted)="onTaskDeleted($event)">
+</app-task-detail>
 
 <app-share-modal  *ngIf="shareVisible"
   [url]="currentTaskUrl">
@@ -32,28 +36,28 @@
         <form (ngSubmit)="onCreateTask()" #taskForm="ngForm">
           <div class="bv-cr-text-group">
             <label for="title">Title</label>
-            <input id="title" [(ngModel)]="taskModel.title" name="title" required placeholder="Enter task title" class="form-control" />
+            <input id="title" [(ngModel)]="taskModel.title" name="title" required placeholder="Enter task title"  />
           </div>
   
           <div class="bv-cr-text-group">
             <label for="description">Description</label>
-            <textarea id="description" [(ngModel)]="taskModel.description" name="description" required placeholder="Enter task description" class="form-control"></textarea>
+            <textarea id="description" [(ngModel)]="taskModel.description" name="description" required placeholder="Enter task description" ></textarea>
           </div>
   
           <div class="bv-cr-input-grp">
             <div class="bv-cr-text-group">
               <label for="startDate">Start Date</label>
-              <input type="date" id="startDate" [(ngModel)]="taskModel.startDate" name="startDate" required class="form-control" />
+              <input type="date" id="startDate" [(ngModel)]="taskModel.startDate" name="startDate" required  />
             </div>
             <div class="bv-cr-text-group">
               <label for="dueDate">Due Date</label>
-              <input type="date" id="dueDate" [(ngModel)]="taskModel.dueDate" name="dueDate" required class="form-control" />
+              <input type="date" id="dueDate" [(ngModel)]="taskModel.dueDate" name="dueDate" required  />
             </div>
           </div>
   
           <div class="bv-cr-text-group">
             <label for="priority">Priority</label>
-            <select id="priority" [(ngModel)]="taskModel.priority" name="priority" required class="form-control">
+            <select id="priority" [(ngModel)]="taskModel.priority" name="priority" required >
               <option *ngFor="let priority of taskPriorities" [value]="priority">{{ priority }}</option>
             </select>
           </div>
@@ -62,7 +66,7 @@
   
           <div class="bv-cp-options">
             <button type="submit" class="bv-cp-submit" [disabled]="!taskForm.form.valid">Submit</button>
-            <div class="bv-cp-close" (click)="toggleCreateTaskBoard()">Close</div>
+            <div class="bv-cp-close"  (click)="toggleCreateTaskBoard()">Close</div>
           </div>
         </form>
       </div>
@@ -138,7 +142,7 @@
                             <div class="bv-task-status">{{ getPriorityString(task.priority) | titlecase }}</div>
                           </div>
                         </div>
-                        <div class="bv-b-ci" (click)="toggleCreateTaskBoard()">
+                        <div class="bv-b-ci" data-modal="task" (click)="toggleCreateTaskBoard()">
                           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
                             <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
                           </svg>
@@ -155,39 +159,3 @@
                 </div>
             </div>
         </div>
-    
- 
-
-
-<!--
-       <div class="bv-b-tasks" *ngFor="let col of columns">
-    
-                    <div class="bv-b-task-item bv-b-task-done"  >
-                        <div class="bv-b-ti-header">
-                            <div class="bv-b-ti-title">
-                                <inline-edit [(value)]="col.title"
-                                (valueChange)="onTitleChange(col, $event)"></inline-edit>
-    
-                            </div>
-                            <div class="bv-b-ti-options">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="#ffffff">
-                                    <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="bv-b-ti-body">
-                            <div class="bv-task-card" *ngFor="let task of col.tasks" [style.border-left]="'4px solid ' + task.color" data-modal="detail" [style.cursor]="'pointer'" (click)="toggleTaskDetail()">
-                                <div class="bv-task-header">{{ task.title }}</div>
-                                <div class="bv-task-desc">{{ task.description }}</div>
-                                <div class="bv-task-status">{{ task.priority }}</div>
-                              </div>
-                              
-                        <div class="bv-b-ci" (click)="toggleCreateTaskBoard()">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
-                            Create Issue
-                        </div>
-                         </div>
-                   
-                  
-                </div>
-            </div>-->

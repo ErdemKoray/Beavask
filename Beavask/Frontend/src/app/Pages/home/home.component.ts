@@ -1,4 +1,4 @@
-import {  Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import {  Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from "../../components/footer/footer.component";
 import { ToastComponent } from "../../components/toast/toast.component";
@@ -13,11 +13,13 @@ import { ToastService } from '../../components/toast/toast.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent{
+export class HomeComponent implements OnInit{
   @ViewChild('hambcontainer') hamb!:ElementRef;
   constructor(private rendered:Renderer2,private toast:ToastService
   ) {}
 
+  ngOnInit(): void {
+  }
   tooglemenu(){
     if(this.hamb){
    const hasClass = this.hamb.nativeElement.classList.contains('bv-hamb-container-o');

@@ -12,7 +12,10 @@ import { LangService } from '../../common/services/lang/lang.service';
 import { CreatprojectService } from '../../common/services/projects/creatproject.service';
 import { cProject } from '../../common/services/projects/creatproject.model';
 import { ToastService } from '../toast/toast.service';
-
+import { ProjectsService } from '../../common/services/projects/projects.service';
+import { Project } from '../../common/model/project.model';
+import { TaskService } from '../../common/services/task/task.service';
+import { Task } from '../../common/services/task/taskModel/task.model';
 
 @Component({
   selector: 'app-navbar',
@@ -33,6 +36,8 @@ export class NavbarComponent implements OnInit {
     this.getTeams(); 
     this.getUserInfo();
     localStorage.getItem(this.themeKey)=== 'dark' ? this.darkMode = true : this.darkMode = false;
+    this.getUserProject();
+    this.getUserTask();
     
   }
     constructor(
@@ -43,7 +48,11 @@ export class NavbarComponent implements OnInit {
       private profileService: AuthprofileService,
       private langService: LangService,
       private createPApi:CreatprojectService,
-      private toastService:ToastService
+      private toastService:ToastService,
+      private projectService:ProjectsService,
+      private taskService:TaskService,
+      private authService:AuthprofileService
+    
     ) {
       this.currentLang = this.langService.getCurrentLanguage();
       this.router.events.subscribe(event => {
@@ -58,11 +67,8 @@ export class NavbarComponent implements OnInit {
     {id:3, name: 'Logout', icon: 'fa fa-sign-out' }
   ];
 
-  projects = [
-    { name: 'Project 1', icon: 'fa fa-folder' },
-    { name: 'Project 2', icon: 'fa fa-folder' },
-    { name: 'Project 3', icon: 'fa fa-folder' }
-  ];
+  projects:Project[] = [];
+  Task:Task[]=[];
 
   darkMode = false;
   teams: Team[] = []; 
@@ -192,6 +198,68 @@ form = new FormGroup({
       }
     });
   }
+
+getUserProject() {
+  this.projectService.getAll().subscribe({
+    next: (Response) => {
+      this.projects = Response.data
+        .map((project: any) => ({
+          id: project.id,
+          name: project.name,
+          description: '',
+          createdAt: new Date(project.createdAt),
+          isActive: true,
+          customerId: 0
+        }))
+        .filter((project, index, self) => {
+          return index >= self.length - 3;
+        });
+    },
+    error: (err) => {
+      const errorMessage = err?.error?.message || 'An unexpected error occurred';
+      this.toastService.show({
+        title: 'Error',
+        message: 'An error occurred while fetching data: ' + errorMessage,
+      });
+    },
+  });
+}
+
+getUserTask() {
+  this.authService.whoami().subscribe({
+    next: (res) => {
+      const userId = res.userId;
+
+      this.taskService.getUserTaskById(userId).subscribe({
+        next: (tasksRes) => {
+          const sortedTasks = tasksRes.data
+            .sort((a: Task, b: Task) => {
+              const dateA = new Date(a.updatedAt ?? a.createdAt).getTime();
+              const dateB = new Date(b.updatedAt ?? b.createdAt).getTime();
+              return dateB - dateA;
+            })
+            .slice(0, 4);
+
+          this.Task = sortedTasks;
+        },
+        error: (err) => {
+          this.toastService.show({
+            title: 'Error',
+            message: 'Task fetch failed: ' + err.message
+          });
+        }
+      });
+    },
+    error: (err) => {
+      this.toastService.show({
+        title: 'Error',
+        message: 'WhoAmI failed: ' + err.message
+      });
+    }
+  });
+}
+
+
   closeAllDropdowns() {
     this.isProjectDropdownOpen = false;
     this.isDropdownOpen = false;

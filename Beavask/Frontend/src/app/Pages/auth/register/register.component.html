@@ -69,7 +69,9 @@
         <div *ngIf="registerForm.hasError('passwordsNotMatching')" class="error-message">
           Passwords do not match.
         </div>
-      
+      <!-- Admin Account Registration -->
+
+
         <!-- Register options -->
         <div class="bv-check2">
           <div (click)="loginWithGithub()" class="bv-register-option-button">
@@ -89,7 +91,10 @@
           </div>
         </div>
       </form>
-      
+      <div class="bv-admin-create mt-4 text-center">
+  <div class="bv-text-muted">Are you creating a company or organization account?</div>
+  <button class="bv-btn bv-btn-secondary bv-radius-3" (click)="goToCompanyRegister()">Create Management Account</button>
+</div>
     </div>
   </div>
 </div>

@@ -172,7 +172,25 @@
     font-weight: bold;
     cursor: pointer;
   }
-  
+  .bv-admin-create {
+  margin-top: 20px;
+}
+
+.bv-btn-secondary {
+  background-color: var(--button-scl);
+  color: var(--text-d);
+  border: 1px solid var(--border-cl);
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bv-btn-secondary:hover {
+  background-color: var(--button-xscl);
+}
+.bv-text-muted{
+  color: var(--text-xsw);
+}
   @media screen and (max-width: 768px) {
     .bv-register-container {
       width: 100vw;

@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand company-navbar">
+  <div class="container-fluid d-flex justify-content-around align-items-center">
+    
+    <!-- Logo -->
+    <div class="bv-img" (click)="goToDashboard()">
+      <img [src]="darkMode ? 'Beavaskgreen.png' : 'iconbeavask.png'" alt="Company Logo" />
+    </div>
+
+    <!-- Menu Items -->
+    <ul class="nav justify-content-center gap-5 bv-company-menu">
+      <li class="nav-item">
+        <a class="bv-nav-link" routerLink="/company/profile">Company Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="bv-nav-link" routerLink="/company/dashboard">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="bv-nav-link" routerLink="/company/employees">Employees</a>
+      </li>
+    </ul>
+
+    <!-- Account Info -->
+    <div class="d-flex align-items-center gap-3 bv-account-area">
+
+      <img [src]="companyLogoUrl" class="company-avatar bv-radius-round" alt="Logo" />
+      <button (click)="logout()" class="btn logout-btn">Logout</button>
+    </div>
+  </div>
+</nav>

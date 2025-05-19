@@ -10,7 +10,7 @@
       
           <h2 class="task-title">
             <span class="state-badge state-badge--lightning"></span>
-            (Sample) Implement NLP Engine
+            {{taskD?.title}}
           </h2>
       
           <button class="task-modal__close">✕</button>
@@ -19,21 +19,35 @@
         <div class="task-modal__body d-flex">
          
           <section class="task-content d-flex flex-column gap-5">
-           
-            <div class="task-actions">
-              <button class="btn bv-radius-2">＋ Add</button>
-              <button class="btn bv-radius-2">⚡ Apps</button>
-            </div>
-      
-            <article class="task-section">
-              <h3 class="task-section__title">Description</h3>
-              <p class="task-description">
-                The NLP engine should be capable of understanding user intents and
-                extracting relevant information from user queries.
-              </p>
-            </article>
-      
-            <!-- TABS -->
+          <!--
+            
+          <div class="task-actions">
+            <button class="btn bv-radius-2"> Add</button>
+            <button class="btn bv-radius-2">⚡ Apps</button>
+          </div>
+    
+          
+          --> 
+        <article class="task-section">
+          <h3 class="task-section__title">Description</h3>
+
+          <div *ngIf="!isEditingDescription" (click)="toggleEditDescription($event)">
+            <p class="task-description">{{ taskD?.description }}</p>
+          </div>
+
+    <div *ngIf="isEditingDescription">
+  <input 
+    type="text"
+    [(ngModel)]="updatedDescription"
+    class="task-description-input" />
+
+  <div class="edit-actions d-flex gap-2 mt-2">
+    <button class="btn--success" (click)="saveDescription()">✔</button>
+    <button class="btn--danger" (click)="cancelDescriptionEdit($event)">✖</button>
+  </div>
+</div>
+
+            </article>    
             <nav class="tabs">
               <button class="tab is-active">Comments</button>
               <button class="tab">History</button>
@@ -53,9 +67,20 @@
       
           <!-- RIGHT : DETAILS -->
           <aside class="task-sidebar">
-            <div class="state-dropdown">
-              <button class="state-dropdown__btn state--in-progress">In Progress ▾</button>
+           <div class="state-dropdown d-flex justify-content-between">
+            <select
+              class="state-dropdown__btn"
+              [ngModel]="taskD?.status"
+              (ngModelChange)="updateStatus($event)">
+              <option *ngFor="let s of statusList" [value]="s.value">
+                {{ s.label }}
+              </option>
+            </select>
+            <div class="delete-task d-flex justify-content-center align-items-center" (click)="deleteTask()">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
             </div>
+      </div>
+
       
             <div class="pinned-fields">
               <h4 class="panel-heading">Pinned fields</h4>
@@ -65,7 +90,9 @@
             <ul class="details-panel">
               <li class="details-field">
                 <span class="details-label">Assignee</span>
-                <span class="details-value">Unassigned <a class="link">Assign to me</a></span>
+
+                <span *ngIf="!taskD?.assignedUserId" class="details-value">Unassigned <div (click)="assignTaskToMe()" class="link">Assign to me</div></span>
+                <span *ngIf="taskD?.assignedUserId" class="details-value"><a class="link">{{assignedUserName}}</a></span>
               </li>
               <li class="details-field">
                 <span class="details-label">Labels</span>
@@ -78,7 +105,7 @@
               <li class="details-field">
                 <span class="details-label">Reporter</span>
                 <span class="details-value">
-                  <img src="iconbeavask.png" class="avatar" /> Muhammed Emin Aldaş
+                 {{reporterName}}
                 </span>
               </li>
             </ul>

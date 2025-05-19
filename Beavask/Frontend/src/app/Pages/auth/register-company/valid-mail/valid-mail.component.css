@@ -1,0 +1,90 @@
+.bv-verify-body {
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--body-xsw);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bv-verify-container {
+  background-color: var(--card-w);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px var(--shadow-d);
+  text-align: center;
+  width: 450px;
+  max-width: 90vw;
+}
+
+.bv-info {
+  color: var(--text-sw);
+  margin-bottom: 30px;
+}
+
+.bv-code-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bv-code-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+h2{
+    color: var(--text-xsw);
+}
+.bv-code-inputs input {
+  width: 50px;
+  height: 60px;
+  font-size: 28px;
+  text-align: center;
+  border: 2px solid var(--border-cl);
+  border-radius: 10px;
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+}
+
+.bv-code-inputs input:focus {
+  border-color: var(--border-scl);
+  outline: none;
+  box-shadow: var(--shadow-cl) 0 0 6px;
+}
+
+.bv-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bv-submit button {
+  background-color: var(--button-cl);
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bv-submit button:hover {
+  background-color: var(--button-xscl);
+}
+
+.loader {
+  animation: spin 1s infinite linear;
+  border: 4px solid transparent;
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,35 @@
+<div class="bv-register-body">
+  <div class="bv-register-container">
+    <div class="bv-logo">
+      <img src="Beavaskpink.png" alt="Logo" />
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="bv-form-container">
+      <div class="bv-text-group">
+        <label>Username</label>
+        <input formControlName="username" type="text" placeholder="Enter username" />
+        <div *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid" class="bv-valid">
+          <small *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</small>
+        </div>
+      </div>
+
+      <div class="bv-text-group">
+        <label>Password</label>
+        <input formControlName="password" type="password" placeholder="Enter password" />
+        <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="bv-valid">
+          <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
+          <small *ngIf="loginForm.get('password')?.errors?.['minlength']">At least 6 characters required.</small>
+        </div>
+      </div>
+
+      <div class="bv-submit mt-3">
+        <button type="submit" [disabled]="isLoading || loginForm.invalid" class="bv-submit">
+          <div *ngIf="isLoading" class="loader"></div>
+          <span *ngIf="!isLoading">Login</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-toast></app-toast>

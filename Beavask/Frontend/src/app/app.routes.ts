@@ -3,7 +3,23 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './common/interceptor/authguard';
 
 export const routes: Routes = [
-
+{
+  path: 'company',
+  loadComponent:()=>import('./Pages/Company/company.component').then(m=>m.CompanyComponent),
+  canActivate: [AuthGuard],
+  children:[
+     {
+      path:'dashboard',
+      loadComponent:()=>import('./Pages/Company/company-dashboard/company-dashboard.component').then(m=>m.CompanyDashboardComponent),
+      canActivate: [AuthGuard]
+    },{
+      path:'profile',
+      loadComponent:()=>import('./Pages/Company/cprofile/cprofile.component').then(m=>m.CprofileComponent),
+      canActivate: [AuthGuard]
+    }
+  ]
+}
+,
     {
         path: '',
         loadComponent:()=>import('./Pages/home/home.component').then(m=>m.HomeComponent),
@@ -46,6 +62,7 @@ export const routes: Routes = [
                     }
                 ]
             },
+           
             {
                 path:'projects',
                 loadComponent:()=>import('./Pages/home/projects/projects.component').then(m=>m.ProjectsComponent),
@@ -76,6 +93,13 @@ export const routes: Routes = [
 
         ]
     },
+     {
+                path:'main',
+                loadComponent:()=>import('./Pages/homepage/homepage.component').then(m=>m.HomepageComponent),
+
+            }
+            ,
+            
     {
         path: 'login',
         loadComponent:()=>import('./Pages/auth/login/login.component').then(m=>m.LoginComponent)
@@ -83,6 +107,20 @@ export const routes: Routes = [
     {
         path: 'register',
         loadComponent:()=>import('./Pages/auth/register/register.component').then(m=>m.RegisterComponent)
+        
+    },
+    {
+          path: 'rcompany',
+        loadComponent:()=>import('./Pages/auth/register-company/register-company.component').then(m=>m.RegisterCompanyComponent),
+      
+    }, 
+    {
+            path:'verify',
+                  loadComponent:()=>import('./Pages/auth/register-company/valid-mail/valid-mail.component').then(m=>m.ValidMailComponent),
+
+        },{
+          path: 'lcompany',
+        loadComponent:()=>import('./Pages/auth/login-company/login-company.component').then(m=>m.LoginCompanyComponent)
     },
     {
         path: 'auth-callback',
@@ -93,4 +131,5 @@ export const routes: Routes = [
         path:"**",
         loadComponent:()=>import('./components/not-found/not-found.component').then(m=>m.NotFoundComponent)
     }
+
 ];

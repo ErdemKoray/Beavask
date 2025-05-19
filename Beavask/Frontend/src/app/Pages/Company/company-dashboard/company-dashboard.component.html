@@ -1,0 +1,66 @@
+<div class="bv-dashboard-container d-flex flex-column gap-4">
+
+  <!-- METRICS -->
+  <div class="bv-dashboard-metrics d-flex justify-content-between flex-wrap gap-4">
+    <div class="bv-dashboard-card" *ngFor="let metric of companyMetrics">
+      <div class="bv-dm-count">{{ metric.count }}</div>
+      <p>{{ metric.label }}</p>
+      <span>{{ metric.subtext }}</span>
+    </div>
+  </div>
+
+  <div class="bv-dashboard-content-grid">
+
+    <!-- TASK DISTRIBUTION -->
+    <div class="bv-dashboard-box">
+      <h4>Company Task Distribution</h4>
+      <div class="bv-dashboard-chart-area">
+        <canvas id="companyTaskChart"></canvas>
+        <ul class="bv-dashboard-legend">
+          <li *ngFor="let item of chartLegend">
+            <span class="bv-status-dot" [ngClass]="item.colorClass"></span>{{ item.label }}: {{ item.count }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ACTIVE EMPLOYEES -->
+    <div class="bv-dashboard-box">
+      <h4>Active Employees</h4>
+      <div class="bv-dashboard-table-wrapper">
+        <table class="bv-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Team</th>
+              <th>Tasks</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of activeEmployees">
+              <td>{{ emp.name }}</td>
+              <td>{{ emp.team }}</td>
+              <td>{{ emp.taskCount }}</td>
+              <td><span class="bv-status" [ngClass]="'bv-status-' + emp.status.toLowerCase()">{{ emp.status }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACTIVITY FEED -->
+    <div class="bv-dashboard-box">
+      <h4>Recent Activities</h4>
+      <div class="bv-activity-list">
+        <div class="bv-activity-item" *ngFor="let log of recentLogs">
+          <div class="bv-activity-content">
+            <strong>{{ log.user }}</strong> {{ log.action }} in <em>{{ log.module }}</em>
+          </div>
+          <div class="bv-activity-date">{{ log.date }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

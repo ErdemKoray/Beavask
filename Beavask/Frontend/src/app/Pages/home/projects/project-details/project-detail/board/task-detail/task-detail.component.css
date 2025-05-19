@@ -21,7 +21,7 @@ h3, h4 {
   inset: 40px 60px;
   max-height: calc(100vh - 80px);
   background: var(--card-xsw);
-  box-shadow: 0 6px 24px var(--shadow-d);
+  box-shadow: 0 6px 12px var(--shadow-d);
   z-index: 1000;
 }
 
@@ -108,7 +108,7 @@ h3, h4 {
   resize: vertical;
   border: 1px solid var(--border-lw);
   background-color: var(--card-cl);
-  
+  color: var(--text-xsw);
   border-radius: 4px;
   padding: 8px;
 }
@@ -153,7 +153,7 @@ h3, h4 {
 .state-dropdown__btn {
   padding: 4px 8px;
   border: 1px solid var(--border-sdark-white-color);
-  border-radius: var(--radius);
+  border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
 }
@@ -188,7 +188,7 @@ h3, h4 {
 }
 .details-value{
   font-size: 14px;
-  color: var(--text-xsd);
+  color: var(--text-xsw);
 }
 .details-label {
   color: var(--text-sw);
@@ -252,7 +252,7 @@ input.view-text-focus:focus {
   height: 100vh;
   position: fixed;
   inset: 0;
-  background: var(--modal-dark-white-color);
+  background: var(--card-xsw);
   z-index: 999;
   animation: fade-in .25s;
 }
@@ -286,7 +286,7 @@ input.view-text-focus:focus {
   padding: 6px 10px;
   font-weight: 600;
   font-size: 14px;
-  border-bottom: 1px solid var(--border-sdark-white-color);
+  border-bottom: 1px solid var(--border-d);
 }
 
 .column-body {
@@ -356,3 +356,46 @@ input.view-text-focus:focus {
   }
 }
 
+.task-description {
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-xsw);
+  transition: background-color 0.3s ease;
+}
+
+.task-description:hover {
+  background-color: var(--card-lw);
+}
+
+.task-description-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid var(--border-w);
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+  border-radius: 4px;
+}
+
+.task-description-input:focus{
+  background-color: var(--card-sw);
+  border: 1px solid var(--border-w);
+  box-shadow: none;
+  color: var(--text-xsw);
+  outline: none;
+  
+}
+
+
+.delete-task{
+  background-color: red;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.delete-task:hover{
+  background-color: brown;
+}

@@ -168,7 +168,9 @@ rotate: 45deg;
     height: 30px;
  
   }
-  
+  .bv-item-bar-d{
+    padding-left: 20px !important; ;
+  }
 @media screen and (max-width:1200px){
     .bv-img{
         position: absolute;

@@ -1,5 +1,5 @@
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, HostListener, Input } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InlineEditComponent } from './inline-edit/inline-edit.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
@@ -10,8 +10,9 @@ import { TaskService } from '../../../../../../common/services/task/task.service
 import { CreateTaskModel } from '../../../../../../common/services/task/taskModel/createTask.model';
 import { ToastService } from '../../../../../../components/toast/toast.service';
 import { TaskPriority ,mapPriority} from '../../../../../../common/model/taskPriority.model';
-import { Task } from '../../../../../../common/model/task.model';
+import { Task } from '../../../../../../common/services/task/taskModel/task.model';
 import { TaskStatus ,mapStatus} from '../../../../../../common/model/taskStatus.model';
+import { Subscription } from 'rxjs';
 
 
 
@@ -23,18 +24,20 @@ import { TaskStatus ,mapStatus} from '../../../../../../common/model/taskStatus.
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })
-export class BoardComponent implements AfterViewInit {
+export class BoardComponent implements OnInit,OnDestroy {
 
 
   projectId: number= 0;
-  taskdetailmodalid=0;
+  taskdetailmodalid = 0;
   isCreateTaskOpen: boolean = false;
   shareVisible = false;
+  taskDetail: Task | null = null;
   currentTaskUrl = 'https://example.com/task/CCS-3';
   isCreateProjectOpen = false;
   activeDetail=false
   taskPriorities = Object.values(TaskPriority).filter(value => typeof value === 'number') as number[];
   taskStatus = Object.values(TaskPriority).filter(value => typeof value !== 'number'); 
+private routeSub: Subscription = new Subscription();
   
   taskModel: CreateTaskModel = {
     title: '',
@@ -63,10 +66,35 @@ export class BoardComponent implements AfterViewInit {
     private route:ActivatedRoute,
     private toastServices:ToastService) { }
 
-  ngAfterViewInit() {
- 
-    this.getProjectDetail();
-    this.getProjectTasks()
+ngOnInit(): void {
+  this.routeSub = this.route.params.subscribe(params => {
+    this.projectId = +params['projectId'];
+    this.getProjectDetail(this.projectId);
+
+    this.route.queryParams.subscribe(query => {
+      const incomingTaskId = query['TaskId'] ? +query['TaskId'] : null;
+
+      this.apiTask.getAllTasks(this.projectId).subscribe({
+        next: (res) => {
+          this.tasks = this.formatTasks(res.data);
+          this.groupTasksByStatus();
+
+          if (incomingTaskId) {
+            this.toggleTaskDetail(incomingTaskId);
+          }
+        },
+        error: (err) => {
+          this.toastServices.show({ title: 'Error', message: 'Task fetch failed.' });
+        }
+      });
+    });
+  });
+}
+
+
+
+  ngOnDestroy(): void {
+    this.routeSub.unsubscribe()
   }
 
 
@@ -88,24 +116,44 @@ showShare() { this.shareVisible = true; }
     
   }
   
-  toggleTaskDetail(id:number) {
+ toggleTaskDetail(taskId: number) {
+    this.taskdetailmodalid = taskId;
     this.activeDetail = !this.activeDetail;
-    this.taskdetailmodalid=id;
-    console.log(this.taskdetailmodalid)
-    
+
+ 
+    this.taskDetail = this.tasks.find(task => task.id === taskId) || null;
+
   }
 
+onTaskUpdated(updatedTask: Task) {
+  const index = this.tasks.findIndex(t => t.id === updatedTask.id);
+  if (index !== -1) {
+    this.tasks[index] = updatedTask;
+  }
 
+  this.groupTasksByStatus();
+
+  if (this.taskDetail?.id === updatedTask.id) {
+    this.taskDetail = { ...updatedTask }; 
+  }
+}
+onTaskDeleted(deletedTaskId: number) {
+  // 1. Task listesinden sil
+  this.tasks = this.tasks.filter(t => t.id !== deletedTaskId);
+
+  // 2. Sütunları güncelle
+  this.groupTasksByStatus();
+
+  // 3. Modalı kapat
+  this.activeDetail = false;
+  this.taskDetail = null;
+}
 
   //API BÖLÜMÜ
 
-  getProjectDetail() {
-    this.route.params.subscribe(params => {
-      this.projectId = params['projectId']; 
-      console.log(this.projectId)
-    }
-  );
-    this.apiProject.getById(this.projectId).subscribe((response) => {
+  getProjectDetail(pId:number) {
+ 
+    this.apiProject.getById(pId).subscribe((response) => {
       if (response?.data) {
        
       }
@@ -130,24 +178,27 @@ showShare() { this.shareVisible = true; }
   
   }
 
-  
-  formatTasks(tasks: any[]): Task[] {
-    return tasks.map(task => ({
-      id: task.id,
-      title: task.title,
-      description: task.description,
-      createdAt: new Date(task.createdAt),  
-      updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
-      startDate: task.startDate ? new Date(task.startDate) : null,
-      dueDate: task.dueDate ? new Date(task.dueDate) : null,
-      completedDate: task.completedDate ? new Date(task.completedDate) : null,
-      priority: mapPriority(task.priority), 
-      status: mapStatus(task.status),  
-      projectId: task.projectId,
-      assignedUserId: task.assignedUserId || undefined, 
-      assignedUser: task.assignedUser || undefined 
-    }));
-  }
+formatTasks(tasks: any[]): Task[] {
+  return tasks.map(task => ({
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    createdAt: new Date(task.createdAt),
+    updatedAt: task.updatedAt ? new Date(task.updatedAt) : null,
+    startDate: new Date(task.startDate),
+    dueDate: new Date(task.dueDate),
+    completedDate: task.completedDate ? new Date(task.completedDate) : null,
+    isActive: true, // Gelen JSON'da yoksa varsayılan true atanabilir
+    priority: task.priority,
+    status: task.status,
+    projectId: task.projectId,
+    project: task.project || null,
+    creatorId: task.creatorId ?? null,
+    assignedUserId: task.assignedUserId ?? null,
+    assignedUser: task.assignedUser || null
+  }));
+}
+
 
   
   getStatusString(status: TaskStatus): string {
@@ -161,14 +212,11 @@ showShare() { this.shareVisible = true; }
 
   
   groupTasksByStatus() {
-    // Her bir statüye göre görevleri sıfırla (column[status] her zaman boş olmalı)
     Object.keys(this.column).forEach(status => {
       this.column[status] = [];
     });
-  
-    // Her bir görevi statüsüne göre doğru sütuna yerleştiriyoruz
     this.tasks.forEach(task => {
-      // Status'a göre doğru sütuna yerleştiriyoruz
+
       switch (task.status) {
         case 0:
           this.column['NotStarted'].push(task);
@@ -189,13 +237,9 @@ showShare() { this.shareVisible = true; }
           this.column['Completed'].push(task);
           break;
         default:
-          console.log('Unknown status', task.status);
           break;
       }
     });
-  
-    // Konsola gruplandırılmış görevleri yazdıralım
-    console.log(this.column); // Gruplandırılmış görevleri kontrol ediyoruz
   }
   
 
@@ -217,6 +261,8 @@ showShare() { this.shareVisible = true; }
              });
            this.resetForm();
            this.toggleCreateTaskBoard();
+           this.getProjectTasks()
+          
          },
          error:(err) => {
            this.toastServices.show(
@@ -226,12 +272,13 @@ showShare() { this.shareVisible = true; }
          }}
        );
     } else {
-      // Eğer başlık veya açıklama boşsa kullanıcıyı bilgilendirebiliriz
-      alert("Title and Description are required.");
+      this.toastServices.show(
+             {title:'error',message:'Title and Description are required.',
+   
+             });
     }
   }
 
-  // Task formunu sıfırlama fonksiyonu
   resetForm() {
     this.taskModel = {
       title: '',
@@ -245,12 +292,10 @@ showShare() { this.shareVisible = true; }
     };
   }
 
-  // Modal açma/kapama fonksiyonu
   toggleCreateTaskBoard() {
     this.isCreateTaskOpen = !this.isCreateTaskOpen;
     this.resetForm(); 
   }
-  //API İLE İLGİLİ FONKSİYONLAR BÖLÜMÜ
 
 
   //HOST LISTENERS BÖLÜMÜ
@@ -258,6 +303,7 @@ showShare() { this.shareVisible = true; }
   onEscape(event: KeyboardEvent) {
     this.isCreateProjectOpen = false;
     this.activeDetail=false;
+    this.isCreateTaskOpen=false;
   }
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: MouseEvent) {
@@ -278,6 +324,13 @@ showShare() { this.shareVisible = true; }
       !target.closest('[data-modal="detail"]')
     ) {
       this.activeDetail = false;
+    }
+       if (
+      this.isCreateTaskOpen &&
+      !target.closest('.bv-cp-container') &&
+      !target.closest('[data-modal="task"]')
+    ) {
+      this.isCreateTaskOpen = false;
     }
   }
   

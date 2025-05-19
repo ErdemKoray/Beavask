@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { CreateTaskModel } from './taskModel/createTask.model';
 import { Task } from './taskModel/task.model';
 import { ApiResponse } from '../../model/apiResponse.model';
+import { UpdateTaskModel } from './taskModel/updateTask.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,22 @@ export class TaskService {
       return this._http.get<Task>(`${this.endpoint}/${id}`);
     }
 
-    
+    assignTaskToUser(taskId:number,userId:number){
+      return this._http.post<any>(`${this.endpoint}/${taskId}/assign/${userId}`,{taskId,userId})
+    }
+
+    getReporter(id:number){
+      return this._http.get<any>(`http://localhost:5092/api/User/${id}`);
+    }
+
+    updateTask(id:number, model:UpdateTaskModel){
+      return this._http.put<any>(`${this.endpoint}/${id}`,model)
+    }
+
+    deleteTask(id:number){
+      return this._http.delete<any>(`${this.endpoint}/${id}`)
+    }
+    getUserTaskById(id:number){
+      return this._http.get<ApiResponse<Task[]>>(`${this.endpoint}/user/${id}`)
+    }
 }

@@ -67,6 +67,10 @@ export class RegisterComponent implements OnInit {
   loginWithGithub() {
     window.location.href = 'https://github.com/login/oauth/authorize?client_id=Ov23lioqh5NrJDct5not&scope=user:email&redirect_uri=http://localhost:4200/auth-callback';
   }
+goToCompanyRegister(): void {
+  // İlgili rota örnek
+  this.router.navigate(['/rcompany']);
+}
 
   // Kullanıcı kaydını gerçekleştir
   register(): void {

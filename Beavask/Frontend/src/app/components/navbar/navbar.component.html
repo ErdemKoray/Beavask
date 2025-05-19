@@ -50,9 +50,8 @@
         </a>
         <div *ngIf="isProjectDropdownOpen" class="bv-dropdown-content bv-radius-3 bv-transition">
           <div class="bv-dropdown-recent-projects-header">{{ 'navbar.recentProjects' | translate }}</div>
-          <div class="dropdown-item bv-transition  di-projects" *ngFor="let project of projects">
-            <div class="d-flex justify-content-start align-items-center">
-              <img class="bv-drpi-img bv-radius-3" src="iconbeavask.png" alt="Project Icon" />
+          <div routerLink="project-detail/board/{{project.id}}" [queryParams]="{ projectId: project.id }" class="dropdown-item bv-transition  di-projects" *ngFor="let project of projects">
+            <div class="d-flex justify-content-start align-items-start bv-item-bar-d">
               <div class="bv-drpi-name">{{ project.name }}</div>
             </div>
           </div>
@@ -84,10 +83,14 @@
         </a>
         <div *ngIf="isTaskDropdownOpen" class="bv-dropdown-content bv-radius-3 bv-transition">
           <div class="bv-dropdown-recent-projects-header">{{ 'navbar.recentTasks' | translate }}</div>
-          <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center di-projects" *ngFor="let task of teams">
-            <div class="d-flex justify-content-start align-items-center bv-transition">
+         <a
+  class="dropdown-item bv-transition d-flex justify-content-start align-items-center di-projects"
+  *ngFor="let task of Task"
+  [routerLink]="'/project-detail/board/' + task.projectId"
+  [queryParams]="{ TaskId: task.id }">    
+          <div class="d-flex justify-content-start align-items-center bv-transition">
               <img class="bv-drpi-img bv-radius-3" src="iconbeavask.png" alt="Task Icon" />
-              <div class="bv-drpi-name">{{ task.name }}</div>
+              <div class="bv-drpi-name">{{ task.title }}</div>
             </div>
           </a>
           <div class="di-line d-flex justify-self-center align-items-center"></div>

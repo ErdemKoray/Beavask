@@ -1,0 +1,26 @@
+<div class="bv-verify-body">
+  <div class="bv-verify-container">
+    <h2>Email Verification</h2>
+    <p class="bv-info">Enter the 6-digit code sent to <strong>{{ email }}</strong></p>
+
+    <form [formGroup]="codeForm" (ngSubmit)="verify()" class="bv-code-form">
+      <div class="bv-code-inputs">
+        <input id="code1" formControlName="code1" maxlength="1" (input)="moveToNext($event, 0)" />
+        <input id="code2" formControlName="code2" maxlength="1" (input)="moveToNext($event, 1)" />
+        <input id="code3" formControlName="code3" maxlength="1" (input)="moveToNext($event, 2)" />
+        <input id="code4" formControlName="code4" maxlength="1" (input)="moveToNext($event, 3)" />
+        <input id="code5" formControlName="code5" maxlength="1" (input)="moveToNext($event, 4)" />
+        <input id="code6" formControlName="code6" maxlength="1" (input)="moveToNext($event, 5)" />
+      </div>
+
+      <div class="bv-submit">
+        <button type="submit" class="bv-submit" [disabled]="codeForm.invalid || isLoading">
+          <div *ngIf="isLoading" class="loader"></div>
+          <span *ngIf="!isLoading">Verify</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-toast></app-toast>

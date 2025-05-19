@@ -1,36 +1,40 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core'; 
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core'; 
 import { TeamService } from '../../../common/services/team/team.service';
 import { Team } from '../../../common/model/team.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProjectsService } from '../../../common/services/projects/projects.service';
+import { Project } from '../../../common/model/project.model';
+import { ToastService } from '../../../components/toast/toast.service';
+import { Subscription } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule,TranslateModule],
+  imports: [CommonModule,TranslateModule,DatePipe,RouterLink],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 
-export class MainComponent  {
+export class MainComponent implements OnInit,OnDestroy  {
 
-  constructor(private teamService: TeamService) {
+
+
+  private routeSub: Subscription = new Subscription();
+  constructor(
+    private teamService: TeamService,
+     private projectService:ProjectsService,
+    private toastService:ToastService
+   
+  ) {
 
   }
   
-  recentProjects = [
-    {
-      name: 'Beavask',
-      openIssues: 3,
-      doneIssues: 5
-    },
-    {
-      name: 'Kripto Ödeme Ağı',
-      openIssues: 1,
-      doneIssues: 2
-    }
-  ];
+
+  recentProjects:Project[]=[];
+
 
   workedActivities = [
     { title: 'ldkşsgsş', code: 'BEAV-8', project: 'Beavask', action: 'Created', userInitials: 'MA' },
@@ -89,11 +93,14 @@ user = {
 
   ngOnInit(): void {
    
+    this.getUserProject();
     this.updateDisplayedActivities();
    
 
   }
-
+  ngOnDestroy(): void {
+    
+  }
   setTab(tab: string): void {
     this.activeTab = tab;
     
@@ -179,21 +186,31 @@ user = {
   }
 
 
+  
+
+getUserProject() {
+  this.projectService.getAll().subscribe({
+    next: (Response) => {
+      this.recentProjects = Response.data
+        .map((project: any) => ({
+          id: project.id,
+          name: project.name,
+          description: '',
+          createdAt: new Date(project.createdAt),
+          isActive: true,
+          customerId: 0
+        }))
+        .filter((project, index, self) => {
+          return index >= self.length - 3;
+        });
+    },
+    error: (err) => {
+      const errorMessage = err?.error?.message || 'An unexpected error occurred';
+      this.toastService.show({
+        title: 'Error',
+        message: 'An error occurred while fetching data: ' + errorMessage,
+      });
+    },
+  });
 }
-
-
-export class Api{
-  constructor(private teamService: TeamService) { }
-
-  getAllTeams() {
-    return this.teamService.getAll();
-  }
-
-  getTeamById(id: number) {
-    return this.teamService.getById(id);
-  }
-
-
-  
-  
 }

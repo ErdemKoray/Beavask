@@ -1,0 +1,183 @@
+.bv-register-body {
+  height: fit-content;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--body-d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.6s ease-in;
+}
+
+.bv-register-container {
+    margin-top: 60px;
+    margin-bottom: 60px;
+  background-color: var(--card-xsw);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 700px;
+  
+  box-shadow: 0 10px 25px var(--shadow-d);
+  animation: slideUp 0.5s ease;
+}
+
+.bv-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.bv-logo img {
+  width: 120px;
+  height: auto;
+  animation: logoPop 0.4s ease;
+}
+
+.bv-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bv-input-grp {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.bv-text-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bv-text-group label {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: var(--text-sw);
+}
+
+.bv-text-group input,
+.bv-text-group textarea {
+  background-color: var(--card-sw);
+  border: 1px solid var(--border-sw);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-xsw);
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.bv-text-group input:focus,
+.bv-text-group textarea:focus {
+  outline: none;
+  border-color: var(--border-cl);
+  box-shadow: 0 0 5px var(--shadow-cl);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+  max-height: 200px;
+}
+
+.bv-submit {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.bv-submit button {
+  padding: 12px 30px;
+  font-weight: bold;
+  border: none;
+  background-color: var(--button-cl);
+  color: var(--text-d);
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.bv-submit button:hover {
+  background-color: var(--button-xscl);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.bv-submit button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--text-d);
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 13px;
+  margin-top: -10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes logoPop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bv-register-container {
+    padding: 20px;
+  }
+
+  .bv-input-grp {
+    flex-direction: column;
+  }
+}
+.bv-valid {
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+  text-align: start;
+}

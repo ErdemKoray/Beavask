@@ -1,6 +1,7 @@
 
 .bv-mp-container {
   height: 85vh;
+ 
 }
 .bv-mp-body {
   margin-top: 5vh;
@@ -72,32 +73,16 @@
 .bv-badge {
   padding: 4px 8px;
   font-weight: 600;
-  color: var(--card-xsw);
+  color: white;
   font-size: 12px;
   text-transform: capitalize;
   display: inline-block;
 }
-.bv-high {
-  background-color: var(--status-color-red);
-}
-.bv-medium {
-  background-color: var(--status-color-purple);
-}
-.bv-low {
-  background-color: var(--status-color-blue);
-}
+
 .bv-status {
   padding: 4px 10px;
   font-size: 12px;
   font-weight: bold;
   color: white;
 }
-.bv-status-open {
-  background-color: var(--status-color-green);
-}
-.bv-status-closed {
-  background-color: var(--status-color-red);
-}
-.bv-status-pending {
-  background-color: var(--status-color-gray);
-}
+
