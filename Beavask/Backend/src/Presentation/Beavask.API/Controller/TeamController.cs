@@ -86,4 +86,11 @@ public class TeamController : ControllerBase
         var result = await _teamService.GetTeamByCompanyIdAsync(companyId);
         return Ok(result);
     }   
+
+    [HttpPost("{teamId}/assign-user/{userId}")]
+    public async Task<ActionResult<Response<bool>>> AssignUserToTeam(int teamId, int userId)
+    {
+        var result = await _teamService.AssignUserToTeamAsync(teamId, userId);
+        return Ok(result);
+    }
 }

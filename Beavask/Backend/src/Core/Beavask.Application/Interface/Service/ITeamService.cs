@@ -19,4 +19,5 @@ public interface ITeamService
     Task<Response<TeamWithMembersDto>> GetTeamWithMembersAsync(int teamId);
     Task<Response<IEnumerable<UserDto>>> GetMembersByTeamIdAsync(int teamId);
     Task<Response<IEnumerable<EventDto>>> GetEventsByTeamIdAsync(int teamId);
+    Task<Response<bool>> AssignUserToTeamAsync(int teamId, int userId);
 }

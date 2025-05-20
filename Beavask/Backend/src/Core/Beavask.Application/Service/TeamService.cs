@@ -183,4 +183,52 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompany
             return Response<TeamDto>.Fail(ex.Message);
         }
     }
+
+    public async Task<Response<bool>> AssignUserToTeamAsync(int teamId, int userId)
+    {
+        try
+        {
+            var team = await _unitOfWork.TeamRepository.GetByIdAsync(teamId);
+            if (team == null)
+            {
+                await _logger.LogError("Team not found", context: teamId.ToString());
+                return Response<bool>.Fail("Team not found");
+            }
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                await _logger.LogError("User not found", context: userId.ToString());
+                return Response<bool>.Fail("User not found");
+            }
+            if(user.CompanyId != _currentCompanyService.CompanyId)
+            {
+                await _logger.LogError("User not found in company", context: userId.ToString());
+                return Response<bool>.Fail("User not found in company");
+            }
+            
+            if (user.TeamId == teamId)
+            {
+                await _logger.LogError("User already in team", context: teamId.ToString());
+                return Response<bool>.Fail("User already in team");
+            }
+
+            if (user.TeamId != null)
+            {
+                await _logger.LogError("User already in another team", context: teamId.ToString());
+                return Response<bool>.Fail("User already in another team");
+            }
+
+            user.TeamId = teamId;
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+            await _logger.LogInformation("User assigned to team successfully", context: teamId.ToString());
+            return Response<bool>.Success(true);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error assigning user to team", ex, context: teamId.ToString());
+            return Response<bool>.Fail(ex.Message);
+        }
+    }
 }
