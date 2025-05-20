@@ -55,4 +55,11 @@ public class CommentController : ControllerBase
         var result = await _commentService.DeleteAsync(id);
         return Ok(result);
     }
+
+    [HttpGet("task/{taskId}")]
+    public async Task<ActionResult<Response<IEnumerable<CommentDto>>>> GetAllCommentsByTaskId(int taskId)
+    {
+        var result = await _commentService.GetAllCommentsByTaskIdAsync(taskId);
+        return Ok(result);
+    }
 }

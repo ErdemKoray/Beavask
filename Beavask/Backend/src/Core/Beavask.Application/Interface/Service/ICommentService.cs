@@ -10,4 +10,5 @@ public interface ICommentService
     Task<Response<CommentDto>> CreateAsync(CommentCreateDto commentDto);
     Task<Response<CommentDto>> UpdateAsync(int id, CommentDto commentDto);
     Task<Response<bool>> DeleteAsync(int id);
+    Task<Response<IEnumerable<CommentDto>>> GetAllCommentsByTaskIdAsync(int taskId);
 }

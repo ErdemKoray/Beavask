@@ -133,4 +133,30 @@ public class CommentService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUser
             return Response<CommentDto>.Fail(ex.Message);
         }
     }
+    public async Task<Response<IEnumerable<CommentDto>>> GetAllCommentsByTaskIdAsync(int taskId)
+    {
+        try
+        {
+            var task = await _unitOfWork.TaskRepository.GetByIdAsync(taskId);
+            if (task == null)
+            {
+                await _logger.LogWarning($"Task not found for task id: {taskId}");
+                return Response<IEnumerable<CommentDto>>.Fail("Task not found.");
+            }
+            var comments = await _unitOfWork.CommentRepository.GetAllByTaskIdAsync(taskId);
+            if (!comments.Any())
+            {
+                await _logger.LogWarning($"No comments found for task id: {taskId}");
+                return Response<IEnumerable<CommentDto>>.Fail("No comments found for this task.");
+            }
+            await _logger.LogInformation($"Comments fetched successfully for task id: {taskId}");
+            var dtos = _mapper.Map<IEnumerable<CommentDto>>(comments);
+            return Response<IEnumerable<CommentDto>>.Success(dtos);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError($"Error while getting comments by task id: {ex.Message}");
+            return Response<IEnumerable<CommentDto>>.Fail(ex.Message);
+        }
+    }
 }

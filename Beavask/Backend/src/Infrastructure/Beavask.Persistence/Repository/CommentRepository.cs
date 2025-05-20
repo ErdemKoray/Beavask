@@ -13,6 +13,14 @@ public class CommentRepository : BaseRepository<Comment, int>, ICommentRepositor
     {
         _context = context;
     }
+
+    public async Task<IEnumerable<Comment>> GetAllByTaskIdAsync(int taskId)
+    {
+        return await _context.Comments
+            .Where(c => c.TaskId == taskId)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Comment>> GetAllByUserIdAsync(int userId)
     {
         return await _context.Comments

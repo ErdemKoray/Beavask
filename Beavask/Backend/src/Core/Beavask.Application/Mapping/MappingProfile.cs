@@ -132,6 +132,7 @@ public class MappingProfile : Profile
         //Comment Entity
         CreateMap<CommentCreateDto, Comment>();
         CreateMap<Comment, CommentDto>();
+        CreateMap<CommentDto, Comment>();
         CreateMap<Comment, CommentCreateDto>();
     }
 }
