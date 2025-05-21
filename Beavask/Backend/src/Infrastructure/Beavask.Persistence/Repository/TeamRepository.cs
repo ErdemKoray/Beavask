@@ -34,4 +34,9 @@ public class TeamRepository : BaseRepository<Team, int>, ITeamRepository
             .Where(e => e.Teams.Any(te => te.TeamId == teamId))
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Team>> GetAllTeamsByCompanyId(int companyId)
+    {
+        return await _dbSet.Where(t => t.CompanyId == companyId).ToListAsync();
+    }
 }

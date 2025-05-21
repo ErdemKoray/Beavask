@@ -227,4 +227,19 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompany
             return Response<bool>.Fail(ex.Message);
         }
     }
+
+    public async Task<Response<IEnumerable<TeamDto>>> GetAllTeamsByCompanyIdAsync(int companyId)
+    {
+        try
+        {
+            var teams = await _unitOfWork.TeamRepository.GetAllTeamsByCompanyId(companyId);
+            var dtos = _mapper.Map<IEnumerable<TeamDto>>(teams);
+            return Response<IEnumerable<TeamDto>>.Success(dtos);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error getting all teams by company id", ex, context: companyId.ToString());
+            return Response<IEnumerable<TeamDto>>.Fail(ex.Message);
+        }
+    }
 }

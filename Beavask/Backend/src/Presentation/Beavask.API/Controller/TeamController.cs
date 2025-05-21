@@ -93,4 +93,11 @@ public class TeamController : ControllerBase
         var result = await _teamService.AssignUserToTeamAsync(teamId, userId);
         return Ok(result);
     }
+
+    [HttpGet("company/{companyId}/teams")]
+    public async Task<ActionResult<Response<IEnumerable<TeamDto>>>> GetAllTeamsByCompanyId(int companyId)
+    {
+        var result = await _teamService.GetAllTeamsByCompanyIdAsync(companyId);
+        return Ok(result);
+    }
 }
