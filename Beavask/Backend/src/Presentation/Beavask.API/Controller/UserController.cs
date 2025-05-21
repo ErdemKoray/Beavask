@@ -59,5 +59,13 @@ public class UserController : ControllerBase
             return Ok(result);
         return BadRequest(result);
     }
-}
 
+    [HttpPut("company/{id}")]
+    public async Task<IActionResult> UpdateCompany(int id, [FromBody] UpdateCompanyRequest updateCompanyRequest)
+    {
+        var result = await _userService.UpdateUserCompanyIdAsync(id, updateCompanyRequest);
+        if (result.IsSuccess)
+            return Ok(result);
+        return BadRequest(result);
+    }
+}

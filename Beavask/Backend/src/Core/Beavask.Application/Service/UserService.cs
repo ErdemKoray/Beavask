@@ -121,5 +121,26 @@ public class UserService : IUserService
     {
         return "randomSalt";
     }
+
+    public async Task<Response<bool>> UpdateUserCompanyIdAsync(int id, UpdateCompanyRequest updateCompanyRequest)
+    {
+        try
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return Response<bool>.NotFound();
+            }
+            user.CompanyId = updateCompanyRequest.CompanyId;
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+            return Response<bool>.Success(true);
+        }
+        catch (Exception ex)
+        {
+            return Response<bool>.Fail(ex.Message);
+        }
+    }
 }
+
 
