@@ -147,10 +147,6 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompany
     {
         try
         {
-            var existingTeam = await _unitOfWork.TeamRepository.GetSingleByConditionAsync(t => t.CompanyId == _currentCompanyService.CompanyId);
-            if (existingTeam != null)
-                return Response<TeamDto>.Fail("Team already exists");
-
             var _team = _mapper.Map<Team>(teamCreateDto);
             _team.CompanyId = _currentCompanyService.CompanyId;
             await _unitOfWork.TeamRepository.AddAsync(_team);
