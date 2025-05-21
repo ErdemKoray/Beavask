@@ -13,5 +13,7 @@ public interface ICompanyService
     Task<Response<bool>> DeleteAsync(int id);
     Task<Response<IEnumerable<UserBirefForCompany>>> GetAllUsersByCompanyIdAsync(int companyId);
     Task<Response<IEnumerable<ProjectDto>>> GetAllProjectsByCompanyIdAsync();
+    Task<Response<IEnumerable<UserDto>>> GetAllUsersByCompanyProjectIdAsync(int projectId);
+    Task<Response<IEnumerable<UserBirefForCompany>>> GetAllUsersAccountDetailsByCompanyProjectIdAsync(int projectId);
 }
 

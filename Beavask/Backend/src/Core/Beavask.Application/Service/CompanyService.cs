@@ -162,6 +162,66 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
             return Response<IEnumerable<UserBirefForCompany>>.Fail($"An error occurred while fetching users: {ex.Message}");
         }
     }
+    public async Task<Response<IEnumerable<UserBirefForCompany>>> GetAllUsersAccountDetailsByCompanyProjectIdAsync(int projectId)
+    {
+        var project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId);
+        if(project == null)
+            return Response<IEnumerable<UserBirefForCompany>>.NotFound();
+
+        var projectMembers = await _unitOfWork.ProjectMemberRepository.GetAllUsersByProjectIdAsync(projectId);
+        var contributors = await _repoService.GetRepositoryContributorsAsync(project.RepoUrl);
+
+        if(contributors?.Data == null)
+            return Response<IEnumerable<UserBirefForCompany>>.Success(new List<UserBirefForCompany>());
+
+        var uniqueUsernames = new HashSet<string>();
+        var userBriefs = new List<UserBirefForCompany>();        
+
+        foreach(var member in projectMembers)
+        {
+            uniqueUsernames.Add(member.User.UserName);
+            userBriefs.Add(new UserBirefForCompany
+            {
+                Id = member.User.Id,
+                Username = member.User.UserName,
+                Email = member.User.Email,
+                IsRegistered = true,
+                IsAssignedToCompany = true
+            });
+        }
+
+        foreach(var contributor in contributors.Data)
+        {
+            if(string.IsNullOrEmpty(contributor.Username) || uniqueUsernames.Contains(contributor.Username))
+                continue;
+
+            uniqueUsernames.Add(contributor.Username);
+            var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.UserName == contributor.Username);
+
+            if(user == null)
+            {
+                userBriefs.Add(new UserBirefForCompany
+                {
+                    Username = contributor.Username,
+                    Email = "",
+                    IsRegistered = false,
+                    IsAssignedToCompany = false
+                });
+                continue;
+            }
+
+            userBriefs.Add(new UserBirefForCompany
+            {
+                Id = user.Id,
+                Username = user.UserName,
+                Email = user.Email,
+                IsRegistered = true,
+                IsAssignedToCompany = true
+            });
+        }
+        var sortedUserBriefs = userBriefs.OrderBy(u => u.Id).ToList();
+        return Response<IEnumerable<UserBirefForCompany>>.Success(sortedUserBriefs);
+    }
 
     public async Task<Response<IEnumerable<ProjectDto>>> GetAllProjectsByCompanyIdAsync()
     {
@@ -170,7 +230,7 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
             await _logger.LogInformation("Getting all projects for company {CompanyId}", _currentCompanyService.CompanyId?.ToString());
             var projects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(_currentCompanyService.CompanyId ?? throw new Exception("Company not found"));
             var dtos = _mapper.Map<IEnumerable<ProjectDto>>(projects);
-            await _logger.LogInformation("Successfully retrieved projects for company {CompanyId}", companyId: _currentCompanyService.CompanyId);
+            await _logger.LogInformation("Successfully retrieved projects for company {CompanyId}", _currentCompanyService.CompanyId?.ToString());
             return Response<IEnumerable<ProjectDto>>.Success(dtos);
         }
         catch (Exception ex)
@@ -179,6 +239,35 @@ public class CompanyService(IUnitOfWork unitOfWork, IMapper mapper, IRepoService
             return Response<IEnumerable<ProjectDto>>.Fail(ex.Message);
         }
     }
+
+
+    public async Task<Response<IEnumerable<UserDto>>> GetAllUsersByCompanyProjectIdAsync(int projectId)
+    {
+        try
+        {
+            await _logger.LogInformation("Getting all users for project {ProjectId}", projectId.ToString());
+            
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId);
+            if (project == null)
+            {
+                await _logger.LogWarning("Project not found with id {ProjectId}", projectId.ToString());
+                return Response<IEnumerable<UserDto>>.NotFound();
+            }
+
+            var users = await _unitOfWork.ProjectMemberRepository.GetAllUsersByProjectIdAsync(projectId);
+            var userIds = users.Select(u => u.UserId).ToList();
+            var dtos = _mapper.Map<IEnumerable<UserDto>>(users);
+            
+            await _logger.LogInformation("Successfully retrieved users for project {ProjectId}", projectId.ToString());
+            return Response<IEnumerable<UserDto>>.Success(dtos);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error getting users for project {ProjectId}", ex, projectId.ToString());
+            return Response<IEnumerable<UserDto>>.Fail(ex.Message);
+        }
+    }
+
 
 }
 

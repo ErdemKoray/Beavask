@@ -56,10 +56,28 @@ public class CompanyController : ControllerBase
         return NotFound(response.Message); 
     }
 
-    [HttpGet("{companyId}/projects")]
-    public async Task<ActionResult> GetAllProjectsByCompanyIdAsync(int companyId)
+    [HttpGet("Company/projects")]
+    public async Task<ActionResult> GetAllProjectsByCompanyIdAsync()
     {
         var response = await _companyService.GetAllProjectsByCompanyIdAsync();
+        return Ok(response.Data);
+    }
+
+    [HttpGet("Company/projects/{projectId}/users")]
+    public async Task<ActionResult> GetAllUsersByCompanyProjectIdAsync(int projectId)
+    {
+        var response = await _companyService.GetAllUsersByCompanyProjectIdAsync(projectId);
+        if (response.IsSuccess)
+        {
+            return Ok(response.Data);
+        }
+        return NotFound(response.Message);
+    }
+
+    [HttpGet("Company/projects/{projectId}/members")]
+    public async Task<ActionResult> GetAllUsersAccountDetailsByCompanyProjectIdAsync(int projectId)
+    {
+        var response = await _companyService.GetAllUsersAccountDetailsByCompanyProjectIdAsync(projectId);
         return Ok(response.Data);
     }
 }
