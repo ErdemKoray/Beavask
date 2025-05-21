@@ -1,4 +1,5 @@
 using Beavask.Application.DTOs.Role;
+using Beavask.Application.DTOs.UserRole;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +60,15 @@ public class RoleController : ControllerBase
         if (result.IsSuccess)
             return NoContent();
         return NotFound(result);
+    }
+
+    [HttpPost("assign-role-to-user")]
+    public async Task<IActionResult> AssignRoleToUser([FromBody] UserRoleCreateDto dto)
+    {
+        var result = await _roleService.AssignRoleToUserAsync(dto.UserId, dto.RoleId);
+        if (result.IsSuccess)
+            return Ok(result);
+        return BadRequest(result);
     }
 }
 

@@ -4,13 +4,50 @@ using Beavask.Application.Common;
 using Beavask.Domain.Entities.Base;
 using AutoMapper;
 using Beavask.Application.Interface.Service;
+using Beavask.Application.Interface.Logging;
 
 namespace Beavask.Application.Service;
 
-public class RoleService(IUnitOfWork unitOfWork, IMapper mapper) : IRoleService
+public class RoleService(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger, ICurrentCompanyService currentCompanyService) : IRoleService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ILogger _logger = logger;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentCompanyService _currentCompanyService = currentCompanyService;
+
+    public async Task<Response<RoleDto>> AssignRoleToUserAsync(int userId, int roleId)
+    {
+        try
+        {   
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return Response<RoleDto>.NotFound();
+            }
+
+            if(user.CompanyId != _currentCompanyService.CompanyId)
+            {
+                return Response<RoleDto>.Fail("User is not in the current company");
+            }
+
+            var role = await _unitOfWork.RoleRepository.GetByIdAsync(roleId);
+            if (role == null)
+            {
+                return Response<RoleDto>.NotFound();
+            }
+
+            await _unitOfWork.UserRoleRepository.AssignRoleToUserAsync(userId, roleId);
+            await _unitOfWork.UserRepository.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            var roleDto = _mapper.Map<RoleDto>(role);
+            return Response<RoleDto>.Success(roleDto);
+        }
+        catch (Exception ex)
+        {
+            return Response<RoleDto>.Fail(ex.Message);
+        }
+    }
 
     public async Task<Response<RoleDto>> CreateAsync(RoleCreateDto roleCreateDto)
     {

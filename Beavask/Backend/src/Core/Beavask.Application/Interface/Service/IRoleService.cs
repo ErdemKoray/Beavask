@@ -10,5 +10,6 @@ namespace Beavask.Application.Interface.Service
         Task<Response<RoleDto>> CreateAsync(RoleCreateDto roleCreateDto);
         Task<Response<RoleDto>> UpdateAsync(int id, RoleUpdateDto roleUpdateDto);
         Task<Response<bool>> DeleteAsync(int id);
+        Task<Response<RoleDto>> AssignRoleToUserAsync(int userId, int roleId);
     }
 }
