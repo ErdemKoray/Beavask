@@ -56,4 +56,16 @@ public class UserRepository : BaseRepository<User, int>, IUserRepository
             .Where(u => u.CompanyId == companyId && u.IsActive == true)
             .ToListAsync();
     }
+    public async Task<IEnumerable<User>> GetAllUsersByUserNameAsync(string userName)
+    {
+        return await _context.Users
+            .Where(u => u.UserName.Contains(userName))
+            .ToListAsync();
+    }
+
+    public async Task<User> IsUserAlreadyAssignedToCompany(string userName)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.UserName == userName && u.CompanyId != null);
+    }
 } 

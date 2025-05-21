@@ -98,6 +98,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.IsRegistered, opt => opt.MapFrom(src => true))
             .ForMember(dest => dest.IsAssignedToCompany, opt => opt.MapFrom(src => src.CompanyId.HasValue));
+        
 
         //Milestone Entity
         CreateMap<Milestone, MilestoneDto>().ReverseMap();

@@ -6,6 +6,7 @@ using Beavask.Application.Interface;
 using Beavask.Domain.Entities.Base;
 using Beavask.Application.DTOs.Repo;
 using Beavask.Application.Helper;
+using Beavask.Domain.Entities.Join;
 
 namespace Beavask.Application.Service;
 
@@ -145,9 +146,41 @@ public class ProjectService : IProjectService
                 UserId = isCompanyProject ? null : _currentUser.UserId,
                 CompanyId = isCompanyProject ? _currentCompany.CompanyId : null
             };
-
             await _unitOfWork.ProjectRepository.AddAsync(project);
             await _unitOfWork.SaveChangesAsync();
+
+            if (isCompanyProject)
+            {
+                var contributors = await _repoService.GetRepositoryContributorsAsync(repoInfo.Data.HtmlUrl);
+                if (contributors?.Data == null)
+                    return Response<bool>.Fail("Repository not found");
+
+                foreach (var contributor in contributors.Data)
+                {
+                    var checkUser = await _unitOfWork.UserRepository.IsUserAlreadyAssignedToCompany(contributor.Username);
+                    if(checkUser != null && checkUser.CompanyId == _currentCompany.CompanyId)
+                    {
+                        var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.UserName == contributor.Username);
+                        if(user == null)
+                            continue;
+                        else
+                        {
+                            await _unitOfWork.ProjectMemberRepository.AddAsync(new ProjectMember
+                            {
+                                ProjectId = project.Id,
+                                UserId = checkUser.Id,
+                                User = checkUser,
+                                Project = project
+                            });
+                            await _unitOfWork.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
 
             return Response<bool>.Success(true);
         }
@@ -156,6 +189,5 @@ public class ProjectService : IProjectService
             return Response<bool>.Fail($"Error: {ex.Message}");
         }
     }
-
 }
 
