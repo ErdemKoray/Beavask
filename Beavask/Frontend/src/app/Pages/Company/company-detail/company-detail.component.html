@@ -1,0 +1,189 @@
+<!-- Invite User Modal -->
+<div *ngIf="isInviteModalOpen" class="bv-invite-modal" (click)="closeInviteModal($event)">
+  <div class="bv-invite-container" (click)="$event.stopPropagation()">
+    <h3>Invite User to Project</h3>
+    <form [formGroup]="inviteForm" (ngSubmit)="submitInvite()">
+
+      <div class="bv-cr-text-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          placeholder="Enter user email"
+          class="view-text-focus"
+        />
+        <div *ngIf="inviteForm.get('email')?.invalid && (inviteForm.get('email')?.touched || inviteForm.get('email')?.dirty)" class="error-text">
+          Please enter a valid email address.
+        </div>
+      </div>
+
+      <div class="bv-cp-options">
+        <button type="submit" [disabled]="inviteForm.invalid" class="bv-cp-submit">Send Invite</button>
+        <button type="button" class="bv-cp-close" (click)="isInviteModalOpen = false">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Modal: Create Task -->
+<div *ngIf="isCreateTaskOpen" class="bv-create-project-modal">
+  <div class="bv-cp-container">
+    <h2 class="bv-b-title">Create New Task</h2>
+    <form (ngSubmit)="onCreateTask()" class="bv-cp-form">
+      <div class="bv-cr-text-group">
+        <label for="taskTitle">Title</label>
+        <input
+          id="taskTitle"
+          type="text"
+          [(ngModel)]="taskModel.title"
+          name="title"
+          required
+          placeholder="Enter task title"
+          class="view-text-focus"
+        />
+      </div>
+
+      <div class="bv-cr-text-group">
+        <label for="taskDescription">Description</label>
+        <textarea
+          id="taskDescription"
+          [(ngModel)]="taskModel.description"
+          name="description"
+          rows="4"
+          placeholder="Enter task description"
+          required
+          class="view-text-focus"
+        ></textarea>
+      </div>
+
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group">
+          <label for="startDate">Start Date</label>
+          <input
+            id="startDate"
+            type="date"
+            [(ngModel)]="taskModel.startDate"
+            name="startDate"
+            required
+            class="view-text-focus"
+          />
+        </div>
+        <div class="bv-cr-text-group">
+          <label for="dueDate">Due Date</label>
+          <input
+            id="dueDate"
+            type="date"
+            [(ngModel)]="taskModel.dueDate"
+            name="dueDate"
+            required
+            class="view-text-focus"
+          />
+        </div>
+      </div>
+
+      <div class="bv-cr-input-grp">
+        <div class="bv-cr-text-group">
+          <label for="priority">Priority</label>
+          <select
+            id="priority"
+            [(ngModel)]="taskModel.priority"
+            name="priority"
+            class="view-text-focus"
+          >
+<option *ngFor="let p of taskPriorities" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bv-cp-options">
+        <button type="submit" class="bv-cp-submit">Create Task</button>
+        <button type="button" class="bv-cp-close"  (click)="toggleCreateTaskBoard()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Board Container -->
+<!-- Board Container -->
+<div class="bv-b-container">
+  <header class="bv-b-header d-flex justify-content-between align-items-center">
+    <h1 class="bv-b-title">Project Tasks</h1>
+    <div class="bv-b-actions">
+      <button class="bv-b-task-add-button" (click)="toggleCreateTaskBoard()" data-modal="task" title="Create New Task" aria-label="Create New Task">
+        <svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 0 24 24" width="28" fill="#fff">
+          <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="bv-b-task-body">
+    <div class="bv-b-tasks" *ngFor="let statusKey of Object.keys(column)">
+     <div
+  class="bv-b-task-item"
+  [class.bv-b-task-done]="statusKey === 'Completed'"
+  [class.bv-b-task-current]="statusKey !== 'Completed'"
+  tabindex="0"
+  role="region"
+  [attr.aria-label]="(statusKey | titlecase) + ' Tasks'"
+>
+
+        <div class="bv-b-ti-header">{{ statusKey | titlecase }}</div>
+        <div class="bv-b-ti-body">
+  <div
+  *ngFor="let task of column[statusKey]"
+  class="bv-task-card"
+  data-modal="detail"
+  (click)="toggleTaskDetail(task.id)"
+  role="button"
+  tabindex="0"
+  aria-pressed="false"
+  [attr.aria-label]="'Open task details for ' + task.title"
+>
+
+            <div class="bv-task-header">{{ task.title }}</div>
+            <div class="bv-task-desc">{{ task.description }}</div>
+            <div class="bv-task-status">Status: {{ task.status }}</div>
+          </div>
+          <div *ngIf="column[statusKey].length === 0" class="bv-no-tasks">No tasks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+<div class="user-list">
+  <h3>Project Users</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button *ngIf="!user.isRegistered || !user.isAssignedToCompany" (click)="openInviteModal(user, projectName)">
+            Invite
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- Task Detail Modal -->
+  <app-task-detail
+    *ngIf="activeDetail && selectedTask"
+    [taskD]="selectedTask"
+    (taskUpdated)="onTaskUpdated($event)"
+    (taskDeleted)="onTaskDeleted($event)"
+    data-modal="detail"
+  ></app-task-detail>
+</div>

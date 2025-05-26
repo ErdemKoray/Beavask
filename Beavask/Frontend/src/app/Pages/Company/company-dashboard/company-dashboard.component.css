@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 100vh;
   height: fit-content;
-  background-color: var(--body-xsw);
+  background-color: var(--body-w);
 }
 
 .bv-dashboard-metrics {
@@ -53,11 +53,17 @@
 }
 
 .bv-dashboard-box {
-  background-color: var(--card-sw);
+  background-color: var(--card-xsw);
   color: var(--text-xsw);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 4px var(--shadow-d);
+  max-height:400px ;
+}
+.bv-dashboard-chart-area canvas {
+  width: 250px !important; /* Genişliği max 300px yap */
+  height: 250px !important; /* Yükseklik sabit kalsın */
+  max-width: 100%; /* Gerektiğinde küçülsün */
 }
 
 .bv-dashboard-box h4 {
@@ -71,6 +77,8 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+  
+
 }
 
 .bv-dashboard-legend {

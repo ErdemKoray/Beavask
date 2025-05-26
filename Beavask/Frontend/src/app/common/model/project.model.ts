@@ -6,4 +6,5 @@ export interface Project {
   updatedAt?: Date;
   isActive: boolean;
   customerId: number;
+ creatorId?: number;
 }

@@ -1,3 +1,10 @@
+
+.bv-pd-container{
+        display: flex;
+    justify-content: start;
+    width: 100vw;
+    height: 100vh;
+}
 .bv-b-container{
     width: 100%;
     min-height: 100%;
@@ -5,6 +12,10 @@
     background-color: var(--body-xsw);
 }
 
+.bv-container{
+    width: 100%;
+    height: 100%;
+}
 .bv-b-header{
     padding: 30px;
     margin-top:30px;
@@ -419,7 +430,7 @@ input.view-text-focus:focus {
     font-size: 16px;
     margin-left: 16px;
     margin-bottom: 10px;
-    color: var(--text-xsw);
+    color: var(--text-xsw)!important;
   }
   
   .bv-cr-text-group input,
@@ -428,6 +439,7 @@ input.view-text-focus:focus {
     background-color: var(--card-sw);
     height: 48px;
     border: 2px solid var(--border-xsw);
+    color: var(--text-xsw);
     border-radius: 0.275rem;
     width: 100%;
     font-size: 14px;

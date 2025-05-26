@@ -13,6 +13,8 @@ import { TaskPriority ,mapPriority} from '../../../../../../common/model/taskPri
 import { Task } from '../../../../../../common/services/task/taskModel/task.model';
 import { TaskStatus ,mapStatus} from '../../../../../../common/model/taskStatus.model';
 import { Subscription } from 'rxjs';
+import { PnavbarComponent } from '../pnavbar/pnavbar.component';
+import { SummaryComponent } from "../summary/summary.component";
 
 
 
@@ -20,13 +22,14 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule,FormsModule,TaskDetailComponent,ShareModalComponent,TitleCasePipe],
+  imports: [CommonModule, PnavbarComponent, FormsModule, TaskDetailComponent, ShareModalComponent, TitleCasePipe, SummaryComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })
 export class BoardComponent implements OnInit,OnDestroy {
 
-
+  activeBoard=true;
+  activeSummary=false;
   projectId: number= 0;
   taskdetailmodalid = 0;
   isCreateTaskOpen: boolean = false;
@@ -84,7 +87,7 @@ ngOnInit(): void {
           }
         },
         error: (err) => {
-          this.toastServices.show({ title: 'Error', message: 'Task fetch failed.' });
+
         }
       });
     });
@@ -110,6 +113,12 @@ ngOnInit(): void {
 
 
 //GENEL FONKSİYONLAR BÖLÜMÜ
+
+
+onActiveBoardChange(active: boolean) {
+  this.activeBoard = active;
+}
+
 showShare() { this.shareVisible = true; }
   toggleCreateProjectBoard() {
     this.isCreateProjectOpen = !this.isCreateProjectOpen;

@@ -16,6 +16,18 @@ export const routes: Routes = [
       path:'profile',
       loadComponent:()=>import('./Pages/Company/cprofile/cprofile.component').then(m=>m.CprofileComponent),
       canActivate: [AuthGuard]
+    }, {
+      path:'teams',
+      loadComponent:()=>import('./Pages/Company/company-team/company-team.component').then(m=>m.CompanyTeamComponent),
+      canActivate: [AuthGuard]
+    }, {
+      path:'projects',
+      loadComponent:()=>import('./Pages/Company/company-projects/company-projects.component').then(m=>m.CompanyProjectsComponent),
+      canActivate: [AuthGuard]
+    }, {
+      path:'project-detail/:id',
+      loadComponent:()=>import('./Pages/Company/company-detail/company-detail.component').then(m=>m.CompanyDetailComponent),
+      canActivate: [AuthGuard]
     }
   ]
 }
@@ -48,19 +60,6 @@ export const routes: Routes = [
                 path: 'teams/:id',
                 loadComponent: () => import('./Pages/teamprofile/teamprofile.component').then(m => m.TeamprofileComponent),
                 canActivate: [AuthGuard]
-            }
-,
-            {
-                path:'company',
-                loadComponent:()=>import('./Pages/Company/company.component').then(m=>m.CompanyComponent),
-               canActivate: [AuthGuard] ,
-                children:[
-                    {
-                        path:'profile',
-                        loadComponent:()=>import('./Pages/Company/cprofile/cprofile.component').then(m=>m.CprofileComponent),
-                       canActivate: [AuthGuard] 
-                    }
-                ]
             },
            
             {

@@ -21,13 +21,20 @@
           <small *ngIf="loginForm.get('password')?.errors?.['minlength']">At least 6 characters required.</small>
         </div>
       </div>
-
-      <div class="bv-submit mt-3">
-        <button type="submit" [disabled]="isLoading || loginForm.invalid" class="bv-submit">
+        <div class="bv-check2">
+          <div (click)="gotoLogin()" class="bv-forgot-password">
+            individual account
+          </div>
+          <div class="bv-create-account" (click)="goToCRegister()">
+            Create Account
+          </div>
+        </div>
+  
+        <button type="submit" [disabled]="isLoading || loginForm.invalid" class="bv-submit bv-radius-5 bv-transition">
           <div *ngIf="isLoading" class="loader"></div>
           <span *ngIf="!isLoading">Login</span>
         </button>
-      </div>
+  
     </form>
   </div>
 </div>

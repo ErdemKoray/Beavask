@@ -1,128 +1,125 @@
 <div class="bv-summary-container d-flex flex-column gap-4">
+  <!-- Top Stat Cards -->
+  <div class="bv-summary-top-cards d-flex justify-content-between flex-wrap gap-4">
+    <div class="bv-summary-card bv-radius-4 bv-summary-box" (click)="gotofiltertask('Completed')">
+      <div class="bv-sc-header bv-transition">{{ taskStats.completed }}</div>
+      <p>Tasks Completed</p>
+      <span>this week</span>
+    </div>
+    <div class="bv-summary-card bv-radius-4 bv-summary-box">
+      <div class="bv-sc-header bv-transition">{{ taskStats.created }}</div>
+      <p>Tasks Created</p>
+      <span>this week</span>
+    </div>
+    <div class="bv-summary-card bv-radius-4 bv-summary-box">
+      <div class="bv-sc-header bv-transition">{{ taskStats.inProgress }}</div>
+      <p>In Progress</p>
+      <span>currently working on</span>
+    </div>
+    <div class="bv-summary-card bv-radius-4 bv-summary-box">
+      <div class="bv-sc-header bv-transition">{{ taskStats.dueToday }}</div>
+      <p>Due Today</p>
+      <span>don’t forget!</span>
+    </div>
+  </div>
 
-    
-    <div class="bv-summary-top-cards d-flex justify-content-between flex-wrap gap-4">
-  <div class="bv-summary-card bv-radius-4 bv-summary-box" (click)="gotofiltertask('Closed')">
-    <div class="bv-sc-header bv-transition">5</div>
-    <p>Tasks Completed</p>
-    <span>this week</span>
-  </div>
-  <div class="bv-summary-card bv-radius-4 bv-summary-box">
-    <div class="bv-sc-header bv-transition">3</div>
-    <p>Tasks Created</p>
-    <span>this week</span>
-  </div>
-  <div class="bv-summary-card bv-radius-4 bv-summary-box">
-    <div class="bv-sc-header bv-transition">2</div>
-    <p>In Progress</p>
-    <span>currently working on</span>
-  </div>
-  <div class="bv-summary-card bv-radius-4 bv-summary-box">
-    <div class="bv-sc-header bv-transition">1</div>
-    <p>Due Today</p>
-    <span>don’t forget!</span>
-  </div>
-</div>
-
-  
-    
-    <div class="bv-summary-grid">
-  
-     
-        <div class="bv-summary-box">
-            <h4>My Recent Tasks</h4>
-            <div class="bv-mp-section">
-              <div class="bv-mp-grid">
-                <table class="bv-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Subject</th>
-                      <th>Priority</th>
-                      <th>Status</th>
-                      <th>Due Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="bv-project-item" *ngFor="let task of recentTasks">
-                      <td>#{{ task.id }}</td>
-                      <td>{{ task.subject }}</td>
-                      <td><span class="bv-badge bv-{{ task.priority | lowercase }}">{{ task.priority }}</span></td>
-                      <td><span class="bv-status bv-status-{{ task.status | lowercase }}">{{ task.status }}</span></td>
-                      <td>{{ task.dueDate }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-     
-   
-      <div class="bv-summary-box">
-        <h4>Task Distribution</h4>
-        <div class="bv-sb-taskd-body d-flex justify-content-between align-items-center flex-wrap gap-4">
-
-            <div class="bv-summary-status-chart">
-              <canvas id="statusChart"></canvas>
-            </div>
-            <ul class="bv-summary-legend">
-              <li><span class="bv-status-dot todo"></span>To Do: 4</li>
-              <li><span class="bv-status-dot inprogress"></span>In Progress: 2</li>
-              <li><span class="bv-status-dot done"></span>Done: 10</li>
-            </ul>
-        </div>
-     
-      </div>
-  
-  
-      
-      <div class="bv-summary-box">
-        <h4>Last Comments</h4>
-        <div class="bv-activity-list">
-          <div class="bv-activity-item">
-            <div class="bv-activity-content">
-              <strong>Koray Erdem</strong> commented on task <em>"Design user login page"</em> in project <strong>Dashboard Redesign</strong>
-            </div>
-            <div class="bv-activity-date">Apr 24, 2025</div>
-          </div>
-          <div class="bv-activity-item">
-            <div class="bv-activity-content">
-              <strong>Muhammed Emin Aldaş</strong> mentioned you in <em>"Sprint Planning"</em> in project <strong>Bug Hunt Sprint</strong>
-            </div>
-            <div class="bv-activity-date">Apr 23, 2025</div>
-          </div>
-          <div class="bv-activity-item">
-            <div class="bv-activity-content">
-              <strong>Ece Demir</strong> replied in <em>"API Endpoint Discussion"</em> in project <strong>API Refactor</strong>
-            </div>
-            <div class="bv-activity-date">Apr 22, 2025</div>
-          </div>
-        </div>
-      </div>
-  
-      
-      <div class="bv-summary-box">
-        <h4>Active Projects</h4>
-        <div class="bv-mp-section">
-          <div class="bv-mp-grid">
-            <table class="bv-table">
-              <thead>
-                <tr>
-                  <th>Project</th>
-                  <th>Status</th>
-                  <th>Owner</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let project of activeProjects">
-                  <td>{{ project.name }}</td>
-                  <td><span class="bv-status bv-status-{{ project.status | lowercase }}">{{ project.status }}</span></td>
-                  <td>{{ project.owner }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <!-- Grid Section -->
+  <div class="bv-summary-grid">
+    <!-- My Recent Tasks -->
+    <div class="bv-summary-box">
+      <h4>My Recent Tasks</h4>
+      <div class="bv-mp-section">
+        <div class="bv-mp-grid">
+          <table class="bv-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Due Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bv-project-item" *ngFor="let task of recentTasks">
+                <td>#{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>
+                  <span class="bv-badge bv-{{ getPriorityClass(task.priority) }}">
+                    {{ getPriorityLabel(task.priority) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="bv-status bv-status-{{ getStatusClass(task.status) }}">
+                    {{ getStatusLabel(task.status) }}
+                  </span>
+                </td>
+                <td>{{ task.dueDate | date: 'shortDate' }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+
+    <!-- Task Distribution -->
+    <div class="bv-summary-box">
+      <h4>Task Distribution</h4>
+      <div class="bv-sb-taskd-body d-flex justify-content-between align-items-center flex-wrap gap-4">
+        <div class="bv-summary-status-chart">
+          <canvas id="statusChart"></canvas>
+        </div>
+        <ul class="bv-summary-legend">
+          <li><span class="bv-status-dot todo"></span>To Do</li>
+          <li><span class="bv-status-dot inprogress"></span>In Progress</li>
+          <li><span class="bv-status-dot done"></span>Done</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Static Last Comments -->
+    <div class="bv-summary-box">
+      <h4>Last Comments</h4>
+      <div class="bv-activity-list">
+       <div class="bv-activity-item" *ngFor="let comment of recentComments">
+  <div class="bv-activity-content">
+    <strong>{{ comment.title }}</strong>
+    <div class="text-muted">{{ comment.content }}</div>
   </div>
+  <div class="bv-activity-date">{{ comment.createdAt | date: 'mediumDate' }}</div>
+</div>
+
+      </div>
+    </div>
+
+    <!-- Active Projects -->
+    <div class="bv-summary-box">
+      <h4>Active Projects</h4>
+      <div class="bv-mp-section">
+        <div class="bv-mp-grid">
+          <table class="bv-table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Description</th>
+                <th>Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let project of activeProjects">
+                <td>{{ project.name }}</td>
+                <td>
+                  <span>
+                    {{ project.description }}
+                  </span>
+                </td>
+                <td>{{ project.createdAt |date }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

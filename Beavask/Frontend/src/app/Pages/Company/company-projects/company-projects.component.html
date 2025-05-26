@@ -1,0 +1,61 @@
+<div class="bv-mp-container d-flex justify-content-center bv-shadow-2">
+  <div class="bv-mp-body bv-shadow-2">
+
+    <div class="bv-mp-header d-flex flex-wrap justify-content-between align-items-center">
+      <div class="bv-mp-h-title">Projects</div>
+
+      <button class="bv-mp-h-a-button" (click)="toggleCreateProjectModal()">
+        + Add Project
+      </button>
+    </div>
+
+    <!-- Proje Listeleme Tablosu -->
+<div class="bv-mp-section">
+  <div class="bv-mp-grid bv-radius-4">
+    <table class="bv-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Active</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+<tr *ngFor="let project of projects" [routerLink]="['/company/project-detail', project.id]">
+           
+                <td>{{ project.id }}</td>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description }}</td>
+                <td>{{ project.isActive ? 'Yes' : 'No' }}</td>
+                <td>{{ project.createdAt | date:'medium' }}</td>
+            
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+    <!-- Modal Başlangıcı -->
+    <div class="modal-backdrop" *ngIf="showCreateProjectModal">
+      <div class="modal-content bv-radius-4">
+        <h3>Add New Project</h3>
+        <form [formGroup]="createProjectForm" (ngSubmit)="submitProject()">
+          <input
+  formControlName="repoUrl"
+  type="text"
+  placeholder="https://github.com/username/repository"
+/>
+
+          <div class="modal-buttons">
+            <button type="submit" [disabled]="createProjectForm.invalid">Add</button>
+            <button type="button" (click)="toggleCreateProjectModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,149 @@
+.bv-mp-container {
+  height: 85vh;
+}
+
+.bv-mp-body {
+  margin-top: 5vh;
+  width: 100%;
+  max-width: 1200px;
+  padding: 40px 20px;
+  background-color: var(--body-xsw);
+  height: fit-content;
+}
+
+.bv-mp-h-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--text-xsw);
+}
+
+.bv-mp-h-actions {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--card-sw);
+  background: var(--card-sw);
+  color: var(--text-xsw);
+}
+
+.bv-mp-h-a-input {
+  border: 0px solid var(--card-sw);
+  outline: none;
+  background: var(--card-sw);
+  color: var(--text-xsw);
+  padding: 6px 8px;
+}
+
+.bv-mp-h-a-input::placeholder {
+  color: var(--text-xsw);
+}
+
+.bv-mp-h-a-button {
+  background-color: var(--button-xsw);
+  color: var(--text-xsw);
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+.bv-mp-h-a-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bv-mp-section {
+  margin-top: 30px;
+}
+
+.bv-mp-grid {
+  overflow-x: auto;
+  background-color: var(--card-xsw);
+  border-radius: 8px;
+}
+
+.bv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: var(--text-xsw);
+}
+
+.bv-table th,
+.bv-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-lw);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bv-table th:hover {
+  box-shadow: inset 0 2px 8px var(--shadow-sw);
+}
+
+.bv-project-item:hover {
+  background-color: var(--card-ld);
+}
+
+.bv-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-xsw);
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: var(--body-xsw);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+}
+.modal-content{
+    color: var(--text-xsw);
+}
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-xsw);
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: var(--button-xsw);
+  color: var(--text-xsw);
+}
+
+.modal-buttons button[type="button"] {
+  background-color: var(--button-lcl);
+  color: var(--text-d);
+}

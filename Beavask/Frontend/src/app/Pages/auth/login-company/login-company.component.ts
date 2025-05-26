@@ -45,7 +45,7 @@ export class LoginCompanyComponent implements OnInit {
         if (res.isSuccess) {
           localStorage.setItem('jwtToken', res.data);
           this.toast.show({ title: 'Success', message: 'Login successful.' });
-          this.router.navigate(['/company/profile']); // yönlendirme
+          this.router.navigate(['/company/dashboard']); // yönlendirme
         } else {
           this.toast.show({ title: 'Error', message: res.message });
         }
@@ -58,5 +58,12 @@ export class LoginCompanyComponent implements OnInit {
         });
       }
     });
+  }
+gotoLogin(){
+    this.router.navigate(['/login'])
+
+}
+  goToCRegister(){
+    this.router.navigate(['/rcompany'])
   }
 }

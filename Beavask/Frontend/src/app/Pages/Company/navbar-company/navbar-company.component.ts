@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class NavbarCompanyComponent implements OnInit {
    companyInfo: CompanyProfile | null = null;
-  companyLogoUrl: string = 'default-logo.png'; // Fallback görsel
+  companyLogoUrl: string = ''; // Fallback görsel
   darkMode = false;
 
   constructor(
@@ -23,22 +23,43 @@ export class NavbarCompanyComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.getCompanyInfo();
-    this.darkMode = localStorage.getItem('theme') === 'dark';
+ngOnInit(): void {
+  this.getCompanyInfo();
+
+  const savedTheme = localStorage.getItem('theme');
+  this.darkMode = savedTheme === 'dark';
+
+  if (this.darkMode) {
+    document.body.classList.add('dark-theme');
+  } else {
+    document.body.classList.add('light-theme');
   }
+}
 
   getCompanyInfo(): void {
     this.companyService.whoamiCompany().subscribe({
-      next: res => {
+      next: (res) => {
+
         this.companyInfo = res;
-        this.companyLogoUrl = res.companyLogoUrl || this.generateInitialsLogo(res.companyName);
+        this.companyLogoUrl =  this.generateInitialsLogo(res.companyName);
       },
       error: () => {
         this.companyInfo = null;
       }
     });
   }
+toggleTheme(): void {
+  this.darkMode = !this.darkMode;
+  localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+
+  if (this.darkMode) {
+    document.body.classList.add('dark-theme');
+    document.body.classList.remove('light-theme');
+  } else {
+    document.body.classList.add('light-theme');
+    document.body.classList.remove('dark-theme');
+  }
+}
 
   generateInitialsLogo(name: string): string {
     const canvas = document.createElement('canvas');

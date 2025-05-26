@@ -6,6 +6,7 @@ import { CreateTaskModel } from './taskModel/createTask.model';
 import { Task } from './taskModel/task.model';
 import { ApiResponse } from '../../model/apiResponse.model';
 import { UpdateTaskModel } from './taskModel/updateTask.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class TaskService {
     create(model: CreateTaskModel) {
       return this._http.post<any>(this.endpoint, model);
     }
-    getAllTasks(projectId: number) {
+    getAllTasks(projectId: number):Observable<ApiResponse<Task[]>> {
       return this._http.get<ApiResponse<Task[]>>(`${this.endpoint}/project/${projectId}`);
     }
 

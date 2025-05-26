@@ -84,8 +84,8 @@
         <textarea formControlName="description" placeholder="Optional description..."></textarea>
       </div>
 
-      <div class="bv-submit mt-3">
-        <button type="submit" [disabled]="isLoading || companyForm.invalid" class="bv-submit">
+      <div class="d-flex justify-content-center w-100 mt-3">
+        <button type="submit" [disabled]="isLoading || companyForm.invalid" class="bv-submit bv-radius-5 bv-transition">
           <div *ngIf="isLoading" class="loader"></div>
           <span *ngIf="!isLoading">Register Company</span>
         </button>

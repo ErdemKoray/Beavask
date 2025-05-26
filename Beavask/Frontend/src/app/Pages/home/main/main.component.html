@@ -24,9 +24,9 @@
 
   <div class="bv-home-tabs d-flex">
     <span class="bv-tab" [class.active]="activeTab === 'worked'" (click)="setTab('worked')">Worked on</span>
-    <span class="bv-tab" [class.active]="activeTab === 'viewed'" (click)="setTab('viewed')">Viewed</span>
-    <span class="bv-tab" [class.active]="activeTab === 'assigned'" (click)="setTab('assigned')">Assigned to me</span>
-    <span class="bv-tab" [class.active]="activeTab === 'starred'" (click)="setTab('starred')">Starred</span>
+    <span style="display: none;" class="bv-tab" [class.active]="activeTab === 'viewed'" (click)="setTab('viewed')">Viewed</span>
+    <span   class="bv-tab" [class.active]="activeTab === 'assigned'" (click)="setTab('assigned')">Assigned to me</span>
+    <span  style="display: none;" class="bv-tab" [class.active]="activeTab === 'starred'" (click)="setTab('starred')">Starred</span>
   </div>
 
   <div class="bv-home-activity d-flex flex-column gap-3">

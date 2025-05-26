@@ -35,7 +35,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="bv-project-item bv-transition" *ngFor="let task of filteredTasks">
+            <tr class="bv-project-item bv-transition" *ngFor="let task of filteredTasks"   [routerLink]="'/project-detail/board/' + task.projectId"
+  [queryParams]="{ TaskId: task.id }">
               <td>{{ task.id }}</td>
               <td>{{  projectMap[task.projectId] }}</td>
               <td>{{ task.title }}</td>

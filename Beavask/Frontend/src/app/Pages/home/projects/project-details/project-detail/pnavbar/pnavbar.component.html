@@ -4,9 +4,10 @@
         <div class="bv-pn-body">       
                 <div class="bv-pn-planning">
                     <ul>
-                        <li routerLink="/project-detail/summary"
-                        routerLinkActive="active-link"    
-                        [routerLinkActiveOptions]="{ exact: true }">
+                        <li
+                        [ngClass]="activeClass ? '' : 'active-link'"
+
+                                (click)="toggleChange(false)">
                             <div class="bv-pn-logo">
                               
                                 <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#494945">
@@ -16,10 +17,11 @@
                             <a >summary</a>
                         </li>
 
-                        <li routerLink="/project-detail/board" 
-                         routerLinkActive="active-link"    
-                        [routerLinkActiveOptions]="{ exact: true }">
-                            <div class="bv-pn-logo">
+                        <li  
+                      [ngClass]="activeClass ? 'active-link' : ''"
+
+                         (click)="toggleChange(true)">
+                            <div class="bv-pn-logo ">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#494945">
                                     <path d="M280-600v-80h560v80H280Zm0 160v-80h560v80H280Zm0 160v-80h560v80H280ZM160-600q-17 0-28.5-11.5T120-640q0-17 11.5-28.5T160-680q17 0 28.5 11.5T200-640q0 17-11.5 28.5T160-600Zm0 160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520q17 0 28.5 11.5T200-480q0 17-11.5 28.5T160-440Zm0 160q-17 0-28.5-11.5T120-320q0-17 11.5-28.5T160-360q17 0 28.5 11.5T200-320q0 17-11.5 28.5T160-280Z"/>
                                 </svg>
@@ -28,16 +30,7 @@
                            >board</a>
                         </li>
 
-                        <li routerLink="/project-detail/timeline" 
-                        routerLinkActive="active-link"    
-                       [routerLinkActiveOptions]="{ exact: true }">
-                            <div class="bv-pn-logo">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#494945">
-                                    <path d="M240-280h240v-80H240v80Zm120-160h240v-80H360v80Zm120-160h240v-80H480v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
-                                </svg>
-                            </div>
-                            <a >timeline</a>
-                        </li>
+    
 
                     </ul>
                 </div>

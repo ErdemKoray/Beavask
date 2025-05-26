@@ -5,15 +5,14 @@
 }
 .bv-login-container{
     position: relative;
-    background-color: var(--body-xsw);
-
-    width: 50vw;
+    background-color: var(--card-dcl);
+    width: 45vw;
     min-height: 75vh;
     height: fit-content;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 50px;
+    border-radius: 0.5rem;
 }
 
 .bv-form-container{
@@ -35,12 +34,21 @@
     height: 50px;
 }
 
+.bv-login-text{
+    color: white!important;
+}
+
 .bv-submit{
     width: 180px;
     height: 50px;
-    background-color: var(--button-lcl);
-    color: white;
+    background-color: var(--button-xsw)!important;
+    color: var(--text-xsw);
+
     border: none;
+    cursor: pointer;
+}
+.bv-submit span{
+        font-weight: 700;
 }
 .bv-submit:hover{
     transform: translateY(-2px);
@@ -53,7 +61,7 @@
 
 .bv-login-option-button:hover{
     cursor: pointer;
-    box-shadow: #000000 0px 0px 2px 1px;
+    box-shadow: #0000006c 0px 0px 8px 2px;
 
 }
 .bv-form-container  form{
@@ -70,9 +78,9 @@
 
 }
 .bv-text-group input{
-    background-color: var(--card-lw);
+    background-color: var(--button-lw);
     height: 48px;
-    border: 3px solid var(--card-lw);
+    border: 3px solid var(--button-lw);
 }
 
 .bv-text-group label{
@@ -86,7 +94,7 @@
 }
 .bv-text-group input:focus-visible{
     border: 2px solid var(--border-w);
-    box-shadow:  var(--shadow-d)  0px 0px 5px 1px;
+    box-shadow:  var(--button-lw)  0px 0px 5px 1px;
 }
 .bv-logo img{
     cursor: pointer;
@@ -129,10 +137,98 @@
     cursor: pointer;
 }
 
+.bv-admin-create {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.bv-company {
+  background-color: var(--button-scl);
+  padding: 12px;
+  border-radius: 50%;
+  width: 56px;       /* Başlangıçta logo alanı */
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: width 0.4s ease, border-radius 0.4s ease;
+  white-space: nowrap;
+  color: white;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bv-company svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+/* Metin başlangıçta görünmez, ama logo her zaman gözükür */
+.bv-company span {
+  opacity: 0;
+  margin-left: 12px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease 0.2s;
+  pointer-events: none;
+  user-select: none;
+  font-size: 1rem;
+  line-height: 1;
+  position: absolute;
+  left: 56px;  /* Logo genişliği kadar boşluk */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hover ile genişleme */
+.bv-company:hover {
+  width: 250px;
+  border-radius: 28px;
+}
+
+/* Logo sağa kayar */
+.bv-company:hover svg {
+  transform: translateX(10px);
+}
+
+/* Metin görünür olur */
+.bv-company:hover span {
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  margin-left: 12px;
+}
 
 .bv-valid{
     color: red;
-    text-shadow: 0px 3px 10px red;
+    font-weight: 500;
+    text-shadow: 0px 0px 6px 3px red;
+}
+
+.bv-btn-secondary {
+  background-color: var(--button-scl);
+  color: var(--text-d);
+  border: 1px solid var(--border-cl);
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bv-btn-secondary:hover {
+  background-color: var(--button-xscl);
+}
+.bv-text-muted{
+  color: var(--text-xsw);
 }
 @media screen and (max-width: 768px) {
     .bv-login-container{
@@ -182,4 +278,29 @@
         height: 20px;
     }
     
+}
+
+
+.bv-box{
+    position: absolute;
+    z-index: 0;
+    background-color: var(--card-lcl);
+    top: 0%;
+    left: 0%;
+    rotate:calc(-45deg);
+    transform: translate(-50%,-50%);
+    width: 20vw;
+    height: 20vw;
+}
+
+.bv-box1{
+    position: absolute;
+    z-index: 0;
+    background-color: var(--card-lcl);
+    top: 50%;
+    left: 105%;
+    rotate:calc(-45deg);
+    transform: translate(-50%,-50%);
+    width: 20vw;
+    height: 20vw;
 }

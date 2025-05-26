@@ -31,36 +31,20 @@
         <table class="bv-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Team</th>
-              <th>Tasks</th>
-              <th>Status</th>
+              <th>Userame</th>
+              <th>Mail</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let emp of activeEmployees">
-              <td>{{ emp.name }}</td>
-              <td>{{ emp.team }}</td>
-              <td>{{ emp.taskCount }}</td>
-              <td><span class="bv-status" [ngClass]="'bv-status-' + emp.status.toLowerCase()">{{ emp.status }}</span></td>
+              <td>{{ emp.username }}</td>
+              <td>{{ emp.email }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ACTIVITY FEED -->
-    <div class="bv-dashboard-box">
-      <h4>Recent Activities</h4>
-      <div class="bv-activity-list">
-        <div class="bv-activity-item" *ngFor="let log of recentLogs">
-          <div class="bv-activity-content">
-            <strong>{{ log.user }}</strong> {{ log.action }} in <em>{{ log.module }}</em>
-          </div>
-          <div class="bv-activity-date">{{ log.date }}</div>
-        </div>
-      </div>
-    </div>
 
   </div>
 </div>

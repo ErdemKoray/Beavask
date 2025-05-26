@@ -1,0 +1,96 @@
+.company-profile-page {
+  margin-top: 1vh;
+  background-color: var(--body-xsw);
+  min-height: 90vh;
+width: 80%;
+}
+.company-profile-container{
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100vw;
+}
+
+.company-banner {
+  align-items: end;
+  justify-content: start;
+  display: flex;
+  padding-left:10px;
+  height: 180px;
+  background-color: var(--card-ld);
+  width: 100%;
+}
+
+.company-content {
+  display: flex;
+  gap: 24px;
+}
+
+.company-sidebar {
+  width: 400px;
+  background-color: var(--card-d);
+  padding: 20px;
+  color: var(--text-xsw);
+  box-shadow: 0 2px 8px var(--shadow-sw);
+}
+
+.company-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.company-info h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.company-desc {
+  color: var(--text-sw);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.company-section {
+  margin-top: 20px;
+}
+
+.company-section h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-xsd);
+}
+
+.company-main {
+  flex: 1;
+}
+
+.company-main h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: var(--text-xsw);
+}
+
+.activity-card {
+  background-color: var(--card-sw);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px var(--shadow-sw);
+}
+
+.activity-card h4 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 500;
+  color: var(--text-cl);
+}
+
+.activity-card small {
+  color: var(--text-sw);
+  font-size: 12px;
+}

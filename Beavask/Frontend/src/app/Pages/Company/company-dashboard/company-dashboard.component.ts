@@ -1,6 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component } from '@angular/core';
-import { Chart } from 'chart.js';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  Chart,
+  DoughnutController,
+  ArcElement,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { CompanyService } from '../../../common/services/company/company.service';
+import { AuthCompanyService } from '../../../common/services/company/auth-company.service';
+import { ToastService } from '../../../components/toast/toast.service';
+import { TeamService } from '../../../common/services/team/team.service';
+import { map } from 'rxjs';
+import { CompanyUser } from '../../../common/services/company/profile-company/company.model';
+
+// Gerekli tüm bileşenleri register et
+Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-company-dashboard',
@@ -9,12 +24,15 @@ import { Chart } from 'chart.js';
   templateUrl: './company-dashboard.component.html',
   styleUrl: './company-dashboard.component.css'
 })
-export class CompanyDashboardComponent  implements AfterViewInit {
+export class CompanyDashboardComponent  implements AfterViewInit,OnInit {
+
+  
+
   companyMetrics = [
-    { count: 124, label: 'Total Tasks', subtext: 'Across teams' },
-    { count: 38, label: 'Employees', subtext: 'Active this week' },
-    { count: 12, label: 'Projects', subtext: 'Currently active' },
-    { count: 6, label: 'Teams', subtext: 'In your company' },
+    { count: 0, label: 'Total Tasks', subtext: 'Across teams' },
+    { count: 0, label: 'Employees', subtext: 'Active this week' },
+    { count: 0, label: 'Projects', subtext: 'Currently active' },
+    { count: 0, label: 'Teams', subtext: 'In your company' },
   ];
 
   chartLegend = [
@@ -23,11 +41,7 @@ export class CompanyDashboardComponent  implements AfterViewInit {
     { label: 'Done', count: 130, colorClass: 'done' }
   ];
 
-  activeEmployees = [
-    { name: 'Emin Aldaş', team: 'Frontend', taskCount: 12, status: 'Active' },
-    { name: 'Koray Erdem', team: 'Backend', taskCount: 9, status: 'Busy' },
-    { name: 'Ece Demir', team: 'QA', taskCount: 6, status: 'Idle' }
-  ];
+activeEmployees: CompanyUser[] = [];
 
   recentLogs = [
     { user: 'Emin Aldaş', action: 'created a task', module: 'Bug Fix', date: 'May 17' },
@@ -35,8 +49,23 @@ export class CompanyDashboardComponent  implements AfterViewInit {
     { user: 'Ece Demir', action: 'commented', module: 'Sprint Review', date: 'May 15' },
   ];
 
+
+  constructor(
+    private companyService:CompanyService,
+    private authCompanyService:AuthCompanyService,
+    private toastService:ToastService,
+    private teamService:TeamService
+  ){
+
+  }
   ngAfterViewInit(): void {
     this.renderCompanyChart();
+  }
+
+  ngOnInit(): void {
+    this.countMembersCompany()
+    this.countProjectsCompany()
+     this.countTeamsCompany()
   }
 
   renderCompanyChart(): void {
@@ -55,10 +84,75 @@ export class CompanyDashboardComponent  implements AfterViewInit {
       },
       options: {
         cutout: '70%',
+        
         plugins: {
           legend: { display: false }
         }
       }
     });
+  }
+
+
+
+
+
+countMembersCompany() {
+  this.authCompanyService.getWhoamiCompany().subscribe({
+    next: (company) => {
+      this.companyService.getCompanyAllUsers(Number(company.companyId)).subscribe({
+        next: (users: CompanyUser[]) => {
+          this.companyMetrics[1].count = users.length;
+
+          // Gelen kullanıcılar CompanyUser tipinde olduğu için direkt atıyoruz
+          this.activeEmployees = users;
+        },
+        error: (er) => {
+          this.toastService.show({ title: 'error', message: 'error:' + er.error.message });
+        }
+      });
+    },
+    error: (err) => {
+      this.toastService.show({ title: 'error', message: 'error:' + err.error.message });
+    }
+  });
+}
+
+
+  countProjectsCompany(){
+ 
+        this.companyService.getCompanyProjects().subscribe({
+          next:(res)=>{
+             this.companyMetrics[2].count=res.length
+          },
+          error:(er)=>{
+            this.toastService.show({title:'error',message:'error:'+er.error.message})
+          }
+        });
+      }
+
+  countTeamsCompany(){
+
+ this.authCompanyService.getWhoamiCompany().subscribe({
+  next: (company) => {
+    this.teamService.getCompanyTeam(Number(company.companyId)).subscribe({
+      next: (res) => {
+      if (Array.isArray(res.data)) {
+  this.companyMetrics[3].count = res.data.length;
+} else if (res.data) {
+  this.companyMetrics[3].count = 1; 
+} else {
+  this.companyMetrics[3].count = 0; 
+}
+
+      },
+      error: (er) => {
+        this.toastService.show({ title: 'error', message: 'error:' + er.error.message });
+      }
+    });
+  },
+  error: (err) => {
+    this.toastService.show({ title: 'error', message: 'error:' + err.error.message });
+  }
+});
   }
 }

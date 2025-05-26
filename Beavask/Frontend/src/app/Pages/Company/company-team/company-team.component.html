@@ -1,0 +1,83 @@
+<div class="bv-mp-container d-flex justify-content-center bv-shadow-2">
+  <div class="bv-mp-body bv-shadow-2">
+    <div class="bv-mp-header d-flex flex-wrap justify-content-between align-items-center">
+      <div class="bv-mp-h-title">Teams</div>
+
+      <form [formGroup]="createTeamForm" class="bv-mp-h-actions d-flex gap-2 align-items-center" (ngSubmit)="createTeam()">
+        <input
+          formControlName="teamName"
+          type="text"
+          placeholder="New Team Name"
+          class="bv-mp-h-a-input"
+          [disabled]="isLoading"
+        />
+        <button type="submit" class="bv-mp-h-a-button" [disabled]="isLoading || !createTeamForm.valid">Create</button>
+      </form>
+    </div>
+
+    <div class="bv-mp-section">
+      <div class="bv-mp-grid bv-radius-4">
+        <table class="bv-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Team Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let team of teams" class="bv-project-item bv-transition" (click)="selectTeam(team)">
+              <td>{{ team.id }}</td>
+              <td>{{ team.title }}</td>
+              <td>
+                <button class="bv-action" (click)="deleteTeam(team.id); $event.stopPropagation()">🗑️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+<div *ngIf="selectedTeam" class="bv-team-detail bv-radius-4 bv-shadow-2 mt-3 p-4 bg-card-w border border-border-w text-text-w">
+  <h3 class="mb-4 fw-bold text-text-w">{{ selectedTeam.title }} Members</h3>
+
+  <ul *ngIf="(selectedTeam?.teamMembers?.length ?? 0) > 0; else noMembers" class="list-group mb-4">
+    <li *ngFor="let member of selectedTeam.teamMembers" class="list-group-item border border-border-w rounded-1 d-flex justify-content-between align-items-center bg-card-xsw text-text-w">
+      <span class="fw-semibold">{{ member.firstName }} {{ member.lastName }}</span>
+      <span [class.text-success]="member.isActive" [class.text-danger]="!member.isActive" class="fw-bold">
+        {{ member.isActive ? 'Active' : 'Inactive' }}
+      </span>
+    </li>
+  </ul>
+
+  <ng-template #noMembers>
+    <p class="text-text-lw fst-italic">No members in this team yet.</p>
+  </ng-template>
+
+  <button *ngIf="!showAddMembers" (click)="toggleAddMembers()" class="btn btn-primary w-100 fw-semibold py-2 mt-2">
+    Add Members +
+  </button>
+
+  <div *ngIf="showAddMembers" class="add-members-section mt-4 p-4 bg-card-w border border-border-w rounded-2 shadow-sm text-text-w">
+    <h4 class="mb-3 fw-bold">Select users to add</h4>
+    <ul class="list-group">
+      <li *ngFor="let user of availableUsers" class="list-group-item border border-border-w rounded-1 d-flex justify-content-between align-items-center bg-card-xsw text-text-w">
+        <span class="text-truncate fw-semibold" title="{{ user.username }}">{{ user.username }}</span>
+        <div>
+          <button
+            *ngIf="!isMember(user.id)"
+            (click)="addMemberToTeam(selectedTeam.id, user.id)"
+            class="btn btn-sm btn-success rounded-circle d-flex align-items-center justify-content-center ms-2"
+            style="width: 32px; height: 32px; font-weight: 700; font-size: 20px;"
+            aria-label="Add member"
+            title="Add member"
+          >
+            +
+          </button>
+          <span *ngIf="isMember(user.id)" class="text-muted fst-italic ms-3 fw-semibold">Already Added</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+

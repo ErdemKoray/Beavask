@@ -60,7 +60,7 @@
         </div>
       </li>
 
-      <li class="nav-item bv-dropdown">
+      <li style="display: none;" class="nav-item bv-dropdown">
         <a class="nav-link bv-radius-2 dropdown-toggle" data-dropdown="teamdropdown" (click)="toggleDropdown('teamdropdown')">
           {{ 'navbar.team' | translate }}
         </a>
@@ -130,7 +130,7 @@
       <div (click)="toggleDropdown('profile')" data-dropdown="profiledropdown" class="bv-userprofile" id="profiledropdown">
         <img [src]="avatarUrl" class="user-avatar bv-radius-round bv-transition d-flex justify-content-center align-items-center gap-1" alt="User Avatar">
       </div>
-      <div class="language-dropdown">
+      <div  style="display: none;" class="language-dropdown">
         <button class="language-button" data-dropdown="lang" (click)="togglelDropdown()">
           <span *ngIf="currentLang === 'tr'"><img src="turkey.png" alt=""></span>
           <span *ngIf="currentLang === 'en'"><img src="united-kingdom.png" alt=""></span>

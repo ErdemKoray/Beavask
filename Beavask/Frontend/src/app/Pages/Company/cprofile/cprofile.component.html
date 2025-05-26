@@ -1,0 +1,56 @@
+
+<div class="company-profile-container">
+  <div class="company-profile-page">
+    
+    <!-- Banner -->
+    <div class="company-banner">
+
+         <div class="company-avatar">
+          <img [src]="company?.logoUrl || 'assets/default-logo.png'" alt="Logo" />
+        </div>
+    </div>
+  
+    <!-- İçerik -->
+    <div class="company-content">
+      
+      <!-- Sol Panel -->
+      <aside class="company-sidebar">
+     
+  
+        <div class="company-info">
+          <h2>{{ company?.name }}</h2>
+          <p class="company-desc">{{ company?.description || 'No description provided' }}</p>
+        </div>
+  
+        <div class="company-section">
+          <h3>📬 Contact</h3>
+          <p><strong>Email:</strong> {{ company?.email }}</p>
+          <p><strong>Phone:</strong> {{ company?.phoneNumber }}</p>
+          <p><strong>Website:</strong>
+            <a *ngIf="company?.website" [href]="company?.website" target="_blank">{{ company?.website }}</a>
+          </p>
+        </div>
+  
+        <div class="company-section">
+          <h3>🏢 Address</h3>
+          <p>{{ company?.addressLine }}</p>
+          <p>{{ company?.city }}, {{ company?.postalCode }}</p>
+          <p>{{ company?.country }}</p>
+        </div>
+  
+        <div class="company-section">
+          <h3>📊 Stats</h3>
+          <p><strong>Status:</strong> {{ company?.isActive ? 'Active' : 'Inactive' }}</p>
+          <p><strong>Created:</strong> {{ company?.createdAt | date: 'mediumDate' }}</p>
+        </div>
+      </aside>
+  
+      <!-- Sağ Panel -->
+      <section class="company-main">
+        <h3>🧾 Company Activity</h3>
+      
+      </section>
+  
+    </div>
+  </div>
+</div>

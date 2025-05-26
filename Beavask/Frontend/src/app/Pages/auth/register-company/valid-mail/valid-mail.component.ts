@@ -40,28 +40,30 @@ export class ValidMailComponent implements OnInit {
     });
   }
 
-  verify(): void {
-    if (this.codeForm.invalid || !this.email) {
-      this.toast.show({ title: 'Error', message: 'Please fill all fields correctly.' });
-      return;
-    }
-
-    const code = Object.values(this.codeForm.value).join('');
-
-    this.isLoading = true;
-
-    this.authService.verifyMail(this.email, code).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.toast.show({ title: 'Success', message: 'Email verified successfully.' });
-        this.router.navigate(['/login-company']);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.toast.show({ title: 'Error', message: err?.error?.message || 'Verification failed.' });
-      }
-    });
+verify(): void {
+  if (this.codeForm.invalid || !this.email) {
+    this.toast.show({ title: 'Error', message: 'Please fill all fields correctly.' });
+    return;
   }
+
+  const code = Object.values(this.codeForm.value).join('');
+  this.isLoading = true;
+
+  this.authService.verifyMail(this.email, code).subscribe({
+    next: (res) => {
+      this.isLoading = false;
+      this.toast.show({ title: 'Success', message: res || 'Email verified successfully.' });
+      this.router.navigate(['/lcompany']);
+    },
+    error: (err) => {
+      this.isLoading = false;
+      const errorMsg =
+        err?.error?.message || err?.message || 'Verification failed.';
+      this.toast.show({ title: 'Error', message: errorMsg });
+    }
+  });
+}
+
 
   moveToNext(event: any, currentIndex: number): void {
     const inputLength = event.target.value.length;

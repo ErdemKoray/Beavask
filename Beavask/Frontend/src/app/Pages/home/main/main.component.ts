@@ -107,6 +107,9 @@ user = {
     this.updateDisplayedActivities();
   }
 
+  getTasksbyId(id:number){
+    
+  }
 
   get activeActivitiesList(): any[] {
     switch (this.activeTab) {

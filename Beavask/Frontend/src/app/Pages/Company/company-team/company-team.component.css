@@ -1,0 +1,253 @@
+.bv-mp-container {
+  height: 85vh;
+}
+
+.bv-mp-body {
+  margin-top: 5vh;
+  width: 100%;
+  max-width: 1200px;
+  padding: 40px 20px;
+  background-color: var(--body-xsw);
+  height: fit-content;
+}
+
+.bv-mp-h-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--text-xsw);
+}
+
+.bv-mp-h-actions {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 4px;
+  border: 1px solid var(--card-sw);
+  background: var(--card-sw);
+  color: var(--text-xsw);
+  display: flex;
+}
+
+.bv-mp-h-a-input {
+  border: 0px solid var(--card-sw);
+  outline: none;
+  background: var(--card-sw);
+  color: var(--text-xsw);
+  padding: 0 10px;
+  width: 220px;
+}
+
+.bv-mp-h-a-button {
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+  border: none;
+  width: 90px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.bv-mp-h-a-button:hover:not(:disabled) {
+  background-color: var(--button-xscl);
+  color: var(--text-d);
+}
+
+.bv-mp-section {
+  margin-top: 30px;
+}
+
+.bv-mp-grid {
+  overflow-x: auto;
+  background-color: var(--card-xsw);
+  gap: 50px;
+}
+
+.bv-mp-grid::-webkit-scrollbar {
+  width: 28px;
+  height: 9px;
+  background-color: var(--border-sd);
+}
+
+.bv-mp-grid::-webkit-scrollbar-thumb {
+  background-color: var(--border-xsd);
+  border-radius: 8px;
+  width: 4px;
+}
+
+.bv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: var(--text-xsw);
+}
+
+.bv-table th,
+.bv-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-lw);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bv-table th:hover {
+  box-shadow: inset 0 2px 8px var(--shadow-sw);
+}
+
+.bv-project-item:hover {
+  background-color: var(--card-ld);
+}
+
+.bv-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-xsw);
+}
+
+.bv-team-detail {
+  margin-top: 24px;
+  padding: 20px;
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+  border-radius: 12px;
+  box-shadow: 0 0 6px var(--shadow-d);
+}
+
+.bv-team-detail h3 {
+  margin-bottom: 16px;
+}
+
+
+/* Genel renkler ve değişkenler :root ve .dark-theme'den geliyor */
+
+/* Container */
+.bv-team-detail {
+  background-color: var(--card-w);
+  border: 1.5px solid var(--border-w);
+  border-radius: 0.25rem; /* bv-radius-4 */
+  box-shadow: 0 0.125rem 0.25rem var(--shadow-sw);
+  padding: 1.5rem; /* p-4 */
+  color: var(--text-w);
+}
+
+/* Başlık */
+.bv-team-detail h3 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-w);
+}
+
+/* Liste */
+.list-group {
+  margin-bottom: 1.5rem;
+}
+
+.list-group-item {
+  background-color: var(--card-xsw);
+  border: 1px solid var(--border-w);
+  border-radius: 0.125rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--text-w);
+  transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: var(--card-sw);
+  cursor: pointer;
+}
+
+.list-group-item + .list-group-item {
+  margin-top: 0.5rem;
+}
+
+/* Durum renkleri */
+.text-success {
+  color: var(--button-cl) !important;
+  font-weight: 700;
+}
+
+.text-danger {
+  color: var(--button-ld) !important;
+  font-weight: 700;
+}
+
+/* Boş liste yazısı */
+.ng-template p {
+  font-style: italic;
+  color: var(--text-lw);
+  margin-bottom: 1rem;
+}
+
+/* Butonlar */
+.btn {
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  border: 1.5px solid transparent;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--button-d);
+  color: var(--button-w);
+  border-color: var(--button-d);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--button-sd);
+  border-color: var(--button-sd);
+  color: var(--button-w);
+}
+
+/* Küçük artı butonu */
+.btn-success {
+  background-color: var(--button-cl);
+  color: var(--button-w);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+  background-color: var(--button-lcl);
+  color: var(--button-w);
+}
+
+/* Already added yazısı */
+.text-muted {
+  color: var(--text-lw) !important;
+  font-style: italic;
+  margin-left: 0.75rem;
+  font-weight: 600;
+}
+
+/* Margin yardımcı sınıflar */
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.ms-2 {
+  margin-left: 0.5rem !important;
+}

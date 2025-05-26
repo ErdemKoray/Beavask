@@ -8,7 +8,7 @@ import { BoardComponent } from './project-detail/board/board.component';
 @Component({
   selector: 'app-project-details',
   standalone: true,
-  imports: [RouterOutlet,PnavbarComponent,CommonModule,FormsModule],
+  imports: [RouterOutlet , CommonModule, FormsModule],
   templateUrl: './project-details.component.html',
   styleUrl: './project-details.component.css'
 })

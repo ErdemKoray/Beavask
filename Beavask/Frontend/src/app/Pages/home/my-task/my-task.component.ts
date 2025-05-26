@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TaskService } from '../../../common/services/task/task.service';
 import { AuthprofileService } from '../../../common/services/profile/authprofile.service';
 import { ToastService } from '../../../components/toast/toast.service';
@@ -11,7 +11,7 @@ import { ProjectsService } from '../../../common/services/projects/projects.serv
 @Component({
   selector: 'app-my-task',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,RouterLink],
   templateUrl: './my-task.component.html',
   styleUrl: './my-task.component.css'
 })
@@ -50,7 +50,7 @@ projectMap: { [key: number]: string } = {};
             this.allTasks = res.data.sort((a, b) =>
               new Date(b.updatedAt ?? b.createdAt).getTime() -
               new Date(a.updatedAt ?? a.createdAt).getTime()
-            ).slice(0, 4); // ✨ Son 4 görev
+            ).slice(0, 4); 
 
             this.allTasks.forEach(task => {
             if (task.projectId) {
@@ -80,6 +80,8 @@ projectMap: { [key: number]: string } = {};
                 team: team || ''
               });
             });
+            console.log(this.projects)
+
           },
           error: err => {
             this.toastService.show({ title: 'Error', message: 'Task load failed: ' + err.message });
@@ -92,11 +94,16 @@ projectMap: { [key: number]: string } = {};
     });
   }
 getProjectNameById(id: number): void {
-  if (this.projectMap[id]) return; // zaten yüklüyse tekrar çağırma
+  if (this.projectMap[id]) return;
 
   this.projectService.getById(id).subscribe({
     next: res => {
-      this.projectMap[id] = res.data.name;
+      const projectName = res.data.name;
+      this.projectMap[id] = projectName;
+
+      if (!this.projects.includes(projectName)) {
+        this.projects.push(projectName); // ✅ Dropdown için proje adlarını listeye ekle
+      }
     },
     error: err => {
       console.warn('Project name fetch failed', err);
@@ -105,15 +112,21 @@ getProjectNameById(id: number): void {
   });
 }
 
-  filterTasks(): void {
-    const { project, team } = this.taskFilterForm.value;
 
-    this.filteredTasks = this.allTasks.filter(task => {
-      const matchesProject = project ? task.project?.name === project : true;
-      const matchesTeam = team ? task.assignedUser?.team?.title === team : true;
-      return matchesProject && matchesTeam;
-    });
-  }
+ filterTasks(): void {
+  const { project, team } = this.taskFilterForm.value;
+
+  this.filteredTasks = this.allTasks.filter(task => {
+    const projectName = this.projectMap[task.projectId] || '';
+    const teamName = task.assignedUser?.team?.title || '';
+
+    const matchesProject = project ? projectName === project : true;
+    const matchesTeam = team ? teamName === team : true;
+
+    return matchesProject && matchesTeam;
+  });
+}
+
   getPriorityLabel(priority: number): string {
   switch (priority) {
     case 0: return 'Low';

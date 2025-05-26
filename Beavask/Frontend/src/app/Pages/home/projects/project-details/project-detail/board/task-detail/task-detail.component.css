@@ -17,11 +17,11 @@ h3, h4 {
 }
 
 .task-modal {
-  position: fixed;
   inset: 40px 60px;
-  max-height: calc(100vh - 80px);
+  height: calc(85vh - 80px);
+
+  width: 80%;
   background: var(--card-xsw);
-  box-shadow: 0 6px 12px var(--shadow-d);
   z-index: 1000;
 }
 
@@ -141,8 +141,9 @@ h3, h4 {
 }
 
 .task-sidebar {
+
   flex: 0.8;
-  border-left: 1px solid var(--card-xsw);
+  border-left: 2px solid var(--card-sw);
   background-color: var(--card-xsw);
   padding: 20px 24px;
   display: flex;
@@ -152,12 +153,19 @@ h3, h4 {
 
 .state-dropdown__btn {
   padding: 4px 8px;
-  border: 1px solid var(--border-sdark-white-color);
+  border: 1px solid var(--card-w);
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
+  color: var(--text-xsw);
+  background-color: var(--card-xsw)!important;
+  border: 1px solid var(--card-xsw);
 }
 
+.state-dropdown__btn:hover{
+ background-color: var(--card-sw)!important;
+  border: 1px solid var(--card-sw);
+}
 .state--in-progress {
   border-radius: 4px;
   background: var(--status-color-blue);
@@ -218,12 +226,17 @@ h3, h4 {
 
 .sidebar-footer {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  position: relative;
+  top: 70%;
+  justify-content: space-between;
+
+  gap: 20px;
   font-size: 12px;
   color: var(--text-bwhite-white-color);
 }
-
+.sidebar-footer .text-muted{
+  font-size: 14px;
+}
 /* Inline Edit */
 .view-text {
   cursor: pointer;
@@ -252,7 +265,10 @@ input.view-text-focus:focus {
   height: 100vh;
   position: fixed;
   inset: 0;
-  background: var(--card-xsw);
+  background: rgba(95, 95, 95, 0.226);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 999;
   animation: fade-in .25s;
 }
@@ -376,7 +392,17 @@ input.view-text-focus:focus {
   color: var(--text-xsw);
   border-radius: 4px;
 }
+ .btn--success{
+  background-color: var(--button-lcl);
+  outline: none;
+  border: 0;
+  font-weight: 600;
+ }
 
+  .btn--success:hover{
+  background-color: var(--button-cl);
+    
+  }
 .task-description-input:focus{
   background-color: var(--card-sw);
   border: 1px solid var(--border-w);
@@ -388,7 +414,8 @@ input.view-text-focus:focus {
 
 
 .delete-task{
-  background-color: red;
+  background-color: var(--button-lcl);
+  
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -396,6 +423,160 @@ input.view-text-focus:focus {
   cursor: pointer;
 }
 
+.delete-task svg{
+  fill: var(--card-xsw);
+}
+
 .delete-task:hover{
-  background-color: brown;
+   background-color: var(--button-cl);
+}.comment-form input,
+.comment-form textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-xsw);
+  background-color: var(--card-sw);
+  color: var(--text-xsw);
+}
+
+.comment-list {
+  max-height: 300px; 
+  overflow-y: auto;
+  padding-right: 8px; 
+}
+
+.comment-list::-webkit-scrollbar {
+  width: 6px;          
+  border-radius: 3px;
+}
+
+.comment-list::-webkit-scrollbar-thumb {
+  background-color: var(--border-lw); 
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.comment-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--border-cl); 
+}
+
+.comment-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-lw) transparent;
+}
+
+.comment-list:hover {
+  scrollbar-color: var(--border-cl) transparent;
+}
+
+.comment-section{
+  display: flex;
+  min-height: 50px;
+  height: fit-content;
+  justify-content: space-between;
+  align-items: start;
+    border-left: 3px solid var(--border-cl);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background-color: var(--body-w);
+  border-radius: 4px;
+}
+.comment-item {
+width: 80%;
+}
+.comment-content{
+  font-size: 14px;
+}
+
+.comment-date{
+  width: 50px;
+  text-align: end;
+  color: var(--text-xsw);
+  width: 100%;
+}
+.comment-title {
+  font-weight: bold;
+}
+
+.comment-meta {
+  font-size: 12px;
+}
+.comment-options{
+  display: flex;
+  align-items: end;
+  flex-direction: column;
+}
+.delete-comment-btn{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background-color: rgba(240, 248, 255, 0);
+
+  transition: all 0.3s ease-in;
+}
+.delete-comment-btn:hover svg{
+
+  fill: var(--text-sw);
+
+}
+
+.delete-comment-btn svg{
+  fill: var(--text-xsw);
+  
+}.bv-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.bv-confirm-box {
+  background-color: var(--body-xsw);
+  padding: 24px;
+  border-radius: 8px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 5px 20px var(--shadow-d);
+}
+
+.bv-confirm-box h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: var(--text-xsw);
+}
+
+.bv-confirm-box p {
+  font-size: 14px;
+  color: var(--text-sw);
+}
+
+.bv-confirm-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bv-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.bv-btn-danger {
+  background-color: var(--status-color-red);
+  color: white;
+}
+
+.bv-btn-cancel {
+  background-color: var(--button-xsw);
+  color: var(--text-xsw);
 }

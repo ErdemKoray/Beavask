@@ -2,7 +2,7 @@
   height: fit-content;
   min-height: 100vh;
   width: 100vw;
-  background-color: var(--body-d);
+  background-color: var(--body-w);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,13 +12,11 @@
 .bv-register-container {
     margin-top: 60px;
     margin-bottom: 60px;
-  background-color: var(--card-xsw);
+  background-color: var(--card-dcl);
   padding: 40px;
-  border-radius: 20px;
+  border-radius: 0.5rem;
   width: 90%;
   max-width: 700px;
-  
-  box-shadow: 0 10px 25px var(--shadow-d);
   animation: slideUp 0.5s ease;
 }
 
@@ -67,8 +65,8 @@ form {
 
 .bv-text-group input,
 .bv-text-group textarea {
-  background-color: var(--card-sw);
-  border: 1px solid var(--border-sw);
+  background-color: var(--button-lw);
+  border: 1px solid var(--button-lw);
   border-radius: 8px;
   padding: 10px;
   color: var(--text-xsw);
@@ -89,27 +87,34 @@ textarea {
   max-height: 200px;
 }
 
-.bv-submit {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+.bv-submit{
+    width: 180px;
+    height: 50px;
+    background-color: var(--button-xsw)!important;
+    color: var(--text-xsw);
+
+    border: none;
+    cursor: pointer;
+}
+.bv-submit span{
+        font-weight: 700;
+}
+.bv-submit:hover{
+    transform: translateY(-2px);
+  }
+.bv-check2{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+
+}
+.bv-check2 div{
+    color:  var(--text-dark-white-color);
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.bv-submit button {
-  padding: 12px 30px;
-  font-weight: bold;
-  border: none;
-  background-color: var(--button-cl);
-  color: var(--text-d);
-  border-radius: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.bv-submit button:hover {
-  background-color: var(--button-xscl);
-  transform: translateY(-2px);
-  cursor: pointer;
-}
 
 .bv-submit button:disabled {
   background-color: #999;

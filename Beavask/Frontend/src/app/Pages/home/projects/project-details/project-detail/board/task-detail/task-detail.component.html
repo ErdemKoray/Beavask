@@ -1,33 +1,33 @@
+<!-- Delete Confirm Modal -->
+<div *ngIf="commentToDelete !== null" class="bv-confirm-modal">
+  <div class="bv-confirm-box">
+    <h4>Confirm Deletion</h4>
+    <p>Are you sure you want to delete this comment?</p>
+    <div class="bv-confirm-actions">
+      <button class="bv-btn bv-btn-danger" (click)="confirmDeleteComment()">Yes, Delete</button>
+      <button class="bv-btn bv-btn-cancel" (click)="cancelDelete()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-backdrop">
     <aside class="task-modal d-flex flex-column bv-radius-4">
         <!-- HEADER -->
         <header class="task-modal__header d-flex align-items-center gap-5">
-          <div class="task-path">
-            <span class="task-path__parent"></span> /
-            <span class="task-path__current">CCS-3</span>
-          </div>
+      
       
           <h2 class="task-title">
             <span class="state-badge state-badge--lightning"></span>
             {{taskD?.title}}
           </h2>
       
-          <button class="task-modal__close">✕</button>
+          <button (click)="closeModal()" class="task-modal__close">✕</button>
         </header>
       
         <div class="task-modal__body d-flex">
          
           <section class="task-content d-flex flex-column gap-5">
-          <!--
-            
-          <div class="task-actions">
-            <button class="btn bv-radius-2"> Add</button>
-            <button class="btn bv-radius-2">⚡ Apps</button>
-          </div>
-    
-          
-          --> 
+
         <article class="task-section">
           <h3 class="task-section__title">Description</h3>
 
@@ -48,21 +48,52 @@
 </div>
 
             </article>    
-            <nav class="tabs">
-              <button class="tab is-active">Comments</button>
-              <button class="tab">History</button>
-              <button class="tab">Work log</button>
-            </nav>
-      
-            <div class="tab-panel">
-              <textarea class="comment-box" rows="4" placeholder="Add a comment…"></textarea>
-              <div class="comment-quick">
-                <button class="chip">Who is working on this…?</button>
-                <button class="chip">Status update…</button>
-                <button class="chip">Thanks…</button>
-              </div>
-              <p class="hint">Pro tip: press <kbd>M</kbd> to comment</p>
-            </div>
+     <article class="task-section">
+  <h3 class="task-section__title">Comments</h3>
+
+  <!-- Add Comment Form -->
+  <div class="comment-form d-flex flex-column gap-2">
+    <input
+      type="text"
+      [(ngModel)]="newCommentTitle"
+      placeholder="Comment title"
+      class="task-description-input"
+    />
+
+    <textarea
+      [(ngModel)]="newCommentContent"
+      placeholder="Write your comment..."
+      class="task-description-input"
+      rows="3"
+    ></textarea>
+
+    <button class="btn btn--success mt-1 bv-transition" (click)="submitComment()">Submit</button>
+  </div>
+
+  <!-- Comment List -->
+  <div class="comment-list mt-3">
+  <div class="comment-section" *ngFor="let comment of comments">
+    <div class="comment-item">
+
+      <h6 class="comment-title">{{ comment.title }}</h6>
+      <p class="comment-content">{{ comment.content }}</p>
+    </div>
+
+    <div class="comment-options">
+
+      <button (click)="prepareDelete(comment.id)" class="delete-comment-btn">
+     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+       <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+     </svg>
+        
+   
+   </button>
+    <div class="comment-date">{{ comment.createdAt | date:'short' }}</div>
+    </div>
+  </div>
+</div>
+
+</article>
           </section>
       
           <!-- RIGHT : DETAILS -->
@@ -80,28 +111,24 @@
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
             </div>
       </div>
-
-      
-            <div class="pinned-fields">
-              <h4 class="panel-heading">Pinned fields</h4>
-              <p class="text-muted">Click on the 📌 next to a field label to start pinning.</p>
-            </div>
       
             <ul class="details-panel">
               <li class="details-field">
-                <span class="details-label">Assignee</span>
+  <span class="details-label">Assignee</span>
+  <span class="details-value">
+    <select 
+      [ngModel]="selectedAssigneeId" 
+      (ngModelChange)="assignToUser($event)" 
+      class="state-dropdown__btn"
+      [disabled]="!assignees.length">
+      <option [ngValue]="null">Unassigned</option>
+      <option *ngFor="let assignee of assignees" [ngValue]="assignee.userId">
+        {{ assignee.fullName }}
+      </option>
+    </select>
+  </span>
+</li>
 
-                <span *ngIf="!taskD?.assignedUserId" class="details-value">Unassigned <div (click)="assignTaskToMe()" class="link">Assign to me</div></span>
-                <span *ngIf="taskD?.assignedUserId" class="details-value"><a class="link">{{assignedUserName}}</a></span>
-              </li>
-              <li class="details-field">
-                <span class="details-label">Labels</span>
-                <span class="details-value text-muted">None</span>
-              </li>
-              <li class="details-field">
-                <span class="details-label">Parent</span>
-                <span class="details-value link link--purple">⚡ CCS-2 (Sample) Chatbot Developer</span>
-              </li>
               <li class="details-field">
                 <span class="details-label">Reporter</span>
                 <span class="details-value">
@@ -110,14 +137,9 @@
               </li>
             </ul>
       
-            <section class="automation-panel">
-              <h4 class="panel-heading">Automation</h4>
-              <p class="text-muted">Rule executions</p>
-            </section>
-      
             <footer class="sidebar-footer">
-              <small class="text-muted">Created yesterday</small>
-              <small class="text-muted">Updated yesterday</small>
+              <div class="text-muted">Created {{taskD?.createdAt | date}}</div>
+              <div class="text-muted">Updated {{taskD?.updatedAt | date}}</div>
             </footer>
           </aside>
         </div>

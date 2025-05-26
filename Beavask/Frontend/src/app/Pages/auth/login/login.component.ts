@@ -95,7 +95,10 @@ export class LoginComponent implements OnInit {
     });
   }
   
-
+goToCompanyLogin(): void {
+  // İlgili rota örnek
+  this.router.navigate(['/lcompany']);
+}
 
 
   goToRegister() {

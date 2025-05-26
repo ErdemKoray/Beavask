@@ -5,10 +5,10 @@
   }
   .bv-register-container {
     position: relative;
-    background-color: var(--body-xsw);
-    width: 50vw;
+    background-color: var(--card-dcl);
+    width: 45vw;
     height: fit-content;
-    min-height: 90%;
+    min-height: 80%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -16,7 +16,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    border-radius: 50px;
+    border-radius: 0.5rem;
   }
   
   .bv-form-container {
@@ -49,19 +49,22 @@
     transition: box-shadow 0.3s ease-in;
   }
   
-  .bv-submit {
+.bv-submit{
     width: 180px;
     height: 50px;
-    background-color: var(--button-dark-white-color);
-    color: white;
-    border-radius: 10px;
-    transition: box-shadow 0.3s ease-in;
+    background-color: var(--button-xsw)!important;
+    color: var(--text-xsw);
+
     border: none;
+    cursor: pointer;
+}
+.bv-submit span{
+        font-weight: 700;
+}
+.bv-submit:hover{
+    transform: translateY(-2px);
   }
-  .bv-submit:hover {
-    box-shadow: var(--button-dark-white-color) 0px 0px 5px 1px;
-  }
-  
+
   .bv-register-logo {
     width: 16px;
     height: 16px;
@@ -72,7 +75,10 @@
   
   .bv-register-option-button:hover {
     cursor: pointer;
-    box-shadow: #000000 0px 0px 5px 1px;
+    box-shadow: #0000006c 0px 0px 8px 2px;
+  }
+  .bv-register-text{
+    color: white!important;
   }
   
   .bv-form-container form {
@@ -88,7 +94,16 @@
     width: 100%;
     margin-top: 20px;
   }
-  
+  .bv-check1{
+    margin-top: 5px;
+    padding: 5px;
+  }
+  .bv-create-account{
+    color: var(--text-xsw);
+    font-weight: 500;
+    cursor: pointer;
+
+  }
   .bv-text-group label {
     font-weight: bold;
     font-size: 20px;
@@ -97,9 +112,9 @@
   }
   
   .bv-text-group input {
-    background-color: var(--card-sw);
+    background-color: var(--button-lw);
     height: 48px;
-    border: 2px solid var(--border-sdark-white-color);
+    border: 2px solid var(--button-lw);
   }
   
   .bv-text-group input::placeholder {
@@ -164,7 +179,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .bv-check2 div {
@@ -172,9 +187,85 @@
     font-weight: bold;
     cursor: pointer;
   }
-  .bv-admin-create {
+
+
+
+.bv-admin-create {
   margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 }
+
+.bv-company {
+  background-color: var(--button-scl);
+  padding: 12px;
+  border-radius: 50%;
+  width: 56px;       /* Başlangıçta logo alanı */
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: width 0.4s ease, border-radius 0.4s ease;
+  white-space: nowrap;
+  color: white;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bv-company svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+/* Metin başlangıçta görünmez, ama logo her zaman gözükür */
+.bv-company span {
+  opacity: 0;
+  margin-left: 12px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease 0.2s;
+  pointer-events: none;
+  user-select: none;
+  font-size: 1rem;
+  line-height: 1;
+  position: absolute;
+  left: 56px;  /* Logo genişliği kadar boşluk */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hover ile genişleme */
+.bv-company:hover {
+  width: 250px;
+  border-radius: 28px;
+}
+
+/* Logo sağa kayar */
+.bv-company:hover svg {
+  transform: translateX(10px);
+}
+
+/* Metin görünür olur */
+.bv-company:hover span {
+  margin-left: 5px;
+  margin-right: 8px;
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  margin-left: 12px;
+}
+
+
+
 
 .bv-btn-secondary {
   background-color: var(--button-scl);
@@ -267,6 +358,7 @@
   }
   
 .bv-valid{
-  color: red;
-  text-shadow: 0px 3px 10px red;
+    color: red;
+    font-weight: 500;
+    text-shadow: 0px 0px 6px 3px red;
 }

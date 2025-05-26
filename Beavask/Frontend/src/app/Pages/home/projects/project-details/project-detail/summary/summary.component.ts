@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   Chart,
   ChartConfiguration,
@@ -18,6 +18,7 @@ Chart.register(...registerables);
 })
 export class SummaryComponent {
 
+  @Input() projectId:number=0;
   ngAfterViewInit(): void {
     this.createStatusChart();
     this.createPriorityChart();

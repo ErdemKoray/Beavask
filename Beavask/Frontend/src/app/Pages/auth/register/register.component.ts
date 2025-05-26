@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../components/toast/toast.service';
 import { AuthService } from '../../../common/services/auth/auth.service';
 import { ToastComponent } from '../../../components/toast/toast.component';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -31,22 +32,28 @@ export class RegisterComponent implements OnInit {
   isLoading = false;
   showLogin = false;
   showRegister = true;
+  companyId: string | null = null;  // companyId saklamak için
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute  // eklendi
   ) {}
 
   ngOnInit(): void {
-    // Dark mode kontrolü
     this.showLogin = false;
     this.showRegister = true;
-  
+
     this.darkMode = localStorage.getItem('theme') === 'dark';
 
-    // Form oluşturma ve validasyonlar
+    // Query parametreden companyId alınır
+    this.route.queryParams.subscribe(params => {
+      this.companyId = params['companyId'] || null;
+    });
+    console.log(this.companyId)
+
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -56,23 +63,28 @@ export class RegisterComponent implements OnInit {
     }, { validators: this.passwordsMatchValidator });
   }
 
-  // Şifre eşleşme doğrulayıcı
   private passwordsMatchValidator(group: AbstractControl) {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordsNotMatching: true };
   }
 
-  // GitHub Login yönlendirmesi
   loginWithGithub() {
-    window.location.href = 'https://github.com/login/oauth/authorize?client_id=Ov23lioqh5NrJDct5not&scope=user:email&redirect_uri=http://localhost:4200/auth-callback';
-  }
-goToCompanyRegister(): void {
-  // İlgili rota örnek
-  this.router.navigate(['/rcompany']);
-}
+    // redirectUri şirket ID’sine göre değişiyor
+    const baseRedirectUri = 'http://localhost:4200/auth-callback';
+    const redirectUri = this.companyId 
+      ? `http://localhost:4200/auth-callback?companyId=${this.companyId}` 
+      : baseRedirectUri;
 
-  // Kullanıcı kaydını gerçekleştir
+    const url = `https://github.com/login/oauth/authorize?client_id=Ov23lioqh5NrJDct5not&scope=user:email&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+    window.location.href = url;
+  }
+
+  goToCompanyRegister(): void {
+    this.router.navigate(['/rcompany']);
+  }
+
   register(): void {
     if (this.registerForm.invalid) {
       this.toastService.show({ title: 'Error', message: 'Please fill all required fields correctly.' });
@@ -106,17 +118,11 @@ goToCompanyRegister(): void {
     });
   }
 
-  // Giriş sayfasına yönlendirme
-
-
   goToLogin() {
-
     this.showRegister = false;
     this.showLogin = true;
-   setTimeout(() => {
-    this.router.navigate(['/login'])
-   }, 1000);
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1000);
   }
-  
 }
-2

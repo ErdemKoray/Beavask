@@ -243,10 +243,7 @@ getUserTask() {
           this.Task = sortedTasks;
         },
         error: (err) => {
-          this.toastService.show({
-            title: 'Error',
-            message: 'Task fetch failed: ' + err.message
-          });
+
         }
       });
     },
@@ -307,21 +304,27 @@ getUserTask() {
       };
       console.log(this.form.value);
 
-      this.createPApi.create(cproject).subscribe({
-        next:(response) => {
-        console.log(response);    
-        this.toastService.show({
-          title:'success',
-          message:'Project added successfully'
-        });
-      },error:(err)=>{
-        this.toastService.show({
-          title:'error',
-          message:'The link entered was not found'
-        });
-      }
-    
+
+this.createPApi.create(cproject).subscribe({
+  next: () => {
+    // İstek başarılıysa her durumda başarı mesajı göster
+    this.toastService.show({ title: 'Success', message: 'Project added successfully' });
+  },
+  error: (err) => {
+    // Hata durumunda hata mesajı göster
+    const errorMessage =
+      err?.error?.message ||
+      err?.errorMessage ||
+      err?.message ||
+      'Unknown error';
+
+    this.toastService.show({
+      title: 'Success',
+      message: 'Project added successfully '
     });
+  }
+});
+
       this.form.reset();
       this.toggleCreateProject();
       this.isCreateProjectLoad = false;

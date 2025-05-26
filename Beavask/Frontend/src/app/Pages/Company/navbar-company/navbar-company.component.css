@@ -4,7 +4,7 @@
   box-shadow: 0 2px 5px var(--shadow-d);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .bv-img img {

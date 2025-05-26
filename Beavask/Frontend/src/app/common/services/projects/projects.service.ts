@@ -13,7 +13,7 @@ export class ProjectsService {
   private endpoint = "Project";
 
   getAll(){
-    return this.apiService.getAll(this.endpoint);
+    return this.apiService.getAll(`${this.endpoint}/get-all-projects-by-user`);
   }
   getById(id: number) {
     return this.apiService.getById(this.endpoint, id);
