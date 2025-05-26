@@ -37,4 +37,12 @@ public class ProjectRepository : BaseRepository<Project, int>, IProjectRepositor
             .ToListAsync();
         return projects;
     }
+
+    public Task<List<Project>> GetAllProjectsByUserId(int userId)
+    {
+        var projects = dbContext.Projects
+            .Where(p => p.UserId == userId)
+            .ToListAsync();
+        return projects;
+    }
 } 

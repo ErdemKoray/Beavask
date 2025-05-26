@@ -10,6 +10,7 @@ public interface IProjectService
     Task<Response<IEnumerable<ProjectDto>>> GetAllAsync();
     Task<Response<ProjectDto>> UpdateAsync(int id, ProjectUpdateDto projectUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
-    Task<Response<bool>> CreateProjectFromGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo,string repoUrl);
+    Task<Response<bool>> CreateProjectFromGitHubRepoAsync(CreateProjectFromGitHubRepoDto repo, string repoUrl);
+    Task<Response<List<ProjectDto>>> GetAllProjectsByUserIdAsync()
 }
 

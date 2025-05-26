@@ -4,6 +4,7 @@ using Beavask.Application.Helper;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
+using Beavask.Domain.Entities.Join;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -370,7 +371,6 @@ namespace Beavask.API.Service
                     ContentDisposition = { Inline = true }
                 };
                 mailMessage.Attachments.Add(logoAttachment);
-
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)

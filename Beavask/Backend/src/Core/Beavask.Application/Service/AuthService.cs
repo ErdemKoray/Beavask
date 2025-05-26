@@ -6,6 +6,7 @@ using Beavask.Application.Interface;
 using Beavask.Application.Interface.Logging;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
+using Beavask.Domain.Entities.Join;
 
 namespace Beavask.Application.Service
 {
@@ -430,9 +431,19 @@ namespace Beavask.Application.Service
             var user = await _unitOfWork.UserRepository.GetByIdAsync(userId) ?? throw new Exception("User not found.");
             user.CompanyId = invitation.CompanyId;
             await _unitOfWork.UserRepository.UpdateAsync(user);
-
             invitation.IsUsed = true;
             await _unitOfWork.InvitationTokenRepository.UpdateAsync(invitation);
+
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(invitation.ProjectId);
+            await _unitOfWork.ProjectMemberRepository.AddAsync(new ProjectMember
+            {
+                UserId = user.Id,
+                ProjectId = invitation.ProjectId,
+                IsActive = true,
+                User = user,
+                Project = project
+            });
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

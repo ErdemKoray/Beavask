@@ -189,5 +189,37 @@ public class ProjectService : IProjectService
             return Response<bool>.Fail($"Error: {ex.Message}");
         }
     }
+
+    public async Task<Response<List<ProjectDto>>> GetAllProjectsByUserIdAsync()
+    {
+        try
+        {
+            var userId = _currentUser.UserId;
+
+            if (!userId.HasValue)
+            {
+                return Response<List<ProjectDto>>.Fail("User not found");
+            }
+
+            var personalProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByUserId(userId.Value);
+            var companyProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(_currentCompany.CompanyId.Value);
+
+            if ((personalProjects == null || !personalProjects.Any()) &&
+                (companyProjects == null || !companyProjects.Any()))
+            {
+                return Response<List<ProjectDto>>.Fail("No projects found for user");
+            }
+
+            var allProjects = personalProjects.Concat(companyProjects).ToList();
+            var projectDtos = _mapper.Map<List<ProjectDto>>(allProjects);
+
+            return Response<List<ProjectDto>>.Success(projectDtos);
+        }
+        catch (Exception ex)
+        {
+            return Response<List<ProjectDto>>.Fail($"Error: {ex.Message}");
+        }
+    }
+
 }
 
