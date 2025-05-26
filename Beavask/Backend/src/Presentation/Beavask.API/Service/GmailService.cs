@@ -4,52 +4,51 @@ using Beavask.Application.Helper;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
-using Beavask.Domain.Entities.Join;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 
 namespace Beavask.API.Service
 {
-    public class GmailMailService : IMailService
+  public class GmailMailService : IMailService
+  {
+    private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentCompanyService _currentCompanyService;
+
+    public GmailMailService(IConfiguration configuration, IMapper mapper, IUnitOfWork unitOfWork, ICurrentCompanyService currentCompanyService)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly ICurrentCompanyService _currentCompanyService;
+      _configuration = configuration;
+      _mapper = mapper;
+      _unitOfWork = unitOfWork;
+      _currentCompanyService = currentCompanyService;
+    }
 
-        public GmailMailService(IConfiguration configuration, IMapper mapper, IUnitOfWork unitOfWork, ICurrentCompanyService currentCompanyService)
+    public async System.Threading.Tasks.Task SendVerificationCodeAsync(string toEmail, string verificationCode)
+    {
+      try
+      {
+        if (string.IsNullOrWhiteSpace(toEmail))
+          throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+
+        var fromEmail = _configuration["Mail:Username"];
+        var password = _configuration["Mail:Password"];
+
+        if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
+          throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
         {
-            _configuration = configuration;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-            _currentCompanyService = currentCompanyService;
-        }
+          Port = 587,
+          Credentials = new NetworkCredential(fromEmail, password),
+          EnableSsl = true
+        };
 
-        public async System.Threading.Tasks.Task SendVerificationCodeAsync(string toEmail, string verificationCode)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(toEmail))
-                    throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+        var logoPath = _configuration["Logo:Path"];
+        var logoCid = "logo_cid"; // Inline olarak gösterilecek CID
 
-                var fromEmail = _configuration["Mail:Username"];
-                var password = _configuration["Mail:Password"];
-
-                if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
-                    throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
-
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(fromEmail, password),
-                    EnableSsl = true
-                };
-
-                var logoPath = _configuration["Logo:Path"];
-                var logoCid = "logo_cid"; // Inline olarak gösterilecek CID
-
-                string bodyHtml = $@"
+        string bodyHtml = $@"
                 <html>
                   <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
                     <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
@@ -69,56 +68,56 @@ namespace Beavask.API.Service
                   </body>
                 </html>";
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail),
-                    Subject = "Your Beavask Verification Code",
-                    Body = bodyHtml,
-                    IsBodyHtml = true
-                };
-
-                mailMessage.To.Add(toEmail);
-
-                // Inline görseli ekliyoruz
-                var logoAttachment = new Attachment(logoPath)
-                {
-                    ContentId = logoCid,
-                    ContentDisposition = { Inline = true }
-                };
-                mailMessage.Attachments.Add(logoAttachment);
-
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to send verification email: {ex.Message}");
-                throw;
-            }
-        }
-        public async System.Threading.Tasks.Task SendUserCredentialsAsync(string toEmail, string loginName, string password)
+        var mailMessage = new MailMessage
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(toEmail))
-                    throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+          From = new MailAddress(fromEmail),
+          Subject = "Your Beavask Verification Code",
+          Body = bodyHtml,
+          IsBodyHtml = true
+        };
 
-                var fromEmail = _configuration["Mail:Username"];
-                var passwordConfig = _configuration["Mail:Password"];
+        mailMessage.To.Add(toEmail);
 
-                if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(passwordConfig))
-                    throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+        // Inline görseli ekliyoruz
+        var logoAttachment = new Attachment(logoPath)
+        {
+          ContentId = logoCid,
+          ContentDisposition = { Inline = true }
+        };
+        mailMessage.Attachments.Add(logoAttachment);
 
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(fromEmail, passwordConfig),
-                    EnableSsl = true
-                };
+        await smtpClient.SendMailAsync(mailMessage);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"[ERROR] Failed to send verification email: {ex.Message}");
+        throw;
+      }
+    }
+    public async System.Threading.Tasks.Task SendUserCredentialsAsync(string toEmail, string loginName, string password)
+    {
+      try
+      {
+        if (string.IsNullOrWhiteSpace(toEmail))
+          throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
 
-                var logoPath = _configuration["Logo:Path"];
-                var logoCid = "logo_cid"; // Inline görsel CID'si
+        var fromEmail = _configuration["Mail:Username"];
+        var passwordConfig = _configuration["Mail:Password"];
 
-                string bodyHtml = $@"
+        if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(passwordConfig))
+          throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+          Port = 587,
+          Credentials = new NetworkCredential(fromEmail, passwordConfig),
+          EnableSsl = true
+        };
+
+        var logoPath = _configuration["Logo:Path"];
+        var logoCid = "logo_cid"; // Inline görsel CID'si
+
+        string bodyHtml = $@"
                 <html>
                   <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
                     <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
@@ -139,56 +138,56 @@ namespace Beavask.API.Service
                   </body>
                 </html>";
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail),
-                    Subject = "Your Beavask Login Details",
-                    Body = bodyHtml,
-                    IsBodyHtml = true
-                };
-
-                mailMessage.To.Add(toEmail);
-
-                // Inline görseli ekliyoruz
-                var logoAttachment = new Attachment(logoPath)
-                {
-                    ContentId = logoCid,
-                    ContentDisposition = { Inline = true }
-                };
-                mailMessage.Attachments.Add(logoAttachment);
-
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to send credentials email: {ex.Message}");
-                throw;
-            }
-        }
-        public async System.Threading.Tasks.Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode)
+        var mailMessage = new MailMessage
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(toEmail))
-                    throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+          From = new MailAddress(fromEmail),
+          Subject = "Your Beavask Login Details",
+          Body = bodyHtml,
+          IsBodyHtml = true
+        };
 
-                var fromEmail = _configuration["Mail:Username"];
-                var password = _configuration["Mail:Password"];
+        mailMessage.To.Add(toEmail);
 
-                if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
-                    throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+        // Inline görseli ekliyoruz
+        var logoAttachment = new Attachment(logoPath)
+        {
+          ContentId = logoCid,
+          ContentDisposition = { Inline = true }
+        };
+        mailMessage.Attachments.Add(logoAttachment);
 
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(fromEmail, password),
-                    EnableSsl = true
-                };
+        await smtpClient.SendMailAsync(mailMessage);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"[ERROR] Failed to send credentials email: {ex.Message}");
+        throw;
+      }
+    }
+    public async System.Threading.Tasks.Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode)
+    {
+      try
+      {
+        if (string.IsNullOrWhiteSpace(toEmail))
+          throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
 
-                var logoPath = _configuration["Logo:Path"];
-                var logoCid = "logo_cid"; // Inline görsel CID'si
+        var fromEmail = _configuration["Mail:Username"];
+        var password = _configuration["Mail:Password"];
 
-                string bodyHtml = $@"
+        if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
+          throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+          Port = 587,
+          Credentials = new NetworkCredential(fromEmail, password),
+          EnableSsl = true
+        };
+
+        var logoPath = _configuration["Logo:Path"];
+        var logoCid = "logo_cid"; // Inline görsel CID'si
+
+        string bodyHtml = $@"
                 <html>
                   <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
                     <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
@@ -208,56 +207,56 @@ namespace Beavask.API.Service
                   </body>
                 </html>";
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail),
-                    Subject = "Your Beavask Verification Code",
-                    Body = bodyHtml,
-                    IsBodyHtml = true
-                };
-
-                mailMessage.To.Add(toEmail);
-
-                // Inline görseli ekliyoruz
-                var logoAttachment = new Attachment(logoPath)
-                {
-                    ContentId = logoCid,
-                    ContentDisposition = { Inline = true }
-                };
-                mailMessage.Attachments.Add(logoAttachment);
-
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to send verification email: {ex.Message}");
-                throw;
-            }
-        }
-        public async System.Threading.Tasks.Task SendRegistrationSuccessEmailAsync(string toEmail)
+        var mailMessage = new MailMessage
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(toEmail))
-                    throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+          From = new MailAddress(fromEmail),
+          Subject = "Your Beavask Verification Code",
+          Body = bodyHtml,
+          IsBodyHtml = true
+        };
 
-                var fromEmail = _configuration["Mail:Username"];
-                var password = _configuration["Mail:Password"];
+        mailMessage.To.Add(toEmail);
 
-                if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
-                    throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+        // Inline görseli ekliyoruz
+        var logoAttachment = new Attachment(logoPath)
+        {
+          ContentId = logoCid,
+          ContentDisposition = { Inline = true }
+        };
+        mailMessage.Attachments.Add(logoAttachment);
 
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(fromEmail, password),
-                    EnableSsl = true
-                };
+        await smtpClient.SendMailAsync(mailMessage);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"[ERROR] Failed to send verification email: {ex.Message}");
+        throw;
+      }
+    }
+    public async System.Threading.Tasks.Task SendRegistrationSuccessEmailAsync(string toEmail)
+    {
+      try
+      {
+        if (string.IsNullOrWhiteSpace(toEmail))
+          throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
 
-                var logoPath = _configuration["Logo:Path"];
-                var logoCid = "logo_cid"; 
+        var fromEmail = _configuration["Mail:Username"];
+        var password = _configuration["Mail:Password"];
 
-                string bodyHtml = $@"
+        if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
+          throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+          Port = 587,
+          Credentials = new NetworkCredential(fromEmail, password),
+          EnableSsl = true
+        };
+
+        var logoPath = _configuration["Logo:Path"];
+        var logoCid = "logo_cid";
+
+        string bodyHtml = $@"
                 <html>
                   <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
                     <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
@@ -274,110 +273,114 @@ namespace Beavask.API.Service
                   </body>
                 </html>";
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail),
-                    Subject = "Your Beavask Registration Was Successful",
-                    Body = bodyHtml,
-                    IsBodyHtml = true
-                };
-
-                mailMessage.To.Add(toEmail);
-
-                var logoAttachment = new Attachment(logoPath)
-                {
-                    ContentId = logoCid,
-                    ContentDisposition = { Inline = true }
-                };
-                mailMessage.Attachments.Add(logoAttachment);
-
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to send registration success email: {ex.Message}");
-                throw;
-            }
-        }
-
-        public async System.Threading.Tasks.Task SendProjectInvitationAsync(ProjectInvitationRequest request)
+        var mailMessage = new MailMessage
         {
-            try
-            {
-                var token = InvitationTokenHelper.GenerateToken();
+          From = new MailAddress(fromEmail),
+          Subject = "Your Beavask Registration Was Successful",
+          Body = bodyHtml,
+          IsBodyHtml = true
+        };
 
-                var invitation = _mapper.Map<InvitationToken>(request);
-                invitation.Token = token;
-                invitation.CreatedAt = InvitationTokenHelper.GetCreatedDate();
-                invitation.ExpiresAt = InvitationTokenHelper.GetExpiryDate(2);
-                invitation.CompanyId = _currentCompanyService.CompanyId ?? throw new InvalidOperationException("Company ID is not available.");
-                invitation.IsUsed = false;
+        mailMessage.To.Add(toEmail);
 
-                await _unitOfWork.InvitationTokenRepository.AddAsync(invitation);
+        var logoAttachment = new Attachment(logoPath)
+        {
+          ContentId = logoCid,
+          ContentDisposition = { Inline = true }
+        };
+        mailMessage.Attachments.Add(logoAttachment);
 
-                var fromEmail = _configuration["Mail:Username"];
-                var password = _configuration["Mail:Password"];
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential(fromEmail, password),
-                    EnableSsl = true
-                };
-
-                var logoPath = _configuration["Logo:Path"];
-                var logoCid = "logo_cid";
-
-                string baseUrl = "http://localhost:4200";
-                string newUserLink = $"{baseUrl}/invite/join?token={token}&mode=new";
-                string existingUserLink = $"{baseUrl}/invite/join?token={token}&mode=existing";
-
-                string bodyHtml = $@"
-                <html>
-                  <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
-                    <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
-                      <div style='background-color: #facc15; padding: 30px; text-align: center;'>
-                        <img src='cid:{logoCid}' alt='Beavask Logo' style='height: 90px; margin-bottom: 10px;' />
-                      </div>
-                      <div style='padding: 35px 30px;'>
-                        <h2 style='color: #111827;'>You're Invited to Beavask</h2>
-                        <p style='font-size: 16px; color: #4b5563;'>
-                            <strong>{request.CompanyName}</strong> has invited you to collaborate on the GitHub project <strong>{request.ProjectName}</strong> via Beavask.
-                        </p>
-                        <div style='margin-top: 30px;'>
-                          <a href='{newUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I'm New to Beavask</a>
-                          <p style='text-align: center; font-size: 14px; color: #6b7280;'>or</p>
-                          <a href='{existingUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #10b981; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I Already Have an Account</a>
-                        </div>
-                        <p style='margin-top: 30px; font-size: 14px; color: #6b7280;'>If you didn't expect this email, you can ignore it.</p>
-                        <p style='margin-top: 20px; font-size: 14px; color: #6b7280;'>Thank you,<br/>The Beavask Team</p>
-                      </div>
-                    </div>
-                  </body>
-                </html>";
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(fromEmail, "Beavask"),
-                    Subject = $"You're invited to join {request.CompanyName} on Beavask",
-                    Body = bodyHtml,
-                    IsBodyHtml = true
-                };
-
-                mailMessage.To.Add(request.ToEmail);
-
-                var logoAttachment = new Attachment(logoPath)
-                {
-                    ContentId = logoCid,
-                    ContentDisposition = { Inline = true }
-                };
-                mailMessage.Attachments.Add(logoAttachment);
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to send project invitation email: {ex.Message}");
-                throw;
-            }
-        }
+        await smtpClient.SendMailAsync(mailMessage);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"[ERROR] Failed to send registration success email: {ex.Message}");
+        throw;
+      }
     }
+    public async System.Threading.Tasks.Task SendProjectInvitationAsync(ProjectInvitationRequest request)
+    {
+      try
+      {
+        var token = InvitationTokenHelper.GenerateToken();
+
+        var invitation = _mapper.Map<InvitationToken>(request);
+        invitation.Token = token;
+        invitation.CreatedAt = InvitationTokenHelper.GetCreatedDate();
+        invitation.ExpiresAt = InvitationTokenHelper.GetExpiryDate(2);
+        invitation.CompanyId = _currentCompanyService.CompanyId ?? throw new InvalidOperationException("Company ID is not available.");
+        invitation.IsUsed = false;
+
+        await _unitOfWork.InvitationTokenRepository.AddAsync(invitation);
+
+        var fromEmail = _configuration["Mail:Username"];
+        var password = _configuration["Mail:Password"];
+        var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+          Port = 587,
+          Credentials = new NetworkCredential(fromEmail, password),
+          EnableSsl = true
+        };
+
+        var logoPath = _configuration["Logo:Path"];
+        var logoCid = "logo_cid";
+
+        string baseUrl = "http://localhost:4200";
+
+        // CompanyId'yi query parametre olarak ekliyoruz
+        int companyId = invitation.CompanyId;
+
+        string newUserLink = $"{baseUrl}/register?companyId={companyId}&token={token}&mode=new";
+        string existingUserLink = $"{baseUrl}/register?companyId={companyId}&token={token}&mode=existing";
+
+        string bodyHtml = $@"
+        <html>
+          <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
+            <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
+              <div style='background-color: #facc15; padding: 30px; text-align: center;'>
+                <img src='cid:{logoCid}' alt='Beavask Logo' style='height: 90px; margin-bottom: 10px;' />
+              </div>
+              <div style='padding: 35px 30px;'>
+                <h2 style='color: #111827;'>You're Invited to Beavask</h2>
+                <p style='font-size: 16px; color: #4b5563;'>
+                    <strong>{request.CompanyName}</strong> has invited you to collaborate on the GitHub project <strong>{request.ProjectName}</strong> via Beavask.
+                </p>
+                <div style='margin-top: 30px;'>
+                  <a href='{newUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I'm New to Beavask</a>
+                  <p style='text-align: center; font-size: 14px; color: #6b7280;'>or</p>
+                  <a href='{existingUserLink}' style='display: inline-block; margin: 10px 0; padding: 12px 24px; background-color: #10b981; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px;'>I Already Have an Account</a>
+                </div>
+                <p style='margin-top: 30px; font-size: 14px; color: #6b7280;'>If you didn't expect this email, you can ignore it.</p>
+                <p style='margin-top: 20px; font-size: 14px; color: #6b7280;'>Thank you,<br/>The Beavask Team</p>
+              </div>
+            </div>
+          </body>
+        </html>";
+
+        var mailMessage = new MailMessage
+        {
+          From = new MailAddress(fromEmail, "Beavask"),
+          Subject = $"You're invited to join {request.CompanyName} on Beavask",
+          Body = bodyHtml,
+          IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(request.ToEmail);
+
+        var logoAttachment = new Attachment(logoPath)
+        {
+          ContentId = logoCid,
+          ContentDisposition = { Inline = true }
+        };
+        mailMessage.Attachments.Add(logoAttachment);
+
+        await smtpClient.SendMailAsync(mailMessage);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"[ERROR] Failed to send project invitation email: {ex.Message}");
+        throw;
+      }
+    }
+  }
 }
