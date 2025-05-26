@@ -202,7 +202,8 @@ public class ProjectService : IProjectService
             }
 
             var personalProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByUserId(userId.Value);
-            var companyProjects = await _unitOfWork.ProjectRepository.GetAllProjectsByCompanyId(_currentCompany.CompanyId.Value);
+
+            var companyProjects = await _unitOfWork.ProjectMemberRepository.GetProjectsByUserIdAsync(userId.Value);
 
             if ((personalProjects == null || !personalProjects.Any()) &&
                 (companyProjects == null || !companyProjects.Any()))
@@ -211,6 +212,7 @@ public class ProjectService : IProjectService
             }
 
             var allProjects = personalProjects.Concat(companyProjects).ToList();
+
             var projectDtos = _mapper.Map<List<ProjectDto>>(allProjects);
 
             return Response<List<ProjectDto>>.Success(projectDtos);
@@ -220,6 +222,7 @@ public class ProjectService : IProjectService
             return Response<List<ProjectDto>>.Fail($"Error: {ex.Message}");
         }
     }
+
 
 }
 
