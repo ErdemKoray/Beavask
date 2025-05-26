@@ -1,4 +1,5 @@
 using Beavask.Application.Interface.Repository;
+using Beavask.Domain.Entities.Base;
 using Beavask.Domain.Entities.Join;
 using Beavask.Infrastructure.Persistence;
 using Beavask.Persistence.Repository;
@@ -21,4 +22,18 @@ public class ProjectMemberRepository : BaseRepository<ProjectMember, int>, IProj
             .ToListAsync();
         return projectMembers;
     }
+    public async Task<List<Project>> GetProjectsByUserIdAsync(int userId)
+    {
+        var projects = await _context.ProjectMembers
+            .Where(pm => pm.UserId == userId && pm.IsActive)
+            .Include(pm => pm.Project)  // Proje bilgisi ile birlikte al
+            .Select(pm => pm.Project)
+            .Where(p => p != null && p.IsActive)
+            .ToListAsync();
+
+        return projects;
+    }
+
+
+
 } 
