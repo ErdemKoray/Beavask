@@ -100,4 +100,11 @@ public class TeamController : ControllerBase
         var result = await _teamService.GetAllTeamsByCompanyIdAsync(companyId);
         return Ok(result);
     }
+
+    [HttpGet("user/team")]
+    public async Task<ActionResult<Response<TeamDto>>> GetTeamByUserId()
+    {
+        var result = await _teamService.GetTeamByUserIdAsync();
+        return Ok(result);
+    }
 }

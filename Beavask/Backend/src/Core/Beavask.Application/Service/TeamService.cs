@@ -10,11 +10,12 @@ using Beavask.Application.Interface.Logging;
 
 namespace Beavask.Application.Service;
 
-public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompanyService currentCompanyService, ILogger logger) : ITeamService
+public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompanyService currentCompanyService, ICurrentUserService currentUserService, ILogger logger) : ITeamService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
     private readonly ICurrentCompanyService _currentCompanyService = currentCompanyService;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
     private readonly ILogger _logger = logger;
 
     public async Task<Response<TeamDto>> GetByIdAsync(int id)
@@ -240,6 +241,40 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompany
         {
             await _logger.LogError("Error getting all teams by company id", ex, context: companyId.ToString());
             return Response<IEnumerable<TeamDto>>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<TeamDto>> GetTeamByUserIdAsync()
+    {
+        try
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(_currentUserService.UserId.Value);
+            if (user == null)
+            {
+                await _logger.LogError("User not found", context: _currentUserService.UserId.ToString());
+                return Response<TeamDto>.Fail("User not found");
+            }
+
+            if (user.TeamId == null)
+            {
+                await _logger.LogError("User has no team", context: _currentUserService.UserId.ToString());
+                return Response<TeamDto>.Fail("User has no team");
+            }
+
+            var userTeam = await _unitOfWork.TeamRepository.GetByIdAsync(user.TeamId.Value);
+            if (userTeam == null)
+            {
+                await _logger.LogError("Team not found", context: user.TeamId.ToString());
+                return Response<TeamDto>.Fail("Team not found");
+            }
+
+            var dto = _mapper.Map<TeamDto>(userTeam);
+            return Response<TeamDto>.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogError("Error getting team by user id", ex, context: _currentUserService.UserId.ToString());
+            return Response<TeamDto>.Fail(ex.Message);
         }
     }
 }
