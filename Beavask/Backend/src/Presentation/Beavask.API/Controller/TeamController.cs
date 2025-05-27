@@ -94,10 +94,10 @@ public class TeamController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("company/{companyId}/teams")]
-    public async Task<ActionResult<Response<IEnumerable<TeamDto>>>> GetAllTeamsByCompanyId(int companyId)
+    [HttpGet("company/all-company-teams")]
+    public async Task<ActionResult<Response<IEnumerable<TeamDto>>>> GetAllTeamsByCompanyId()
     {
-        var result = await _teamService.GetAllTeamsByCompanyIdAsync(companyId);
+        var result = await _teamService.GetAllTeamsByCompanyIdAsync();
         return Ok(result);
     }
 

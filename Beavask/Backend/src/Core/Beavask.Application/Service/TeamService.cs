@@ -229,17 +229,20 @@ public class TeamService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentCompany
         }
     }
 
-    public async Task<Response<IEnumerable<TeamDto>>> GetAllTeamsByCompanyIdAsync(int companyId)
+    public async Task<Response<IEnumerable<TeamDto>>> GetAllTeamsByCompanyIdAsync()
     {
         try
         {
-            var teams = await _unitOfWork.TeamRepository.GetAllTeamsByCompanyId(companyId);
+            var teams = await _unitOfWork.TeamRepository.GetAllTeamsByCompanyId(_currentCompanyService.CompanyId.Value);
+            if (teams == null || !teams.Any())
+                return Response<IEnumerable<TeamDto>>.NotFound();
+
             var dtos = _mapper.Map<IEnumerable<TeamDto>>(teams);
             return Response<IEnumerable<TeamDto>>.Success(dtos);
         }
         catch (Exception ex)
         {
-            await _logger.LogError("Error getting all teams by company id", ex, context: companyId.ToString());
+            await _logger.LogError("Error getting all teams by company id", ex, context: _currentCompanyService.CompanyId.ToString());
             return Response<IEnumerable<TeamDto>>.Fail(ex.Message);
         }
     }
