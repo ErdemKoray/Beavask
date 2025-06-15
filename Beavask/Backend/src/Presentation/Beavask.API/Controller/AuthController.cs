@@ -93,6 +93,13 @@ public class AuthController(IAuthService authService , IConfiguration configurat
 
         return Ok(new { message = "You have been added to the company." });
     }
-
+    [HttpPost("change-user-password")]
+    public async Task<IActionResult> ChangeUserPassword([FromBody] ChangeUserPasswordRequestDto dto)
+    {
+        var result = await _authService.ChangeUserPasswordAsync(dto);
+        if (result.IsSuccess)
+            return Ok("Password successfully changed.");
+        return BadRequest(result.Message);
+    }
 }
 

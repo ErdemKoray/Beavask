@@ -445,5 +445,48 @@ namespace Beavask.Application.Service
             });
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<Response<bool>> ChangeUserPasswordAsync(ChangeUserPasswordRequestDto dto)
+        {
+            try
+            {
+                if(dto.NewPassword != dto.ConfirmNewPassword)
+                {
+                    await _logger.LogWarning("Password change failed - passwords do not match", 
+                        context: $"UserId: {_currentUserService.UserId}");
+                    return Response<bool>.Fail("New password and confirmation do not match.");
+                }
+
+                var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Id == _currentUserService.UserId);
+                if(user == null)
+                {
+                    await _logger.LogWarning("Password change failed - user not found", 
+                        context: $"UserId: {_currentUserService.UserId}");
+                    return Response<bool>.Fail("User not found.");
+                }
+                
+                if(!PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash, user.PasswordSalt))
+                {
+                    await _logger.LogWarning("Password change failed - invalid old password", 
+                        context: $"UserId: {_currentUserService.UserId}");
+                    return Response<bool>.Fail("Invalid old password.");
+                }
+                
+                PasswordHelper.CreatePasswordHash(dto.NewPassword, out string newHash, out string newSalt);
+                user.PasswordHash = newHash;
+                user.PasswordSalt = newSalt;
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+                await _logger.LogInformation("User password changed successfully", 
+                context: $"UserId: {_currentUserService.UserId}");
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError("Password change failed", ex, 
+                    context: $"UserId: {_currentUserService.UserId}");
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
