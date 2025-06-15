@@ -159,6 +159,24 @@ public class UserService : IUserService
             return Response<UserDto>.Fail(ex.Message);
         }
     }
+
+    public async Task<Response<UserDto>> GetUserByIdAsync(int id)
+    {
+        try
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return Response<UserDto>.NotFound();
+            }
+            var userDto = _mapper.Map<UserDto>(user);
+            return Response<UserDto>.Success(userDto);
+        }
+        catch (Exception ex)
+        {
+            return Response<UserDto>.Fail(ex.Message);
+        }
+    }
 }
 
 

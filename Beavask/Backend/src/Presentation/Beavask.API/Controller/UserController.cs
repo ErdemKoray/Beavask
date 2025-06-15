@@ -24,6 +24,15 @@ public class UserController : ControllerBase
         return BadRequest(result);
     }
 
+    [HttpGet("id/{id}")]
+    public async Task<IActionResult> GetByIdAllInfo(int id)
+    {
+        var result = await _userService.GetUserByIdAsync(id);
+        if (result.IsSuccess)
+            return Ok(result);
+        return BadRequest(result);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
