@@ -68,4 +68,11 @@ public class UserController : ControllerBase
             return Ok(result);
         return BadRequest(result);
     }
+
+    [HttpGet("username/{username}")]
+    public async Task<IActionResult> GetUserByUsername(string username)
+    {
+        var result = await _userService.GetUserByUsernameAsync(username);
+        return Ok(result);
+    }
 }

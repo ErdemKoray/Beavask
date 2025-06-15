@@ -68,4 +68,10 @@ public class UserRepository : BaseRepository<User, int>, IUserRepository
         return await _context.Users
             .FirstOrDefaultAsync(u => u.UserName == userName && u.CompanyId != null);
     }
+
+    public async Task<User> GetUserByUsernameAsync(string username)
+    {
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.UserName == username);
+    }
 } 

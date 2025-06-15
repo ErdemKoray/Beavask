@@ -12,5 +12,5 @@ public interface IUserRepository : IBaseRepository<User, int>
     Task<IEnumerable<User>> GetAllUsersByCompanyIdAsync(int companyId);
     Task<IEnumerable<User>> GetAllUsersByUserNameAsync(string userName);
     Task<User> IsUserAlreadyAssignedToCompany(string userName);
-
+    Task<User> GetUserByUsernameAsync(string username);
 } 

@@ -11,5 +11,6 @@ public interface IUserService
     Task<Response<UserDto>> UpdateAsync(int id, UserUpdateDto userUpdateDto);
     Task<Response<bool>> DeleteAsync(int id);
     Task<Response<bool>> UpdateUserCompanyIdAsync(int id, UpdateCompanyRequest updateCompanyRequest);
+    Task<Response<UserDto>> GetUserByUsernameAsync(string username);
 }
 
