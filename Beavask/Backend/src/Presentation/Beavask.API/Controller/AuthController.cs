@@ -101,5 +101,23 @@ public class AuthController(IAuthService authService , IConfiguration configurat
             return Ok("Password successfully changed.");
         return BadRequest(result.Message);
     }
+    [HttpPost("send-reset-password-email")]
+    public async Task<IActionResult> SendResetPasswordEmail(string email)
+    {
+        var result = await _authService.SendResetPasswordEmailAsync(email);
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+    [HttpPost("verify-reset-password")]
+    public async Task<IActionResult> VerifyResetPassword(string email, string code)
+    {
+        var result = await _authService.VerifyResetPasswordAsync(email, code);
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest dto)
+    {
+        var result = await _authService.ForgotPasswordAsync(dto);
+        return result.IsSuccess ? Ok(result) : BadRequest(result);
+    }
 }
 

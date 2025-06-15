@@ -382,5 +382,74 @@ namespace Beavask.API.Service
         throw;
       }
     }
-  }
+
+        public async System.Threading.Tasks.Task SendForgotPasswordEmailAsync(string toEmail, string verificationCode)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(toEmail))
+                    throw new ArgumentNullException(nameof(toEmail), "Recipient email address cannot be null or empty.");
+
+                var fromEmail = _configuration["Mail:Username"];
+                var password = _configuration["Mail:Password"];
+
+                if (string.IsNullOrWhiteSpace(fromEmail) || string.IsNullOrWhiteSpace(password))
+                    throw new InvalidOperationException("Email configuration values are missing (Mail:Username or Mail:Password).");
+
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(fromEmail, password),
+                    EnableSsl = true
+                };
+
+                var logoPath = _configuration["Logo:Path"];
+                var logoCid = "logo_cid";
+
+                string bodyHtml = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px;'>
+                        <div style='max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden;'>
+                            <div style='background-color: #facc15; padding: 30px; text-align: center;'>
+                                <img src='cid:{logoCid}' alt='Beavask Logo' style='height: 90px; margin-bottom: 10px;' />
+                            </div>
+                            <div style='padding: 35px 30px;'>
+                                <h2 style='color: #111827; margin-bottom: 10px;'>Reset Your Password</h2>
+                                <p style='font-size: 16px; color: #4b5563;'>Use the following code to reset your Beavask password. This code will expire in 3 minutes:</p>
+                                <div style='margin-top: 25px; background-color: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; color: #1f2937; letter-spacing: 3px;'>
+                                    {verificationCode}
+                                </div>
+                                <p style='margin-top: 30px; font-size: 14px; color: #6b7280;'>If you didn't request this password reset, please ignore this email.</p>
+                                <p style='margin-top: 40px; font-size: 14px; color: #6b7280;'>Thank you,<br/>The Beavask Team</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>";
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(fromEmail, "Beavask"),
+                    Subject = "Reset Your Beavask Password",
+                    Body = bodyHtml,
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(toEmail);
+
+                var logoAttachment = new Attachment(logoPath)
+                {
+                    ContentId = logoCid,
+                    ContentDisposition = { Inline = true }
+                };
+                mailMessage.Attachments.Add(logoAttachment);
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to send password reset email: {ex.Message}");
+                throw;
+            }
+        }
+    }
 }

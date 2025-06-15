@@ -9,6 +9,6 @@ namespace Beavask.Application.Interface.Service
         Task SendIndividualVerificationCodeAsync(string toEmail, string verificationCode);
         Task SendRegistrationSuccessEmailAsync(string toEmail);
         Task SendProjectInvitationAsync(ProjectInvitationRequest request);
-
+        Task SendForgotPasswordEmailAsync(string toEmail, string verificationCode);
     }
 }

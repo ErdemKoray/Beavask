@@ -488,5 +488,93 @@ namespace Beavask.Application.Service
                 return Response<bool>.Fail($"An error occurred: {ex.Message}");
             }
         }
+
+        public async Task<Response<bool>> SendResetPasswordEmailAsync(string email)
+        {
+            try
+            {
+                var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == email);
+                if(user == null)
+                {
+                    await _logger.LogWarning("Reset password email failed - user not found", 
+                        context: email);
+                    return Response<bool>.Fail("User not found.");
+                }
+                var verificationCode = MailHelper.GenerateVerificationCode();
+                if(verificationCode == null)
+                {
+                    await _logger.LogError("Failed to generate verification code", context: email);
+                    throw new ArgumentNullException(nameof(verificationCode), "Verification code cannot be null");
+                }
+                var verification = new VerificationCode
+                {
+                    Email = email,
+                    Code = verificationCode,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _unitOfWork.VerificationCodeRepository.AddAsync(verification);
+                await _unitOfWork.SaveChangesAsync();
+                await _mailService.SendForgotPasswordEmailAsync(email, verificationCode);
+                await _logger.LogInformation("Reset password email sent successfully", context: email);
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError("Reset password email failed", ex, context: email);
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
+            }
+        }
+        public async Task<Response<bool>> VerifyResetPasswordAsync(string email, string code)
+        {
+            try
+            {
+                var verification = await _unitOfWork.VerificationCodeRepository.GetSingleByConditionAsync(v => v.Email == email && v.Code == code && !v.IsUsed);
+                if(verification == null)
+                {
+                    await _logger.LogWarning("Reset password verification failed - verification code not found", context: email);
+                    return Response<bool>.Fail("Verification code not found.");
+                }
+                verification.IsUsed = true;
+                await _unitOfWork.VerificationCodeRepository.UpdateAsync(verification);
+                await _unitOfWork.SaveChangesAsync();
+                await _logger.LogInformation("Reset password verification successful", context: email);
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError("Reset password verification failed", ex, context: email);
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
+            }
+        }
+
+        public async Task<Response<bool>> ForgotPasswordAsync(ForgotPasswordRequest dto)
+        {
+            try
+            {
+                var user = await _unitOfWork.UserRepository.GetSingleByConditionAsync(u => u.Email == dto.Email);
+                if(user == null)
+                {
+                    await _logger.LogWarning("Forgot password failed - user not found", context: dto.Email);
+                    return Response<bool>.Fail("User not found.");
+                }
+                if(dto.Password != dto.ConfirmPassword)
+                {
+                    await _logger.LogWarning("Forgot password failed - passwords do not match", context: dto.Email);
+                    return Response<bool>.Fail("Passwords do not match.");
+                }
+                PasswordHelper.CreatePasswordHash(dto.Password, out string newHash, out string newSalt);
+                user.PasswordHash = newHash;
+                user.PasswordSalt = newSalt;
+                await _unitOfWork.UserRepository.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+                await _logger.LogInformation("Forgot password successful", context: dto.Email);
+                return Response<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogError("Forgot password failed", ex, context: dto.Email);
+                return Response<bool>.Fail($"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
