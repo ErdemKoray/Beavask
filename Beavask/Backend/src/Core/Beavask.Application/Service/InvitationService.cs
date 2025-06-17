@@ -36,6 +36,10 @@ public class InvitationService : IInvitationService
             {
                 return Response<bool>.Fail("Receiver not found");
             }
+            if (await _unitOfWork.FriendshipRepository.IsFriendshipExistsAsync(senderId, request.ReceiverId))
+            {
+                return Response<bool>.Fail("Friendship already exists");
+            }
             var friendship = new Friendship
             {
                 SenderId = senderId,

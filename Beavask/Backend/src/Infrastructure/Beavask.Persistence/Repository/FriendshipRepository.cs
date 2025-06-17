@@ -18,4 +18,11 @@ public class FriendshipRepository : BaseRepository<Friendship, int>, IFriendship
     {
         return await _context.Friendships.Include(f => f.Sender).Include(f => f.Receiver).FirstOrDefaultAsync(f => f.Id == id);
     }
+
+    public async Task<bool> IsFriendshipExistsAsync(int senderId, int receiverId)
+    {
+        return await _context.Friendships.AnyAsync(f => 
+            (f.SenderId == senderId && f.ReceiverId == receiverId) || 
+            (f.SenderId == receiverId && f.ReceiverId == senderId));
+    }
 }
