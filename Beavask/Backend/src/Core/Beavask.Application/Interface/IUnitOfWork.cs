@@ -31,6 +31,6 @@ public interface IUnitOfWork
     IVerificationCodeRepository VerificationCodeRepository { get; }
     IInvitationTokenRepository InvitationTokenRepository { get; }
     IFriendshipRepository FriendshipRepository { get; }
-    
+    IProjectInvitationRepository ProjectInvitationRepository { get; }
     Task<int> SaveChangesAsync();
 }

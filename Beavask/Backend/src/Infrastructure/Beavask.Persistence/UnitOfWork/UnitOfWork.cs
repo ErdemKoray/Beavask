@@ -90,5 +90,8 @@ public class UnitOfWork : IUnitOfWork
     private IFriendshipRepository? _friendshipRepository;
     public IFriendshipRepository FriendshipRepository => _friendshipRepository ??= new FriendshipRepository(_context);
 
+    private IProjectInvitationRepository? _projectInvitationRepository;
+    public IProjectInvitationRepository ProjectInvitationRepository => _projectInvitationRepository ??= new ProjectInvitationRepository(_context);
+
     public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
 }

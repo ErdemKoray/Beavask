@@ -61,4 +61,15 @@ public class InvitationController : ControllerBase
         }
         return Ok(result);
     }
+
+    [HttpPost("invite-friend-to-personal-project")]
+    public async Task<IActionResult> InviteFriendToPersonalProject([FromBody] PersonelProjectInvitationRequest request)
+    {
+        var result = await _invitationService.InviteFriendToPersonelProject(request);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
 }

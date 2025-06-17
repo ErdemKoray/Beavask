@@ -7,6 +7,7 @@ using Beavask.Application.Interface.Repository;
 using Beavask.Application.Interface.Service;
 using Beavask.Domain.Entities.Base;
 using Beavask.Domain.Entities.Join;
+using Beavask.Domain.Enums;
 
 namespace Beavask.Application.Service;
 
@@ -135,6 +136,53 @@ public class InvitationService : IInvitationService
         catch (Exception ex)
         {
             return Response<List<PendingFriendRequestDto>>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<bool>> InviteFriendToPersonelProject(PersonelProjectInvitationRequest request)
+    {
+        try
+        {
+            var senderId = _currentUserService.UserId.Value;
+            var sender = await _unitOfWork.UserRepository.GetByIdAsync(senderId);
+            if (sender == null)
+            {
+                return Response<bool>.Fail("Sender not found");
+            }
+            var receiver = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
+            if (receiver == null)
+            {
+                return Response<bool>.Fail("Receiver not found");
+            }
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(request.ProjectId);
+            if (project == null)
+            {
+                return Response<bool>.Fail("Project not found");
+            }
+            var invitation = new ProjectInvitation
+            {
+                SenderId = senderId,
+                ReceiverId = request.UserId,
+                ProjectId = request.ProjectId,
+                Sender = sender,
+                Receiver = receiver,
+                Project = project
+            };
+            await _unitOfWork.ProjectInvitationRepository.AddAsync(invitation);
+            var notificationDto = new NotificationCreateDto
+            {
+                NotificationType = "ProjectInvitation",
+                Title = "Project Invitation",
+                Content = $"{sender.UserName} has invited you to join their personal project named {project.Name}",
+                UserId = receiver.Id
+            };
+            await _notificationService.CreateAsync(notificationDto);
+            await _unitOfWork.SaveChangesAsync();
+            return Response<bool>.Success(true, "Project invitation sent successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<bool>.Fail(ex.Message);
         }
     }
 }

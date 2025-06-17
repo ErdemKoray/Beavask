@@ -39,7 +39,7 @@ namespace Beavask.Infrastructure.Persistence
         public DbSet<TeamEvent> TeamEvents { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
-
+        public DbSet<ProjectInvitation> ProjectInvitations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -66,6 +66,12 @@ namespace Beavask.Infrastructure.Persistence
                 .HasOne(f => f.Receiver)
                 .WithMany(u => u.ReceivedFriendships)
                 .HasForeignKey(f => f.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<ProjectInvitation>()
+                .HasOne(p => p.Sender)
+                .WithMany(u => u.SentProjectInvitations)
+                .HasForeignKey(p => p.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
         }
