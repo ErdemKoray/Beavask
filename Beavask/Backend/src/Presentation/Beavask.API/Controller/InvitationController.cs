@@ -30,9 +30,9 @@ public class InvitationController : ControllerBase
     }
 
     [HttpPost("accept-friendship-request")]
-    public async Task<IActionResult> AcceptFriendshipRequest([FromBody] int friendshipId)
+    public async Task<IActionResult> AcceptFriendshipRequest([FromBody] FriendReqDto friendReqDto)
     {
-        var result = await _invitationService.AcceptFriendshipRequest(friendshipId);
+        var result = await _invitationService.AcceptFriendshipRequest(friendReqDto.FriendshipId);
         if (!result.IsSuccess)
         {
             return BadRequest(result);
@@ -41,9 +41,9 @@ public class InvitationController : ControllerBase
     }
 
     [HttpPost("reject-friendship-request")]
-    public async Task<IActionResult> RejectFriendshipRequest([FromBody] int friendshipId)
+    public async Task<IActionResult> RejectFriendshipRequest([FromBody] FriendReqDto friendReqDto)
     {
-        var result = await _invitationService.RejectFriendshipRequest(friendshipId);
+        var result = await _invitationService.RejectFriendshipRequest(friendReqDto.FriendshipId);
         if (!result.IsSuccess)
         {
             return BadRequest(result);
