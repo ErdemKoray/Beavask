@@ -7,4 +7,5 @@ public interface IProjectMemberRepository : IBaseRepository<ProjectMember, int>
 {
     Task<List<ProjectMember>> GetAllUsersByProjectIdAsync(int projectId);
     Task<List<Project>> GetProjectsByUserIdAsync(int userId);
+    Task<ProjectMember?> GetProjectMemberAsync(int userId, int projectId);
 } 

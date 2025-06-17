@@ -1,4 +1,3 @@
-using Beavask.Domain.Enums;
 
 namespace Beavask.Application.DTOs.Friendship;
 

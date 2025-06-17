@@ -34,6 +34,9 @@ public class ProjectMemberRepository : BaseRepository<ProjectMember, int>, IProj
         return projects;
     }
 
-
-
+    public async Task<ProjectMember?> GetProjectMemberAsync(int userId, int projectId)
+    {
+        return await _context.ProjectMembers
+            .FirstOrDefaultAsync(pm => pm.UserId == userId && pm.ProjectId == projectId && pm.IsActive);
+    }
 } 

@@ -143,22 +143,45 @@ public class InvitationService : IInvitationService
     {
         try
         {
+            if (request == null)
+            {
+                return Response<bool>.Fail("Request object is null");
+            }
+
+            if (!_currentUserService.UserId.HasValue)
+            {
+                return Response<bool>.Fail("Current user ID is not available");
+            }
+
             var senderId = _currentUserService.UserId.Value;
             var sender = await _unitOfWork.UserRepository.GetByIdAsync(senderId);
             if (sender == null)
             {
-                return Response<bool>.Fail("Sender not found");
+                return Response<bool>.Fail($"Sender not found with ID: {senderId}");
             }
+
+            if (request.UserId <= 0)
+            {
+                return Response<bool>.Fail("Invalid receiver user ID");
+            }
+
             var receiver = await _unitOfWork.UserRepository.GetByIdAsync(request.UserId);
             if (receiver == null)
             {
-                return Response<bool>.Fail("Receiver not found");
+                return Response<bool>.Fail($"Receiver not found with ID: {request.UserId}");
             }
+
+            if (request.ProjectId <= 0)
+            {
+                return Response<bool>.Fail("Invalid project ID");
+            }
+
             var project = await _unitOfWork.ProjectRepository.GetByIdAsync(request.ProjectId);
             if (project == null)
             {
-                return Response<bool>.Fail("Project not found");
+                return Response<bool>.Fail($"Project not found with ID: {request.ProjectId}");
             }
+
             var invitation = new ProjectInvitation
             {
                 SenderId = senderId,
@@ -166,9 +189,13 @@ public class InvitationService : IInvitationService
                 ProjectId = request.ProjectId,
                 Sender = sender,
                 Receiver = receiver,
-                Project = project
+                Project = project,
+                Status = ProjectInvitationStatus.Pending,
+                CreatedAt = DateTime.UtcNow
             };
+
             await _unitOfWork.ProjectInvitationRepository.AddAsync(invitation);
+
             var notificationDto = new NotificationCreateDto
             {
                 NotificationType = "ProjectInvitation",
@@ -176,14 +203,88 @@ public class InvitationService : IInvitationService
                 Content = $"{sender.UserName} has invited you to join their personal project named {project.Name}",
                 UserId = receiver.Id
             };
+
             await _notificationService.CreateAsync(notificationDto);
             await _unitOfWork.SaveChangesAsync();
             return Response<bool>.Success(true, "Project invitation sent successfully");
         }
         catch (Exception ex)
         {
-            return Response<bool>.Fail(ex.Message);
+            return Response<bool>.Fail($"An error occurred while sending project invitation: {ex.Message}");
         }
+    }
+
+    public async Task<Response<bool>> AcceptProjectInvitation(int invitationId)
+    {
+        try
+        {
+            if (invitationId <= 0)
+            {
+                return Response<bool>.Fail("Invalid invitation ID");
+            }
+
+            var invitation = await _unitOfWork.ProjectInvitationRepository.GetByIdAsync(invitationId);
+            if (invitation == null)
+            {
+                return Response<bool>.Fail($"Invitation not found with ID: {invitationId}");
+            }
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(invitation.ReceiverId);
+            if (user == null)
+            {
+                return Response<bool>.Fail($"User not found with ID: {invitation.ReceiverId}");
+            }
+
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(invitation.ProjectId);
+            if (project == null)
+            {
+                return Response<bool>.Fail($"Project not found with ID: {invitation.ProjectId}");
+            }
+
+            // Check if user is already a member of the project
+            var existingMembership = await _unitOfWork.ProjectMemberRepository.GetProjectMemberAsync(user.Id, project.Id);
+            if (existingMembership != null)
+            {
+                return Response<bool>.Fail("User is already a member of this project");
+            }
+
+            invitation.Status = ProjectInvitationStatus.Accepted;
+            await _unitOfWork.ProjectInvitationRepository.UpdateAsync(invitation);
+
+            var projectMember = new ProjectMember
+            {
+                UserId = user.Id,
+                ProjectId = project.Id,
+                User = user,
+                Project = project,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _unitOfWork.ProjectMemberRepository.AddAsync(projectMember);
+
+            var notificationDto = new NotificationCreateDto
+            {
+                NotificationType = "ProjectInvitationAccepted",
+                Title = "Project Invitation Accepted",
+                Content = $"{user.UserName} has accepted your invitation to join the project {project.Name}",
+                UserId = invitation.SenderId
+            };
+
+            await _notificationService.CreateAsync(notificationDto);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Response<bool>.Success(true, "Project invitation accepted successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<bool>.Fail($"An error occurred while accepting project invitation: {ex.Message}");
+        }
+    }
+
+    public Task<Response<bool>> RejectProjectInvitation(int invitationId)
+    {
+        throw new NotImplementedException();
     }
 }
 

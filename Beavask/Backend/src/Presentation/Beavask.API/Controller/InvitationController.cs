@@ -72,4 +72,16 @@ public class InvitationController : ControllerBase
         }
         return Ok(result);
     }
+
+    [HttpPost("accept-project-invitation")]
+    public async Task<IActionResult> AcceptProjectInvitation([FromBody] int invitationId)
+    {
+        var result = await _invitationService.AcceptProjectInvitation(invitationId);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
+
 }
