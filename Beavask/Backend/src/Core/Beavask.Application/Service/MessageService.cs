@@ -7,16 +7,25 @@ using AutoMapper;
 
 namespace Beavask.Application.Service;
 
-public class MessageService(IUnitOfWork unitOfWork, IMapper mapper) : IMessageService
+public class MessageService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentUserService currentUserService) : IMessageService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
-
+    private readonly ICurrentUserService _currentUserService = currentUserService;
     public async Task<Response<MessageDto>> CreateAsync(MessageCreateDto messageCreateDto)
     {
         try
         {
-            var message = _mapper.Map<Message>(messageCreateDto);
+            var senderId = _currentUserService.UserId.Value;
+            var sender = await _unitOfWork.UserRepository.GetByIdAsync(senderId);
+            var receiver = await _unitOfWork.UserRepository.GetByIdAsync(messageCreateDto.ReceiverId);
+            var message = new Message
+            {
+                Sender = sender,
+                Receiver = receiver,
+                Content = messageCreateDto.Content,
+                CreatedAt = DateTime.UtcNow,
+            };
             await _unitOfWork.MessageRepository.AddAsync(message);
             await _unitOfWork.SaveChangesAsync();
             
@@ -58,6 +67,21 @@ public class MessageService(IUnitOfWork unitOfWork, IMapper mapper) : IMessageSe
 
             var messageDtos = _mapper.Map<IEnumerable<MessageDto>>(receivedMessages);
 
+            return Response<IEnumerable<MessageDto>>.Success(messageDtos);
+        }
+        catch (Exception ex)
+        {
+            return Response<IEnumerable<MessageDto>>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<IEnumerable<MessageDto>>> GetMessagesByFriendIdIdAsync(int friendId)
+    {
+        try
+        {
+            var currentUserId = _currentUserService.UserId.Value;
+            var messages = await _unitOfWork.MessageRepository.GetMessagesByFriendIdAsync(currentUserId, friendId);
+            var messageDtos = _mapper.Map<IEnumerable<MessageDto>>(messages);
             return Response<IEnumerable<MessageDto>>.Success(messageDtos);
         }
         catch (Exception ex)

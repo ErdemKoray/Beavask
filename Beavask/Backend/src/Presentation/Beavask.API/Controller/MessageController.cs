@@ -41,5 +41,14 @@ public class MessageController : ControllerBase
             return BadRequest(result.Message);
         return CreatedAtAction(nameof(GetMessagesBySenderId), new { senderId = result.Data.SenderId }, result.Data);
     }
+
+    [HttpGet("friend/{friendId}")]
+    public async Task<IActionResult> GetMessagesByFriendId(int friendId)
+    {
+        var result = await _messageService.GetMessagesByFriendIdIdAsync(friendId);
+        if (!result.IsSuccess)
+            return NotFound(result.Message);
+        return Ok(result.Data);
+    }
 }
 

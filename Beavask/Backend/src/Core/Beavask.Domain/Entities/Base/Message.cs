@@ -6,7 +6,7 @@ namespace Beavask.Domain.Entities.Base
     {
         public int Id { get; set; }
         public string Content { get; set; }  = string.Empty;
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public required User Sender { get; set; }
         public int SenderId { get; set; }

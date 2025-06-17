@@ -4,5 +4,5 @@ namespace Beavask.Application.Interface.Repository;
 
 public interface IMessageRepository : IBaseRepository<Message, int>
 {
-    // Add any message-specific repository methods here
+    Task<IEnumerable<Message>> GetMessagesByFriendIdAsync(int currentUserId, int friendId);
 } 

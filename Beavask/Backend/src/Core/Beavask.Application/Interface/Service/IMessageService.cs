@@ -8,5 +8,6 @@ public interface IMessageService
     Task<Response<MessageDto>> CreateAsync(MessageCreateDto messageCreateDto);
     Task<Response<IEnumerable<MessageDto>>> GetMessagesBySenderIdAsync(int senderId);
     Task<Response<IEnumerable<MessageDto>>> GetMessagesByReceiverIdAsync(int receiverId);
+    Task<Response<IEnumerable<MessageDto>>> GetMessagesByFriendIdIdAsync(int friendId);
 }
 
