@@ -87,5 +87,8 @@ public class UnitOfWork : IUnitOfWork
     private IInvitationTokenRepository? _invitationTokenRepository;
     public IInvitationTokenRepository InvitationTokenRepository => _invitationTokenRepository ??= new InvitationTokenRepository(_context);
 
+    private IFriendshipRepository? _friendshipRepository;
+    public IFriendshipRepository FriendshipRepository => _friendshipRepository ??= new FriendshipRepository(_context);
+
     public Task<int> SaveChangesAsync() => _context.SaveChangesAsync();
 }

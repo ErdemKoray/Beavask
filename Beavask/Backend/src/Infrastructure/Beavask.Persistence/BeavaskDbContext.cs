@@ -38,6 +38,7 @@ namespace Beavask.Infrastructure.Persistence
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<TeamEvent> TeamEvents { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +55,19 @@ namespace Beavask.Infrastructure.Persistence
                 .WithMany(u => u.ReceivedMessages)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Sender)
+                .WithMany(u => u.SentFriendships)
+                .HasForeignKey(f => f.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Receiver)
+                .WithMany(u => u.ReceivedFriendships)
+                .HasForeignKey(f => f.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

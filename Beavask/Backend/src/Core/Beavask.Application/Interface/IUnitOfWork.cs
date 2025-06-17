@@ -30,6 +30,7 @@ public interface IUnitOfWork
     ICommentRepository CommentRepository { get; }
     IVerificationCodeRepository VerificationCodeRepository { get; }
     IInvitationTokenRepository InvitationTokenRepository { get; }
+    IFriendshipRepository FriendshipRepository { get; }
     
     Task<int> SaveChangesAsync();
 }

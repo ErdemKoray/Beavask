@@ -48,5 +48,9 @@ namespace Beavask.Domain.Entities.Base
         
         // User - Notification one-to-many relationship
         public ICollection<Notification> Notifications = new List<Notification>();
+
+        // User - Friendship one-to-many relationship
+        public ICollection<Friendship> SentFriendships = new List<Friendship>();
+        public ICollection<Friendship> ReceivedFriendships = new List<Friendship>();
     }
 }
