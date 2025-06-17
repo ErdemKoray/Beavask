@@ -96,4 +96,15 @@ public class InvitationController : ControllerBase
         }
         return Ok(result);
     }
+
+    [HttpGet("get-project-invitations")]
+    public async Task<IActionResult> GetProjectInvitations()
+    {
+        var result = await _invitationService.GetProjectInvitationsAsync();
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
 }

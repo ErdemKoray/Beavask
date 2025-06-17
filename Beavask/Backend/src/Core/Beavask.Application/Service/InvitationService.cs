@@ -321,5 +321,41 @@ public class InvitationService : IInvitationService
             return Response<bool>.Fail($"An error occurred while rejecting project invitation: {ex.Message}");
         }
     }
+
+    public async Task<Response<List<ProjectInvitationDto>>> GetProjectInvitationsAsync()
+    {
+        try
+        {
+            if (!_currentUserService.UserId.HasValue)
+            {
+                return Response<List<ProjectInvitationDto>>.Fail("User ID is not available");
+            }
+
+            var userId = _currentUserService.UserId.Value;
+            var projectInvitations = await _unitOfWork.ProjectInvitationRepository.GetProjectInvitationsByUserIdAsync(userId);
+            
+            if (projectInvitations == null)
+            {
+                return Response<List<ProjectInvitationDto>>.Success(new List<ProjectInvitationDto>(), "No project invitations found");
+            }
+
+            var projectInvitationDtos = projectInvitations.Select(invitation => new ProjectInvitationDto
+            {
+                Id = invitation.Id,
+                ProjectId = invitation.ProjectId,
+                SenderId = invitation.SenderId,
+                Status = invitation.Status,
+                CreatedAt = invitation.CreatedAt,
+                SenderName = invitation.Sender?.UserName ?? "Unknown User",
+                ProjectName = invitation.Project?.Name ?? "Unknown Project"
+            }).ToList();
+
+            return Response<List<ProjectInvitationDto>>.Success(projectInvitationDtos, "Project invitations fetched successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<List<ProjectInvitationDto>>.Fail($"An error occurred while fetching project invitations: {ex.Message}");
+        }
+    }
 }
 

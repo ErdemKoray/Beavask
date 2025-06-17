@@ -1,4 +1,3 @@
-
 namespace Beavask.Application.DTOs.Invitation;
 
 public class ProjectInvitationIdRequest

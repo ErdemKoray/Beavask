@@ -16,4 +16,5 @@ public interface IInvitationService
     Task<Response<bool>> InviteFriendToPersonelProject(PersonelProjectInvitationRequest request);
     Task<Response<bool>> AcceptProjectInvitation(ProjectInvitationIdRequest request);
     Task<Response<bool>> RejectProjectInvitation(ProjectInvitationIdRequest request);
+    Task<Response<List<ProjectInvitationDto>>> GetProjectInvitationsAsync();
 }
