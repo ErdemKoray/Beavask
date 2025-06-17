@@ -1,5 +1,7 @@
 using Beavask.Application.Common;
+using Beavask.Application.DTOs.Auth;
 using Beavask.Application.DTOs.Friendship;
+using Beavask.Application.DTOs.Invitation;
 using Beavask.Application.Interface.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,9 +76,9 @@ public class InvitationController : ControllerBase
     }
 
     [HttpPost("accept-project-invitation")]
-    public async Task<IActionResult> AcceptProjectInvitation([FromBody] int invitationId)
+    public async Task<IActionResult> AcceptProjectInvitation([FromBody] ProjectInvitationIdRequest request)
     {
-        var result = await _invitationService.AcceptProjectInvitation(invitationId);
+        var result = await _invitationService.AcceptProjectInvitation(request);
         if (!result.IsSuccess)
         {
             return BadRequest(result);
@@ -84,4 +86,14 @@ public class InvitationController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("reject-project-invitation")]
+    public async Task<IActionResult> RejectProjectInvitation([FromBody] ProjectInvitationIdRequest request)
+    {
+        var result = await _invitationService.RejectProjectInvitation(request);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
 }

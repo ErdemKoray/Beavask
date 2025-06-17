@@ -1,5 +1,7 @@
 using Beavask.Application.Common;
+using Beavask.Application.DTOs.Auth;
 using Beavask.Application.DTOs.Friendship;
+using Beavask.Application.DTOs.Invitation;
 using Beavask.Application.DTOs.NotificationDtos;
 using Beavask.Application.DTOs.User;
 using Beavask.Application.Interface;
@@ -214,19 +216,19 @@ public class InvitationService : IInvitationService
         }
     }
 
-    public async Task<Response<bool>> AcceptProjectInvitation(int invitationId)
+    public async Task<Response<bool>> AcceptProjectInvitation(ProjectInvitationIdRequest request)
     {
         try
         {
-            if (invitationId <= 0)
+            if (request.ProjectInvitationId <= 0)
             {
                 return Response<bool>.Fail("Invalid invitation ID");
             }
 
-            var invitation = await _unitOfWork.ProjectInvitationRepository.GetByIdAsync(invitationId);
+            var invitation = await _unitOfWork.ProjectInvitationRepository.GetByIdAsync(request.ProjectInvitationId);
             if (invitation == null)
             {
-                return Response<bool>.Fail($"Invitation not found with ID: {invitationId}");
+                return Response<bool>.Fail($"Invitation not found with ID: {request.ProjectInvitationId}");
             }
 
             var user = await _unitOfWork.UserRepository.GetByIdAsync(invitation.ReceiverId);
@@ -282,9 +284,42 @@ public class InvitationService : IInvitationService
         }
     }
 
-    public Task<Response<bool>> RejectProjectInvitation(int invitationId)
+    public async Task<Response<bool>> RejectProjectInvitation(ProjectInvitationIdRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var invitation = await _unitOfWork.ProjectInvitationRepository.GetByIdAsync(request.ProjectInvitationId);
+            if (invitation == null)
+            {
+                return Response<bool>.Fail("Project invitation not found");
+            }
+
+            var currentUserId = _currentUserService.UserId.Value;
+            if (invitation.ReceiverId != currentUserId)
+            {
+                return Response<bool>.Fail("You are not authorized to reject this invitation");
+            }
+
+            invitation.Status = ProjectInvitationStatus.Rejected;
+            await _unitOfWork.ProjectInvitationRepository.UpdateAsync(invitation);
+
+            var notificationDto = new NotificationCreateDto
+            {
+                NotificationType = "ProjectInvitationRejected",
+                Title = "Project Invitation Rejected",
+                Content = $"Your project invitation has been rejected",
+                UserId = invitation.SenderId
+            };
+
+            await _notificationService.CreateAsync(notificationDto);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Response<bool>.Success(true, "Project invitation rejected successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<bool>.Fail($"An error occurred while rejecting project invitation: {ex.Message}");
+        }
     }
 }
 

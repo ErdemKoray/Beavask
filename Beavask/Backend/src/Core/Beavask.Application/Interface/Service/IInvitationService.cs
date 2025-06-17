@@ -1,5 +1,7 @@
 using Beavask.Application.Common;
+using Beavask.Application.DTOs.Auth;
 using Beavask.Application.DTOs.Friendship;
+using Beavask.Application.DTOs.Invitation;
 using Beavask.Application.DTOs.User;
 using Beavask.Domain.Entities.Base;
 
@@ -12,6 +14,6 @@ public interface IInvitationService
     Task<Response<bool>> RejectFriendshipRequest(int friendshipId);
     Task<Response<List<PendingFriendRequestDto>>> GetPendingFriendRequestsAsync();
     Task<Response<bool>> InviteFriendToPersonelProject(PersonelProjectInvitationRequest request);
-    Task<Response<bool>> AcceptProjectInvitation(int invitationId);
-    Task<Response<bool>> RejectProjectInvitation(int invitationId);
+    Task<Response<bool>> AcceptProjectInvitation(ProjectInvitationIdRequest request);
+    Task<Response<bool>> RejectProjectInvitation(ProjectInvitationIdRequest request);
 }
