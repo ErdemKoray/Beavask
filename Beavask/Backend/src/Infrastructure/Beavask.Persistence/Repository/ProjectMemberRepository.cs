@@ -18,7 +18,8 @@ public class ProjectMemberRepository : BaseRepository<ProjectMember, int>, IProj
     public async Task<List<ProjectMember>> GetAllUsersByProjectIdAsync(int projectId)
     {
         var projectMembers = await _context.ProjectMembers
-            .Where(pm => pm.ProjectId == projectId)
+            .Where(pm => pm.ProjectId == projectId && pm.IsActive)
+            .Include(pm => pm.User)  // Include User data
             .ToListAsync();
         return projectMembers;
     }

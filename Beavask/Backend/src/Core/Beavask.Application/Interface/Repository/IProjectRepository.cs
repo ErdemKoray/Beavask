@@ -8,4 +8,5 @@ public interface IProjectRepository : IBaseRepository<Project, int>
     Task<bool> AskProjectNameExistsForCompany(string repoUrl, int companyId);
     Task<List<Project>> GetAllProjectsByCompanyId(int companyId);
     Task<List<Project>> GetAllProjectsByUserId(int userId);
+    Task<int> GetProjectOwnerByProjectId(int projectId);
 } 

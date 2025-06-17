@@ -7,6 +7,7 @@ using Beavask.Domain.Entities.Base;
 using Beavask.Application.DTOs.Repo;
 using Beavask.Application.Helper;
 using Beavask.Domain.Entities.Join;
+using Beavask.Application.DTOs.User;
 
 namespace Beavask.Application.Service;
 
@@ -223,6 +224,50 @@ public class ProjectService : IProjectService
         }
     }
 
+    public async Task<Response<List<UserDto>>> GetAllUsersByProjectIdAsync(int projectId)
+    {
+        try
+        {
+            var project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId);
+            if (project == null)
+            {
+                return Response<List<UserDto>>.Fail("Project not found");
+            }
 
+            var projectOwnerId = await _unitOfWork.ProjectRepository.GetProjectOwnerByProjectId(projectId);
+            var projectOwner = await _unitOfWork.UserRepository.GetByIdAsync(projectOwnerId);
+            var projectMembers = await _unitOfWork.ProjectMemberRepository.GetAllUsersByProjectIdAsync(projectId);
+            
+            var users = new List<UserDto>();
+            
+            // Add project owner
+            if (projectOwner != null)
+            {
+                users.Add(_mapper.Map<UserDto>(projectOwner));
+            }
+            
+            // Add project members
+            if (projectMembers != null && projectMembers.Any())
+            {
+                foreach (var member in projectMembers)
+                {
+                    if (member.User != null)
+                    {
+                        var userDto = _mapper.Map<UserDto>(member.User);
+                        if (!users.Any(u => u.Id == userDto.Id)) // Prevent duplicate users
+                        {
+                            users.Add(userDto);
+                        }
+                    }
+                }
+            }
+            
+            return Response<List<UserDto>>.Success(users, "Project users fetched successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<List<UserDto>>.Fail($"Error: {ex.Message}");
+        }
+    }
 }
 

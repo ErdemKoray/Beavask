@@ -45,4 +45,12 @@ public class ProjectRepository : BaseRepository<Project, int>, IProjectRepositor
             .ToListAsync();
         return projects;
     }
-} 
+
+    public async Task<int> GetProjectOwnerByProjectId(int projectId)
+    {
+        var project = await dbContext.Projects
+            .Where(p => p.Id == projectId)
+            .FirstOrDefaultAsync();
+        return project.UserId ?? 0;
+    }
+}   

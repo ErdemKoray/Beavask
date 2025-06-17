@@ -60,5 +60,11 @@ public class ProjectController(IProjectService projectService, ICurrentUserServi
         var result = await _projectService.GetAllProjectsByUserIdAsync();
         return result.IsSuccess ? Ok(result) : StatusCode(500, result);
     }
+    [HttpGet("get-all-users-by-project-id")]
+    public async Task<IActionResult> GetAllUsersByProjectId(int projectId)
+    {
+        var result = await _projectService.GetAllUsersByProjectIdAsync(projectId);
+        return result.IsSuccess ? Ok(result) : NotFound(result);
+    }
 }
 
