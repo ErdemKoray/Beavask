@@ -1,6 +1,7 @@
 using Beavask.Application.Common;
 using Beavask.Application.DTOs.Friendship;
 using Beavask.Application.DTOs.NotificationDtos;
+using Beavask.Application.DTOs.User;
 using Beavask.Application.Interface;
 using Beavask.Application.Interface.Repository;
 using Beavask.Application.Interface.Service;
@@ -120,6 +121,20 @@ public class InvitationService : IInvitationService
         catch (Exception ex)
         {
             return Response<bool>.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Response<List<PendingFriendRequestDto>>> GetPendingFriendRequestsAsync()
+    {
+        try
+        {
+            var userId = _currentUserService.UserId.Value;
+            var pendingFriendRequests = await _unitOfWork.FriendshipRepository.GetPendingFriendRequestsAsync(userId);
+            return Response<List<PendingFriendRequestDto>>.Success(pendingFriendRequests, "Pending friend requests fetched successfully");
+        }
+        catch (Exception ex)
+        {
+            return Response<List<PendingFriendRequestDto>>.Fail(ex.Message);
         }
     }
 }

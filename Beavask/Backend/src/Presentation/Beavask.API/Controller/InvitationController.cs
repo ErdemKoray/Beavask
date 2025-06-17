@@ -50,4 +50,15 @@ public class InvitationController : ControllerBase
         }
         return Ok(result);
     }
+
+    [HttpGet("get-pending-friend-requests")]
+    public async Task<IActionResult> GetPendingFriendRequests()
+    {
+        var result = await _invitationService.GetPendingFriendRequestsAsync();
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+        return Ok(result);
+    }
 }
