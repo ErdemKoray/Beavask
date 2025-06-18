@@ -1,51 +1,71 @@
 <div class="bv-team-container d-flex flex-column bv-shadow-2">
-    <!-- Team Banner -->
-    <div class="bv-team-header">
-      <img [src]="headerImagePath" alt="Team Banner" class="bv-team-banner" />
-      <div class="bv-team-info">
-        <h2>{{ team?.name }}</h2>
-        <p>{{ team?.title }}</p>
-      </div>
-    </div>
-  
-    <!-- Main Body -->
-    <div class="bv-team-main d-flex flex-row">
-      
-      <div class="bv-team-left">
-        <h3>Team Members</h3>
-            <div  (click)="gotoprofile()" class="bv-team-member bv-transition d-flex align-items-center bv-radius-3" *ngFor="let member of members">
-              <img [src]="member.profileImagePath || 'assets/default-profile.png'" class="bv-team-member-img bv-radius-round" />
-              <div class="bv-team-member-info">
-                <span class="bv-member-name">{{ member.firstName }} {{ member.lastName }}</span>
-                <span class="bv-member-role">{{ member.role }}</span>
-              </div>
-              <div class="bv-member-status" [ngClass]="{ 'active': member.isActive, 'inactive': !member.isActive }">
-                ● {{ member.isActive ? 'Active' : 'Inactive' }}
-              </div>
-           
-        </div>
-      </div>
-  
-      <div class="bv-team-right">
-        <div class="bv-team-section">
-          <h3>Assigned Tasks</h3>
-          <div class="bv-task-card" *ngFor="let task of tasks">
-            <div class="bv-task-title">{{ task.title }}</div>
-            <div class="bv-task-user">Assigned to: {{ task.assignedUserName }}</div>
-            <div class="bv-task-status">{{ task.status }}</div>
-          </div>
-        </div>
-  
-     
-        <div class="bv-team-section">
-          <h3>Team Activity</h3>
-          <div class="bv-activity-log bv-radius-2" *ngFor="let act of activities">
-            <div class="bv-activity-user">{{ act.userName }}</div>
-            <div class="bv-activity-desc">{{ act.description }}</div>
-            <div class="bv-activity-time">{{ act.createdAt | date:'short' }}</div>
-          </div>
-        </div>
-      </div>
+
+  <!-- Takım Banner -->
+  <div class="bv-team-header position-relative">
+    <img [src]="headerImagePath" alt="Team Banner" class="bv-team-banner" />
+    <div class="bv-team-info position-absolute bottom-0 start-0 p-3">
+      <h1>{{ team?.name }} </h1>
+      <p style="font-size:20px; font-weight:900;">{{ team?.title || 'No description provided' }}</p>
     </div>
   </div>
-  
+
+  <!-- Ana Kısım -->
+  <div class="bv-team-main d-flex flex-row flex-wrap gap-4 mt-4">
+
+    <!-- Üyeler -->
+    <div class="bv-team-left flex-fill">
+      <h3>Team Members</h3>
+      <div *ngIf="members.length > 0; else noMembers">
+        <div routerLink="/userprofile/{{member.id}}" *ngFor="let member of members"
+             class="bv-team-member d-flex align-items-center gap-3 p-3 mb-3 bv-radius-3 bv-transition"
+             role="button">
+
+          <img [src]=" 'iconbeavask.png' "
+               class="bv-team-member-img bv-radius-round"
+               alt="{{ member.username }}" />
+
+          <div class="flex-grow-1">
+            <div class="bv-member-name fw-semibold">{{ member.username }}</div>
+            <div class="text-muted small">{{ member.email }}</div>
+          </div>
+
+          <div class="bv-member-status small fw-medium"
+               [ngClass]="{ 'active': member.isActive, 'inactive': !member.isActive }">
+            ● {{ member.isActive ? 'Active' : 'Inactive' }}
+          </div>
+        </div>
+      </div>
+      <ng-template #noMembers>
+        <p class="text-muted small fst-italic">No members found in this team.</p>
+      </ng-template>
+    </div>
+
+    <!-- Projeler ve Görevler -->
+    <div class="bv-team-right flex-fill d-flex flex-column gap-4">
+      <div class="bv-team-section">
+        <h3>Projects & Tasks</h3>
+        <div *ngFor="let project of projects" class="bv-project-section bv-radius-3 p-3 mb-3 bv-shadow-1">
+          <a [routerLink]="getProjectLink(project.id)" class="bv-project-name fw-semibold">
+            {{ project.name }}
+          </a>
+          <ul>
+            <li *ngFor="let task of tasksMap[project.id]">
+              <a [routerLink]="getTaskLink(project.id, task.id)">
+                {{ task.title }}
+              </a>
+            </li>
+            <li *ngIf="!tasksMap[project.id] || tasksMap[project.id].length === 0" class="text-muted fst-italic">
+              No tasks found.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bv-team-section">
+        <h3>Team Activity</h3>
+        <p class="text-muted fst-italic">Activity log integration pending...</p>
+      </div>
+    </div>
+
+  </div>
+</div>

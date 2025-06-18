@@ -1,20 +1,35 @@
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
+import {  Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { InlineEditComponent } from './inline-edit/inline-edit.component';
+
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { ShareModalComponent } from './share/share.component';
 import { ProjectsService } from '../../../../../../common/services/projects/projects.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TaskService } from '../../../../../../common/services/task/task.service';
 import { CreateTaskModel } from '../../../../../../common/services/task/taskModel/createTask.model';
 import { ToastService } from '../../../../../../components/toast/toast.service';
-import { TaskPriority ,mapPriority} from '../../../../../../common/model/taskPriority.model';
+import { TaskPriority } from '../../../../../../common/model/taskPriority.model';
 import { Task } from '../../../../../../common/services/task/taskModel/task.model';
-import { TaskStatus ,mapStatus} from '../../../../../../common/model/taskStatus.model';
+import { TaskStatus } from '../../../../../../common/model/taskStatus.model';
 import { Subscription } from 'rxjs';
 import { PnavbarComponent } from '../pnavbar/pnavbar.component';
 import { SummaryComponent } from "../summary/summary.component";
+import {
+  CdkDragDrop,
+  CdkDrag,
+  CdkDropList,
+  CdkDropListGroup,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { UpdateTaskModel } from '../../../../../../common/services/task/taskModel/updateTask.model';
+import { AuthprofileService } from '../../../../../../common/services/profile/authprofile.service';
+import { ProjectDetail } from '../../../../../../common/services/projects/ProjectDetail.model';
+import { Project } from '../../../../../../common/model/project.model';
+import { TranslateModule } from '@ngx-translate/core';
+import { ProjectUserService } from '../../../../../../common/services/projects/project-user.service';
+import { Friend } from '../../../../../../common/services/friendship/friendship.service';
 
 
 
@@ -22,15 +37,30 @@ import { SummaryComponent } from "../summary/summary.component";
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule, PnavbarComponent, FormsModule, TaskDetailComponent, ShareModalComponent, TitleCasePipe, SummaryComponent],
+  imports: [CommonModule,
+        TranslateModule,
+     PnavbarComponent,
+      FormsModule,
+       TaskDetailComponent, 
+       ShareModalComponent,
+        TitleCasePipe,
+         SummaryComponent,
+         CdkDropListGroup, 
+         CdkDropList,
+          CdkDrag,
+          RouterLink
+        ],
   templateUrl: './board.component.html',
   styleUrl: './board.component.css'
 })
 export class BoardComponent implements OnInit,OnDestroy {
-
+ searchQuery: string = ''; 
+ 
   activeBoard=true;
   activeSummary=false;
+
   projectId: number= 0;
+  projectDetail: Project | null = null;
   taskdetailmodalid = 0;
   isCreateTaskOpen: boolean = false;
   shareVisible = false;
@@ -39,7 +69,6 @@ export class BoardComponent implements OnInit,OnDestroy {
   isCreateProjectOpen = false;
   activeDetail=false
   taskPriorities = Object.values(TaskPriority).filter(value => typeof value === 'number') as number[];
-  taskStatus = Object.values(TaskPriority).filter(value => typeof value !== 'number'); 
 private routeSub: Subscription = new Subscription();
   
   taskModel: CreateTaskModel = {
@@ -57,17 +86,19 @@ private routeSub: Subscription = new Subscription();
   column: { [key: string]: Task[] } = {
     NotStarted: [],
     InProgress: [],
-    Blocked: [],
     OnHold: [],
     Cancelled: [],
     Completed: []
   };
 
- 
+   friends: Friend[] = [];
   constructor(private apiProject:ProjectsService,
     private apiTask:TaskService,
     private route:ActivatedRoute,
-    private toastServices:ToastService) { }
+    private toastServices:ToastService,
+  private authapi:AuthprofileService,
+  private projectUserService:ProjectUserService
+) { }
 
 ngOnInit(): void {
   this.routeSub = this.route.params.subscribe(params => {
@@ -81,6 +112,7 @@ ngOnInit(): void {
         next: (res) => {
           this.tasks = this.formatTasks(res.data);
           this.groupTasksByStatus();
+          this.projectUser();
 
           if (incomingTaskId) {
             this.toggleTaskDetail(incomingTaskId);
@@ -95,25 +127,34 @@ ngOnInit(): void {
 }
 
 
-
+onImageError(event: Event) {
+  const imgElement = event.target as HTMLImageElement;
+  imgElement.src = 'iconbeavask.png'; 
+}
   ngOnDestroy(): void {
     this.routeSub.unsubscribe()
   }
 
 
-
-
-
-  
-  
-  
-  
-
-
-
+projectUser(){
+          this.projectUserService.getProjectUser(this.projectId).subscribe({
+          next: (response) => {
+            console.log(response.data)
+            this.friends = response.data || [];       
+            
+          },
+          error: () => { 
+         
+          }
+        });
+}
 
 //GENEL FONKSİYONLAR BÖLÜMÜ
 
+handleInvite(userId: number) {
+  // Örn: snackbar, listeyi güncelle vs.
+  console.log('Davet gönderildi:', userId);
+}
 
 onActiveBoardChange(active: boolean) {
   this.activeBoard = active;
@@ -164,7 +205,8 @@ onTaskDeleted(deletedTaskId: number) {
  
     this.apiProject.getById(pId).subscribe((response) => {
       if (response?.data) {
-       
+       console.log('Project Details:', response.data);
+       this.projectDetail = response.data;
       }
     });
   }
@@ -197,7 +239,7 @@ formatTasks(tasks: any[]): Task[] {
     startDate: new Date(task.startDate),
     dueDate: new Date(task.dueDate),
     completedDate: task.completedDate ? new Date(task.completedDate) : null,
-    isActive: true, // Gelen JSON'da yoksa varsayılan true atanabilir
+    isActive: true,
     priority: task.priority,
     status: task.status,
     projectId: task.projectId,
@@ -313,6 +355,7 @@ formatTasks(tasks: any[]): Task[] {
     this.isCreateProjectOpen = false;
     this.activeDetail=false;
     this.isCreateTaskOpen=false;
+    this.shareVisible=false;
   }
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: MouseEvent) {
@@ -334,16 +377,113 @@ formatTasks(tasks: any[]): Task[] {
     ) {
       this.activeDetail = false;
     }
-       if (
-      this.isCreateTaskOpen &&
-      !target.closest('.bv-cp-container') &&
-      !target.closest('[data-modal="task"]')
+      
+     if (
+      this.shareVisible &&
+      !target.closest('.project-invite-root') &&
+      !target.closest('[data-modal="shareVisible"]')
     ) {
-      this.isCreateTaskOpen = false;
+      this.shareVisible = false;
     }
   }
   
 
+taskStatusKeys = Object.keys(this.column); 
+
+
+drop(event: CdkDragDrop<Task[]>) {
+  if (event.previousContainer === event.container) {
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  } else {
+    const task = event.previousContainer.data[event.previousIndex];
+    const newStatusEnum = this.mapStatusStringToEnum(event.container.id);
+
+    // Status aynıysa işlem yapma
+    if (task.status === newStatusEnum) {
+      return;
+    }
+
+    this.authapi.whoami().subscribe({
+      next: (response) => {
+        const currentUserId = response.userId;
+        if (task.assignedUserId !== currentUserId) {
+          this.toastServices.show({
+            title: 'Unauthorized',
+            message: 'Only the assigned user can change the status.'
+          });
+          return;
+        }
+
+        const updatedTaskModel: UpdateTaskModel = {
+          title: task.title,
+          description: task.description,
+          startDate: task.startDate.toISOString(),
+          dueDate: task.dueDate.toISOString(),
+          completedDate: task.completedDate ? task.completedDate.toISOString() : new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          priority: task.priority,
+          status: newStatusEnum,
+          assignedUserId: task.assignedUserId ?? 0
+        };
+
+        this.apiTask.updateTask(task.id, updatedTaskModel).subscribe({
+          next: () => {
+            task.status = newStatusEnum;
+            task.updatedAt = new Date();
+            transferArrayItem(
+              event.previousContainer.data,
+              event.container.data,
+              event.previousIndex,
+              event.currentIndex
+            );
+
+          },
+          error: err => {
+            this.toastServices.show({
+              title: 'Error',
+              message: 'Status update failed: ' + (err?.error?.message || err.message)
+            });
+          }
+        });
+      },
+      error: err => {
+        this.toastServices.show({
+          title: 'Error',
+          message: 'Authorization check failed: ' + (err?.error?.message || err.message)
+        });
+        
+      }
+    });
+  }
+}
+
+
+mapStatusStringToEnum(statusString: string): TaskStatus {
+  switch (statusString) {
+    case 'NotStarted': return TaskStatus.NotStarted;
+    case 'InProgress': return TaskStatus.InProgress;
+    case 'OnHold': return TaskStatus.OnHold;
+    case 'Cancelled': return TaskStatus.Cancelled;
+    case 'Completed': return TaskStatus.Completed;
+    default: return TaskStatus.NotStarted;
+  }
+}
+
+ getFilteredTasks(status: string): Task[] {
+    // 'searchQuery' ile arama yapıyoruz
+    const query = this.searchQuery.toLowerCase();
+    
+    // Eğer arama boşsa tüm taskları döndürüyoruz
+    if (!query) {
+      return this.column[status];
+    }
+
+    // Arama terimine göre taskları filtreliyoruz
+    return this.column[status].filter(task => 
+      task.title.toLowerCase().includes(query) || 
+      task.description.toLowerCase().includes(query)
+    );
+  }
 }
 
 

@@ -6,11 +6,14 @@ import { ToastService } from '../../../components/toast/toast.service';
 import { CommonModule } from '@angular/common';
 import { ToastComponent } from '../../../components/toast/toast.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
+import { LangService } from '../../../common/services/lang/lang.service';
+import { ForgetPasswordComponent } from '../forget-password/forget-password.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ToastComponent, ReactiveFormsModule],
+  imports: [CommonModule, ToastComponent, ReactiveFormsModule,TranslateModule,ForgetPasswordComponent],
   templateUrl: './login.component.html',
   animations: [
     trigger('slideUp', [
@@ -28,8 +31,10 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class LoginComponent implements OnInit {
   
   loginForm!: FormGroup;
+  sendMail!:FormGroup;
   darkMode: boolean = false;
   isLoading: boolean = false;
+  showMail: boolean = false;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -39,6 +44,7 @@ export class LoginComponent implements OnInit {
 
   showLogin = false;
   showRegister = true;
+  openModal=false;
 
   ngOnInit(): void {
     this.showLogin = true;
@@ -50,7 +56,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],  
       password: ['', [Validators.required, Validators.minLength(6)]], 
-    });
+    }); 
   }
 
   // GitHub Login yönlendirmesi
@@ -108,4 +114,17 @@ goToCompanyLogin(): void {
       this.router.navigate(['/register'])
      }, 1000);
   }
+  
+  toogleForgotPassModal() {
+    this.showMail = !this.showMail;
+    this.showLogin = !this.showLogin;
+  }
+
+
+
+
+
+
+
+
 }

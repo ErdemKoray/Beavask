@@ -217,10 +217,7 @@ getUserProject() {
     },
     error: (err) => {
       const errorMessage = err?.error?.message || 'An unexpected error occurred';
-      this.toastService.show({
-        title: 'Error',
-        message: 'An error occurred while fetching data: ' + errorMessage,
-      });
+     
     },
   });
 }
@@ -248,10 +245,7 @@ getUserTask() {
       });
     },
     error: (err) => {
-      this.toastService.show({
-        title: 'Error',
-        message: 'WhoAmI failed: ' + err.message
-      });
+     
     }
   });
 }
@@ -302,7 +296,7 @@ getUserTask() {
       const cproject: cProject | any= {
         repoUrl: this.form.value.projectName
       };
-      console.log(this.form.value);
+   
 
 
 this.createPApi.create(cproject).subscribe({
@@ -358,7 +352,7 @@ this.createPApi.create(cproject).subscribe({
 
   createnewproject() {
     if (this.form.valid) {
-      console.log(this.form.value);
+
       this.form.reset();
       this.toggleCreateProject();
     }
@@ -369,16 +363,27 @@ this.createPApi.create(cproject).subscribe({
     this.router.navigate(['/login']);
   }
 
-  getTeams() {
-    this.teamService.getAll().subscribe(response => {
-      if (response?.data) {
-        this.teams = response.data.slice(0,3).map((team: any) => ({
-          id: team.id,
-          name: team.title 
-        }));
-      }
-    });
-  }
+getTeams(): void {
+  this.teamService.getAllUserTeams().subscribe({
+    next: (response) => {
+
+      const rawData = response?.data;
+
+      // Eğer tek nesne geldiyse array'e çeviriyoruz
+      const teams = Array.isArray(rawData) ? rawData : rawData ? [rawData] : [];
+
+      this.teams = teams.slice(0, 3).map(team => ({
+        id: team.id,
+        name: team.title || 'Unnamed Team'
+      }));
+
+    
+    },
+    error: (err) => {
+      console.warn('Failed to fetch user teams:', err);
+    }
+  });
+}
 
 
   generateInitialsAvatar(name: string, size: number = 100): string {

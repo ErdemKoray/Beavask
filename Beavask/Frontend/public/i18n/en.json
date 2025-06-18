@@ -16,9 +16,21 @@
     "recentTasks": "Recent Tasks",
     "recentProjects": "Recent Projects",
     "recentTeams": "Recent Teams",
-    "recentWork": "Recent Work"
+    "recentWork": "Recent Work",
+    "quit":"Quit",
+    "connections":"connections"
 
   },
+  
+  "chat": {
+    "supportTitle": "Chat Support",
+    "support": "Support",
+    "you": "You",
+    "noMessages": "No messages yet.",
+    "typeMessage": "Type a message...",
+    "noContacts": "No contacts found."
+}
+,
   "project": {
     "createProject": "Create Project",
     "githubProjectLink": "Github Project Link",
@@ -35,12 +47,85 @@
     "projectNamePlaceholder": "e.g. github.com/../..",
     "projectKeyPlaceholder": "e.g. MKT",
     "projectDescriptionPlaceholder": "Write about the project...",
-    "bugTracking": "Bug Tracking"
+    "bugTracking": "Bug Tracking",
+    "project": "Projects",
+    "searchProject": "Search Project",
+        "inviteFriends": {
+      "title": "Invite Friends to Project",
+      "loading": "Loading...",
+      "empty": "No friends available to invite.",
+      "button": "Invite to Project",
+      "sent": "Invitation Sent"
+    }
+,
+    "detail":{
+      "projectDetail": "Project Detail",
+      "projectNameDetail": "Project Name",
+      "projectKeyDetail": "Project Key",
+      "projectDescriptionDetail": "Project Description",
+      "startDateDetail": "Start Date",
+      "endDateDetail": "End Date",
+      "projectLeadDetail": "Project Lead",
+      "projectTypeDetail": "Project Type",
+      "priorityDetail": "Priority",
+      "statusDetail": "Status",
+      "attachmentDetail": "Attachment",
+      "action":"action"
+    }, "invitation": {
+      "title": "Project Invitations",
+      "invitedBy": "Invited by",
+      "accept": "Accept",
+      "reject": "Reject",
+      "noPending": "There are no pending project invitations."
+    }
+  },
+  "task": {
+  "createTask": "Create Task",
+  "title": "Title",
+  "titlePlaceholder": "Enter task title",
+  "description": "Description",
+  "descriptionPlaceholder": "Enter task description",
+  "startDate": "Start Date",
+  "dueDate": "Due Date",
+  "priority": "Priority",
+  "submit": "Submit",
+  "close": "Close",
+  "searchPlaceholder": "Search tasks...",
+  "createIssue": "Create Issue",
+    "myTasks": "My Tasks",
+    "allProjects": "All Projects",
+    "project": "Project",
+    "status": "Status",
+    "previous": "Previous",
+    "next": "Next"
+}, "dashboard": {
+    "tasksCompleted": "Tasks Completed",
+    "tasksCreated": "Tasks Created",
+    "inProgress": "In Progress",
+    "dueToday": "Due Today",
+    "thisWeek": "this week",
+    "currentlyWorking": "currently working on",
+    "dontForget": "don’t forget!",
+    "myRecentTasks": "My Recent Tasks",
+    "taskDistribution": "Task Distribution",
+    "todo": "To Do",
+    "done": "Done",
+    "lastComments": "Last Comments",
+    "activeProjects": "Active Projects",
+    "project": "Project",
+    "description": "Description",
+    "owner": "Created At",
+    "title": "Title",
+    "priority": "Priority",
+    "status": "Status",
+    "dueDate": "Due Date"
   },
   "priority": {
-    "low": "Low",
-    "medium": "Medium",
-    "high": "High"
+    "Notstarted": "Not started",
+    "Inprogress": "In progress",
+    "Completed": "Completed",
+    "Onhold": "On hold",
+    "Cancelled": "Cancelled"
   },
   "status": {
     "draft": "Draft",
@@ -50,6 +135,69 @@
   "button": {
     "create": "Create",
     "cancel": "Cancel"
+  },
+  "login": {
+    "login": "Login",
+    "email": "Email address",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": {
+       "title": "Forgot your password?",
+  "description": "Enter your email address to reset your password.",
+  "mail": "Email",
+  "mailPlaceholder": "Enter your email address",
+  "send": "Send",
+  "enterCode": "Enter the verification code sent to {{mail}}.",
+  "code": "Verification Code",
+  "codePlaceholder": "Enter the code",
+  "codeHelper": "If you did not receive the code, please check your spam folder.",
+  "resetTitle": "Create a New Password",
+  "newPassword": "New Password",
+  "passwordPlaceholder": "Enter your new password",
+  "confirmPassword": "Confirm Password",
+  "confirmPasswordPlaceholder": "Re-enter your password",
+  "save": "Save"
+}
+,
+    "passsRequired": "Password is required.",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Please enter a valid email address.",
+    "invalidPassword": "Password must be at least 6 characters long.",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "or": "or",
+    "createAccount": "Create an account",
+    "loading": "Loading...",
+    "loginCompany": "Login company account"
+
+  },
+  "register": {
+    "register": "Register",
+    "email": "Email address",
+    "password": "Password",
+    "username":"Username",
+      "usernameRequired": "Username is required.",
+  "usernameMinLength": "Username must be at least 4 characters.",
+  "usernameMaxLength": "Username cannot exceed 30 characters.",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "createCompanyAccount": "Create a company account",
+    "companyName": "Company Name",
+    "termsAndConditions": "I agree to the Terms and Conditions",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "registerCompany": "Register company account",
+    "loading": "Loading...",
+    "emailRequired": "Email is required.",
+    "passwordRequired": "Password is required.",
+    "confirmPasswordRequired": "Confirm password is required.",
+    "firstNameRequired": "First name is required.",
+    "lastNameRequired": "Last name is required.",
+    "companyNameRequired": "Company name is required.",
+    "invalidEmail": "Please enter a valid email address.",
+    "invalidPassword": "Password must be at least 6 characters long.",
+    "passwordsDoNotMatch": "Passwords do not match."
   },
   "home": {
     "welcome":"Welcome",
@@ -67,15 +215,13 @@
     "recentWork": "Recent Work",
     "myActivity": "My Activity",
     "previous": "Previous",
-    "next": "Next",
-    "pageInfo": "Page: {{ currentPage }} of {{ totalPages }}",
-    "paginationInfo": "Showing {{ currentItemsRange }} items"
+    "next": "Next"
   },
   "userprofile": {
     "about": "About",
     "userProfile": "User Profile",
     "userName": "User Name",
-    "contact":"Contact",
+    "contact":"contact information and links",
     "userEmail": "User Email",
     "userTeam":"User Team",
     "userLinkedln":"User Linkedln",
@@ -88,8 +234,45 @@
     "updateProfile": "Update Profile",
     "changePassword": "Change Password",
     "totalProjects": "Total Projects",
-    "totalTasks": "Total Tasks"
-  }
+    "totalTasks": "Total Tasks",
+       "lastTasks": "Recent Tasks",
+    "loadingTasks": "Loading tasks...",
+    "completed": "Completed",
+    "active": "Active",
+    "noTasks": "No active tasks.",
+    "lastProjects": "Recent Projects",
+    "loadingProjects": "Loading projects...",
+    "archived": "Archived",
+    "noProjects": "No active projects."
+  },
+"connections": {
+  "myConnections": "My Connections",
+  "addConnection": "Add Connection",
+  "noConnections": "No connections found. Click \"Add Connection\" to get started!",
+  "avatar": "Avatar",
+  "username": "Username",
+  "email": "Email",
+  "addedDate": "Added Date",
+  "actions": "Actions",
+  "remove": "Remove",
+  "confirmRemove": "Are you sure you want to remove this connection?",
+  "successAdd": "Connection added successfully.",
+  "successRemove": "Connection removed successfully.",
+  "cancel": "Cancel",
+    "save":"Save"
+},
+"summary": {
+  "created": "Created",
+  "inprogress": "In Progress",
+  "canceled": "Canceled",
+  "completed": "Completed",
+  "todo": "To Do",
+  "done": "Done",
+  "noActivity": "No activity yet",
+  "activityHelper": "Create issues and invite teammates to track progress."
+}
+
+
 
 
 }

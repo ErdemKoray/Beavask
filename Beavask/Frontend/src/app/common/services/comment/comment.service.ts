@@ -17,8 +17,8 @@ export class CommentService {
    getCommentByTaskId(id:number): Observable<ApiResponse<Comment[]>>{
     return this._http.get<ApiResponse<Comment[]>>(`${this.endpoint}/task/${id}`)
    }
-getCommentByUserId(id: number): Observable<ApiResponse<Comment[]>> {
-  return this._http.get<ApiResponse<Comment[]>>(`${this.endpoint}/user/${id}`);
+getCommentByUserId(): Observable<ApiResponse<Comment[]>> {
+  return this._http.get<ApiResponse<Comment[]>>(`${this.endpoint}`);
 }
 
    createComment(model:CreateComment): Observable<ApiResponse<CreateComment>>{

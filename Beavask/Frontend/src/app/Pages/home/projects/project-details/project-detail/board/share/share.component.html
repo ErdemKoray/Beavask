@@ -1,23 +1,26 @@
-<div class="share-backdrop" (click)="hide()">
-    <div class="share-panel" (click)="$event.stopPropagation()">
-      <header class="share-head">
-        <span>Share</span>
-        <button class="icon-btn" (click)="hide()">✕</button>
-      </header>
+<div class="pi-container">
+  <div class="project-invite-root">
+    <h4>{{ 'project.inviteFriends.title' | translate }}</h4>
   
-      <div class="share-link">
-        <input [value]="url" readonly />
-        <button class="btn btn--primary" (click)="copy()">
-          {{ copied ? 'Copied!' : 'Copy' }}
+    <div *ngIf="loading" class="loading">{{ 'project.inviteFriends.loading' | translate }}</div>
+    <div *ngIf="!loading && friends.length === 0" class="empty-info">{{ 'project.inviteFriends.empty' | translate }}</div>
+  
+    <div class="invite-list" *ngIf="!loading && friends.length > 0">
+      <div class="invite-row" *ngFor="let friend of friends">
+        <img [src]="friend.avatarUrl || defaultAvatar(friend.username)" class="avatar" alt="Avatar" />
+        <div class="info">
+          <div class="username">{{ friend.username }}</div>
+          <div class="fullname">{{ friend.firstName }} {{ friend.lastName }}</div>
+          <div class="mail">{{ friend.email }}</div>
+        </div>
+        <button class="invite-btn"
+                [class.sent]="inviteSent[friend.id]"
+                [disabled]="inviteSent[friend.id]"
+                (click)="invite(friend)">
+          <i class="fa-solid" [ngClass]="inviteSent[friend.id] ? 'fa-paper-plane' : 'fa-user-plus'"></i>
+          {{ inviteSent[friend.id] ? ('project.inviteFriends.sent' | translate) : ('project.inviteFriends.button' | translate) }}
         </button>
-      </div>
-  
-      <div class="share-grid">
-        <button class="share-tile"><i class="fa-brands fa-slack"></i><span>Slack</span></button>
-        <button class="share-tile"><i class="fa-brands fa-discord"></i><span>Discord</span></button>
-        <button class="share-tile"><i class="fa-brands fa-linkedin"></i><span>LinkedIn</span></button>
-        <button class="share-tile"><i class="fa-regular fa-envelope"></i><span>Email</span></button>
       </div>
     </div>
   </div>
-  
+</div>

@@ -315,6 +315,11 @@ body { margin: 0;}
 
 :root {
 
+  --login-container:linear-gradient(135deg,#ffffffa6,#ffffff73);
+  --login-body:#fed428;
+  --login-body2:#1597bf;
+  --login-circle:#1f1f1f;
+  --login-text-label:#535529;
   --card-w:    #ffffff;  
   --card-xsw:  #f9fafb;  
   --card-sw:   #f3f4f6;  
@@ -323,6 +328,7 @@ body { margin: 0;}
   --card-xsd:  #334155;  
   --card-sd:   #1e293b;  
   --card-ld:   #64748b;  
+  --card-xdcl:    #ffffff;  
 
 
   --card-cl:   #dbeafe;  
@@ -340,6 +346,7 @@ body { margin: 0;}
   --text-xsd:  #f3f4f6;  
   --text-sd:   #e2e8f0;  
   --text-ld:   #94a3b8;  
+  --text-dcl: #e2e8f0;
 
   --text-cl:   #1e40af;  
   --text-xscl: #1d4ed8;  
@@ -415,6 +422,11 @@ body { margin: 0;}
 
 
 .dark-theme {
+    --login-container: linear-gradient(135deg, #434d53a6 70%, #39475069 100%);
+  --login-body: #1f2a31;      /* Dark için koyu zemin */
+  --login-body2:#123c49;
+  --login-circle: #ededed;  
+    --login-text-label:rgb(242, 243, 222);
   --card-w: #0a1d23;
   --card-xsw: #1b2b31;
   --card-sw: #23414b;
@@ -429,6 +441,7 @@ body { margin: 0;}
   --card-scl: #263a42;
   --card-lcl: #4a5d67;
   --card-dcl:  #374852;  
+--card-xdcl:#2d3e44;
 
   --text-w: #e4e1d5;
   --text-xsw: #c8bfa3;
@@ -439,6 +452,7 @@ body { margin: 0;}
   --text-sd: #a8a68d;
   --text-ld: #8f8e6a;
   --text-cl: #7d7f7f;
+  --text-dcl: #464d4d;
   --text-xscl: #9e9f9f;
   --text-scl: #6e7272;
   --text-lcl: #6e7a77;

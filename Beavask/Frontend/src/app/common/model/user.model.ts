@@ -1,12 +1,10 @@
-import { ProjectMember } from './projectMember.model'; 
-import { UserContact } from './userContact.model'; 
-import { Message } from './message.model'; 
-import { Role } from './role.model'; 
-import { Team } from './team.model'; 
-import { Company } from './company.model'; 
-import { Problem } from './problem.model'; 
-import { Log } from './log.model'; 
-import { Notification } from './notification.model'; 
+import { Company } from "./company.model";
+import { Log } from "./log.model";
+import { Message } from "../services/message/model/message.model";
+import { Problem } from "./problem.model";
+import { ProjectMember } from "./projectMember.model";
+import { Role } from "./role.model";
+import { Team } from "./team.model";
 
 export interface User {
   id: number;
@@ -19,7 +17,6 @@ export interface User {
   isActive: boolean;
 
   projects: ProjectMember[];
-  contacts: UserContact[];
   sentMessages: Message[];
   receivedMessages: Message[];
   userRoles: Role[];

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import {
   Chart,
   ChartConfiguration,
@@ -7,29 +7,52 @@ import {
   ChartType,
   registerables
 } from 'chart.js';
+import { TaskService } from '../../../../../../common/services/task/task.service';
+import { Task } from '../../../../../../common/services/task/taskModel/task.model';
+import { TranslateModule } from '@ngx-translate/core';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateModule],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
 })
-export class SummaryComponent {
+export class SummaryComponent implements AfterViewInit,OnInit{
 
   @Input() projectId:number=0;
   ngAfterViewInit(): void {
     this.createStatusChart();
     this.createPriorityChart();
   }
-  
+    column: { [key: string]: Task[] } = {
+      NotStarted: [],
+      InProgress: [],
+      OnHold: [],
+      Cancelled: [],
+      Completed: []
+    };
+    statusType=[
+      {name:'Completed',count:0},
+      {name:'Inprogress',count:0},
+      {name:'Created',count:0},
+      {name:'Canceled',count:0}
+    ]
   types = [
     { name: 'Epik', percent: 40 },
     { name: 'Task', percent: 35 },
     { name: 'Alt Görev', percent: 25 }
   ];
   
+  
+  constructor(private taskService:TaskService){
+
+  }
+  
+  ngOnInit(): void {
+     this.filterTaskByStatus();
+  }
 
   createStatusChart(): void {
     const statusCtx = document.getElementById('statusChart') as HTMLCanvasElement;
@@ -113,4 +136,47 @@ export class SummaryComponent {
     });
   }
   
+
+  filterTaskByStatus(){
+    this.taskService.getAllTasks(this.projectId).subscribe({
+      next: (Response)=>{
+        this.groupTasksByStatus(Response.data)
+      },
+      error:(err)=>{
+
+      }
+    })
+  }
+
+  groupTasksByStatus(tasks:Task[]) {
+    console.log(tasks)
+    Object.keys(this.column).forEach(status => {
+      this.column[status] = [];
+    });
+    tasks.forEach(task => {
+
+      switch (task.status) {
+        case 0:
+          this.column['NotStarted'].push(task);
+          this.statusType[2].count =this.statusType[2].count +1  
+          break;
+        case 1:
+          this.column['InProgress'].push(task);
+          this.statusType[1].count =this.statusType[1].count +1  
+          break;
+        case 4:
+          this.column['Cancelled'].push(task);
+          this.statusType[3].count = this.statusType[3].count +1 
+
+          break;
+        case 5:
+          this.column['Completed'].push(task);
+          this.statusType[0].count = this.statusType[0].count +1; 
+          break;
+        default:
+          break;
+      }
+    });
+    console.log(this.statusType)
+  }
 }

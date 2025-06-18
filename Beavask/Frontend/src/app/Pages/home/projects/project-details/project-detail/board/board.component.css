@@ -1,23 +1,29 @@
 
 .bv-pd-container{
-        display: flex;
-    justify-content: start;
+display: grid;
+    grid-template-columns: 15% 85%;
     width: 100vw;
-    height: 100vh;
+    height: 113%;
+       background-color: var(--body-xsw);
 }
 .bv-b-container{
-    width: 100%;
-    min-height: 100%;
+
+    display: flex;
+justify-self: center;
+    padding: 30px;
     height: fit-content;
     background-color: var(--body-xsw);
 }
-
+.bv-b-share i{
+color: var(--text-d);
+}
 .bv-container{
     width: 100%;
     height: 100%;
 }
 .bv-b-header{
-    padding: 30px;
+    padding: 30px;    
+    padding-left: 90px;
     margin-top:30px;
     width: 80%;
 }
@@ -59,7 +65,8 @@
 
 .bv-b-body{
     margin-top: 10px;
-    width: 80%;
+    width: 87%;
+
     height: 70%;
 }
 .bv-b-op-search {
@@ -74,7 +81,7 @@
     border-radius: 4px 0px 0px 4px;
     background-color: var(--card-lw);
     border: 0px;
-    color: var(--text-xsw);
+    color: var(--text-xsw)!important;
 }
 
 .bv-b-op-search input:focus{
@@ -102,14 +109,14 @@
 }
 
 .bv-b-task-body {
-    margin-top: 20px;
     display: flex;
     gap: 20px; 
     border-bottom: 1px solid var(--border-xsw); 
     border-top: 1px solid var(--border-xsw); 
     padding: 20px 10px; 
     overflow-y: auto;
-    height: calc(80vh - 200px); 
+    width: 100%;
+    height: calc(75vh - 220px); 
     flex-wrap: wrap; 
 }
 
@@ -132,6 +139,7 @@
    
 }
 .bv-b-body-options{
+  padding: 10px;
     display: flex;
     justify-content: space-between;
 }
@@ -192,9 +200,10 @@ input.view-text-focus:focus {
 
 .bv-b-ci svg{
     margin-left: 5px;
+    fill: var(--text-sw);
 }
 .bv-b-ci:hover{
-    background-color: var(--card-sw);
+    background-color: var(--card-xsw);
    
     border-radius: 2px;
 }
@@ -373,7 +382,9 @@ input.view-text-focus:focus {
   }
   
   .bv-b-header {
-    width: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
   
   
@@ -393,11 +404,11 @@ input.view-text-focus:focus {
   .bv-cp-container {
     padding: 30px;
     z-index: 2001;
-    width: 50%;
+    width: 40%;
     position: relative;
     height: fit-content;
-    border-radius: 8px;
-    background-color: var(--body-xsw);
+    border-radius: 0px;
+    background-color: var(--card-xsw);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -436,16 +447,21 @@ input.view-text-focus:focus {
   .bv-cr-text-group input,
   .bv-cr-text-group select,
   .bv-cr-text-group textarea {
-    background-color: var(--card-sw);
+    background-color: var(--card-xscl);
     height: 48px;
-    border: 2px solid var(--border-xsw);
+    border: 2px solid var(--card-cl);
     color: var(--text-xsw);
-    border-radius: 0.275rem;
+    border-radius: 0.175rem;
     width: 100%;
     font-size: 14px;
     padding: 5px;
   }
-  
+  .bv-cp-title{
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-xsw);
+    margin-bottom: 20px;
+  }
   .bv-cr-text-group input:focus,
   .bv-cr-text-group select:focus,
   .bv-cr-text-group textarea:focus {
@@ -473,6 +489,8 @@ input.view-text-focus:focus {
     height: 40px;
     display: flex;
     justify-content: center;
+    outline: none;
+    border: none;
     align-items: center;
     cursor: pointer;
     transition: box-shadow 0.2s ease-in;
@@ -499,3 +517,131 @@ input.view-text-focus:focus {
     box-shadow: 0 0 10px 0.5px var(--button-d);
   }
   
+
+
+
+.kanban-board {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.kanban-column {
+  background: var(--card-w);
+  border-radius: 8px;
+  width: 250px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.kanban-list {
+  flex-grow: 1;
+  min-height: 100px;
+  padding: 10px;
+  overflow-y: auto;
+  background: var(--card-xsw);
+  border-radius: 8px;
+}
+
+.kanban-item {
+  background: var(--card-sw);
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: grab;
+}
+.bv-b-task-item {
+  width: 250px;
+  height: 400px;
+  background-color: var(--card-w);
+  box-shadow: var(--shadow-xsw) 0 0 3px 1px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bv-b-ti-header {
+  padding: 10px;
+  font-weight: bold;
+  color: var(--text-xsw);
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.bv-b-ti-body {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* Drag preview ve placeholder için cdk sürükle bırak stilleri */
+.cdk-drag-preview {
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2),
+              0 8px 10px 1px rgba(0,0,0,0.14),
+              0 3px 14px 2px rgba(0,0,0,0.12);
+  border-radius: 6px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0,0,0.2,1);
+}
+.bv-task-card, .cdk-drag-preview {
+  box-shadow: none !important;
+  transition: none !important;
+}
+.bv-task-card {
+  will-change: transform;
+}
+
+
+.cdk-drag-preview {
+  box-shadow: none;
+  border-radius: 4px;
+}
+
+
+:root {
+  --avatar-size: 50px;
+}
+
+.bv-b-users {
+ 
+  width: 200px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  height: fit-content;
+}
+.bv-b-op-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+.bv-b-users-profile {
+  cursor: pointer;
+  background-color: var(--card-lcl);
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  border: 1px solid var(--text-xsw);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bv-b-users-profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}

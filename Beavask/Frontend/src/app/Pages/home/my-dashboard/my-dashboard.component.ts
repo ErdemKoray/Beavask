@@ -14,13 +14,14 @@ import {
 import { Project } from '../../../common/model/project.model';
 import { CommentService } from '../../../common/services/comment/comment.service';
 import { Comment } from '../../../common/model/comment/comment.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,DatePipe],
+  imports: [CommonModule, ReactiveFormsModule,DatePipe,TranslateModule],
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.css'
 })
@@ -74,20 +75,22 @@ export class MyDashboardComponent implements OnInit {
 
         this.projectService.getAll().subscribe({
           next: res => {
-            console.log(res.data);
             this.activeProjects = res.data
               .slice(0, 5);
-              console.log(this.activeProjects);
           }
         });
 
-        // ✅ Yorumları çek
-        this.commentService.getCommentByUserId(userId).subscribe({
+        
+        this.commentService.getCommentByUserId().subscribe({
           next: res => {
+            console.log(res)
             this.recentComments = res.data
+      
               .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-              .slice(0, 3); // sadece son 3 yorum
+              .slice(0, 3); 
+              console.log(this.recentComments)
           }
+        
         });
       }
     });
@@ -100,9 +103,6 @@ export class MyDashboardComponent implements OnInit {
       inProgress: tasks.filter(t => t.status === 1).length,
       done: tasks.filter(t => t.status === 5).length
     };
-
-    console.log(statusCounts)
-
     const canvas = document.getElementById('statusChart') as HTMLCanvasElement;
     if (!canvas) return;
 

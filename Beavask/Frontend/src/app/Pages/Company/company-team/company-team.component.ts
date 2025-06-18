@@ -40,24 +40,18 @@ export class CompanyTeamComponent implements OnInit {
   ngOnInit(): void {
     this.loadCompanyTeams();
   }
-
 loadCompanyTeams(): void {
   this.isLoading = true;
+
   this.authService.getWhoamiCompany().subscribe({
-    next: (user) => {
-      this.teamService.getCompanyTeam(user.companyId).subscribe({
-       next: (res: ApiResponse<companyTeam[] | companyTeam>) => {
-
-  if (Array.isArray(res.data)) {
-    this.teams = res.data;
-  } else if (res.data) {
-    this.teams = [res.data]; 
-  } else {
-    this.teams = [];
-  }
-
-  this.isLoading = false;
-},
+    next: () => {
+      this.teamService.getAllCompanyTeams().subscribe({
+        next: (res) => {
+          console.log('Fetched Teams:', res);
+          this.teams = Array.isArray(res.data) ? res.data : [];
+          this.isLoading = false;
+          console.log('Company Teams:', this.teams);
+        },
         error: () => {
           this.toastService.show({ title: 'Error', message: 'Failed to load teams.' });
           this.isLoading = false;
@@ -70,6 +64,7 @@ loadCompanyTeams(): void {
     }
   });
 }
+
 
 selectTeam(team: companyTeam): void {
   this.selectedTeam = team;

@@ -29,7 +29,7 @@ export class CompanyDashboardComponent  implements AfterViewInit,OnInit {
   
 
   companyMetrics = [
-    { count: 0, label: 'Total Tasks', subtext: 'Across teams' },
+    { count: 24, label: 'Total Tasks', subtext: 'Across teams' },
     { count: 0, label: 'Employees', subtext: 'Active this week' },
     { count: 0, label: 'Projects', subtext: 'Currently active' },
     { count: 0, label: 'Teams', subtext: 'In your company' },
@@ -103,16 +103,15 @@ countMembersCompany() {
         next: (users: CompanyUser[]) => {
           this.companyMetrics[1].count = users.length;
 
-          // Gelen kullanıcılar CompanyUser tipinde olduğu için direkt atıyoruz
-          this.activeEmployees = users;
+          this.activeEmployees = users.filter(user => user.isAssignedToCompany);
         },
         error: (er) => {
-          this.toastService.show({ title: 'error', message: 'error:' + er.error.message });
+        
         }
       });
     },
     error: (err) => {
-      this.toastService.show({ title: 'error', message: 'error:' + err.error.message });
+  
     }
   });
 }
@@ -125,16 +124,15 @@ countMembersCompany() {
              this.companyMetrics[2].count=res.length
           },
           error:(er)=>{
-            this.toastService.show({title:'error',message:'error:'+er.error.message})
+          
           }
         });
       }
 
   countTeamsCompany(){
 
- this.authCompanyService.getWhoamiCompany().subscribe({
-  next: (company) => {
-    this.teamService.getCompanyTeam(Number(company.companyId)).subscribe({
+
+    this.teamService.getAllCompanyTeams().subscribe({
       next: (res) => {
       if (Array.isArray(res.data)) {
   this.companyMetrics[3].count = res.data.length;
@@ -146,12 +144,8 @@ countMembersCompany() {
 
       },
       error: (er) => {
-        this.toastService.show({ title: 'error', message: 'error:' + er.error.message });
-      }
-    });
-  },
-  error: (err) => {
-    this.toastService.show({ title: 'error', message: 'error:' + err.error.message });
+
+    
   }
 });
   }

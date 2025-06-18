@@ -60,7 +60,7 @@
         </div>
       </li>
 
-      <li style="display: none;" class="nav-item bv-dropdown">
+      <li  class="nav-item bv-dropdown">
         <a class="nav-link bv-radius-2 dropdown-toggle" data-dropdown="teamdropdown" (click)="toggleDropdown('teamdropdown')">
           {{ 'navbar.team' | translate }}
         </a>
@@ -72,8 +72,7 @@
               <div class="bv-drpi-name">{{ team.name }}</div>
             </div>
           </a>
-          <div class="di-line d-flex justify-self-center align-items-center"></div>
-          <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center">{{ 'navbar.myTeams' | translate }}</a>
+         
         </div>
       </li>
 
@@ -119,18 +118,19 @@
       </li>
     </ul>
 
-    <div class="bv-account d-flex justify-content-center align-items-center gap-1 bv-dropdown" >
+    <div class="bv-account d-flex justify-content-center align-items-center gap-3 bv-dropdown" >
       
       
       <div *ngIf="isProfileDropdownOpen" class="bv-dropdown-content bv-radius-3 bv-transition bv-transition profile-dropdown" id="profiledropdown">
-        <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center" style="font-weight:400;" routerLink="/userprofile">My Profile</a>
-        <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center" style="font-weight:400;" (click)="logout()">Quit</a>
+        <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center" style="font-weight:400;" routerLink="/userprofile">{{'navbar.profile' | translate}}</a>
+        <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center" style="font-weight:400;" routerLink="/connections">{{'navbar.connections' | translate}}</a>
+        <a class="dropdown-item bv-transition d-flex justify-content-start align-items-center" style="font-weight:400;" (click)="logout()">{{'navbar.quit' | translate}}</a>
       
       </div>
       <div (click)="toggleDropdown('profile')" data-dropdown="profiledropdown" class="bv-userprofile" id="profiledropdown">
         <img [src]="avatarUrl" class="user-avatar bv-radius-round bv-transition d-flex justify-content-center align-items-center gap-1" alt="User Avatar">
       </div>
-      <div  style="display: none;" class="language-dropdown">
+      <div   class="language-dropdown">
         <button class="language-button" data-dropdown="lang" (click)="togglelDropdown()">
           <span *ngIf="currentLang === 'tr'"><img src="turkey.png" alt=""></span>
           <span *ngIf="currentLang === 'en'"><img src="united-kingdom.png" alt=""></span>

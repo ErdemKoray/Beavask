@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GenericHttpsService } from '../generic-https.service';
-
 import { HttpClient } from '@angular/common/http';
 import { CreateTaskModel } from './taskModel/createTask.model';
 import { Task } from './taskModel/task.model';
@@ -8,6 +6,18 @@ import { ApiResponse } from '../../model/apiResponse.model';
 import { UpdateTaskModel } from './taskModel/updateTask.model';
 import { Observable } from 'rxjs';
 
+export interface UserInfos {
+   firstName:string
+    lastName: string
+    username: string
+    email: string
+    avatarUrl: string
+    createdAt: Date|null
+    updatedAt: Date|null
+    isActive:boolean
+    teamId: number
+    companyId: number
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -32,8 +42,9 @@ export class TaskService {
       return this._http.post<any>(`${this.endpoint}/${taskId}/assign/${userId}`,{taskId,userId})
     }
 
-    getReporter(id:number){
-      return this._http.get<any>(`http://localhost:5092/api/User/${id}`);
+    getReporter(id:number):Observable<ApiResponse<UserInfos>>{
+      console.log(id)
+      return this._http.get<ApiResponse<UserInfos>>(`http://localhost:5092/api/User/id/${id}`);
     }
 
     updateTask(id:number, model:UpdateTaskModel){

@@ -4,12 +4,13 @@ import { FooterComponent } from "../../components/footer/footer.component";
 import { ToastComponent } from "../../components/toast/toast.component";
 import {  RouterOutlet } from '@angular/router';
 import { ToastService } from '../../components/toast/toast.service';
+import { ChatBoxComponent } from '../../components/chat-box/chat-box.component';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NavbarComponent,RouterOutlet,ToastComponent],
+  imports: [NavbarComponent,RouterOutlet,ToastComponent,ChatBoxComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

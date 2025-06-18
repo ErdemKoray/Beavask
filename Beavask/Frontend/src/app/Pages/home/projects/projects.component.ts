@@ -8,12 +8,14 @@ import { GithubrepoService } from '../../../common/services/projects/githubrepo.
 import { GithubRepo } from '../../../common/model/githubrepo.model';
 import { Project } from '../../../common/model/project.model';
 import { ProjectsService } from '../../../common/services/projects/projects.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { InvitationService, pendingProjects } from '../../../common/services/invitation/invitation.service';
 
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SortPipe, DatePipe,RouterLink], 
+  imports: [ReactiveFormsModule, CommonModule, SortPipe, DatePipe,RouterLink,TranslateModule], 
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
@@ -24,10 +26,12 @@ export class ProjectsComponent implements OnInit {
     private toast: ToastService,
     private githubRepoService: GithubrepoService,
     private projectService: ProjectsService,
+     private invitationService: InvitationService
   ) {}
 
   ngOnInit(): void {
     this.getMyProjects(); 
+      this.getProjectInvitations()
   }
  
   sortKey: string = 'id'; 
@@ -37,6 +41,7 @@ export class ProjectsComponent implements OnInit {
   items: Project[] = [];
   private originalItems: any[] = [...this.items];
 
+  projectInvitations: pendingProjects[] = [];
   getMyProjects(): void {
     this.projectService.getAll().subscribe(response => {
       if (response?.data) {
@@ -81,10 +86,37 @@ export class ProjectsComponent implements OnInit {
   
 
  
-
+getProjectInvitations() {
+  this.invitationService.getPrpjectReq().subscribe({
+    next: res => {
+      // API response'u dizi mi? (genelde res.data bir array döner)
+      if (Array.isArray(res.data)) {
+        this.projectInvitations = res.data;
+      } else {
+        this.projectInvitations = [];
+      }
+    }
+  });
+}
   
+acceptProject(invitationId: number) {
+  this.invitationService.acceptProject(invitationId).subscribe({
+    next: () => {
+      this.projectInvitations = this.projectInvitations.filter(p => p.id !== invitationId);
+      this.toast.show({ title: 'Başarılı', message: 'Davet kabul edildi!' });
+      this.getMyProjects();
+    }
+  });
+}
+rejectProject(invitationId: number) {
+  this.invitationService.rejectProject(invitationId).subscribe({
+    next: () => {
+      this.projectInvitations = this.projectInvitations.filter(p => p.id !== invitationId);
+      this.toast.show({ title: 'Reddedildi', message: 'Davet reddedildi.' });
+    }
+  });
+}
 
- 
 
 
  searchForm = new FormGroup({

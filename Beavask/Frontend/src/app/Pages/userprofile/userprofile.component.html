@@ -1,14 +1,23 @@
+<div class="bv-modal-backdrop" *ngIf="confirmModalOpen">
+  <div class="bv-modal-content">
+    <div class="bv-modal-header">
+      <span>Onayla</span>
+      <span class="bv-modal-close" (click)="closeConfirmModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </span>
+    </div>
+    <div class="bv-modal-body">
+      Bu iletişim bilgisini silmek istediğine emin misin?
+    </div>
+    <div class="bv-modal-footer">
+      <button class="bv-modal-btn cancel" (click)="closeConfirmModal()">Vazgeç</button>
+      <button class="bv-modal-btn save" (click)="confirmDelete()">Sil</button>
+    </div>
+  </div>
+</div>
 <div class="bv-u-container d-flex justify-content-center bv-shadow-2">
-  <div class="bv-u-body d-flex flex-column bv-shadow-2">
-    <div class="bv-u-header d-flex justify-content-center align-items-center">
-      <div class="bv-u-header-container d-flex justify-content-center align-items-center">
-        <div class="header-img-none">
-          <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3">
-            <path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
-          </svg>
-        </div>
-      </div>
-      <div (click)="toggleProfileModal()" data-modal="profile" class="profile-img-container bv-radius-round d-flex justify-content-center align-items-center">
+  <div class="bv-u-body d-flex flex-column">
+   <div (click)="toggleProfileModal()" data-modal="profile" class="profile-img-container bv-radius-round d-flex justify-content-center align-items-center">
         <img [src]="avatarUrl" class="user-avatar bv-transition d-flex justify-content-center align-items-center bv-radius-round" alt="User Avatar">
         <div class="profile-img-none bv-radius-round d-flex justify-content-center align-items-center">
           <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 -960 960 960" width="36px" fill="#e3e3e3">
@@ -16,31 +25,147 @@
           </svg>
         </div>
       </div>
-    </div>
-
+  
     <div class="bv-u-main d-flex flex-row justify-content-between">
       <div class="bv-u-main-left">
         <div class="bv-uml-content">
-          <div class="bv-lc-about bv-gap">
-            <div class="bv-a-h">{{ 'userprofile.about' | translate }}</div>
-            <div class="bv-a-ih"><strong>{{"userprofile.userRole"|translate}}</strong> <div class="bv-a-i">{{ user.role }}</div></div>
-            <div class="bv-a-ih"><strong>{{"userprofile.totalProjects"|translate}}</strong> <div class="bv-a-i">{{ user.totalProjects }}</div></div>
-            <div class="bv-a-ih"><strong>{{"userprofile.totalTasks"|translate}}</strong> <div class="bv-a-i">{{ user.totalTasks }}</div></div>
-          </div>
-          <div class="bv-lc-contact bv-gap">
-            <div  class="bv-a-h">{{ 'userprofile.contact' | translate }}</div>
-            <div class="bv-a-ih" ><strong title="{{'userprofile.userEmail'|translate}}"><i class="fa-solid fa-envelope"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
-            <div class="bv-a-ih" ><strong title="{{'userprofile.userPhone'|translate}}"><i class="fa-solid fa-phone"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
-            <div class="bv-a-ih" ><strong title="{{'userprofile.userLinkedln'|translate}}"><i class="fa-brands fa-linkedin"></i></strong><div class="bv-a-i">{{ user.email }}</div></div>
+          <div class="bv-username">
+            {{username}}
 
           </div>
+          <div class="bv-lc-follow">
+          
+          </div>
+         <div class="bv-lc-about bv-gap">
+         <div class="bv-a-h">{{ 'userprofile.about' | translate }}</div>
+          <div 
+            class="bv-a-ih"
+            [ngClass]="{'bv-p-edit': isOwner}"
+            (dblclick)="enableAboutEdit()"
+          >
+            <ng-container *ngIf="aboutEditMode; else aboutShow">
+              <input 
+                [(ngModel)]="aboutEditValue"
+                class="bv-modal-input"
+                (keydown.enter)="saveAboutEdit()"
+                (blur)="saveAboutEdit()"
+                autofocus
+              />
+            </ng-container>
+            <ng-template #aboutShow>
+              <!-- About varsa yazı, yoksa ekle butonu -->
+              <ng-container *ngIf="aboutContact; else addAbout">
+                <p class="bv-a-i bv-transition">
+                  {{ aboutContact.contactValue }}
+                </p>
+              </ng-container>
+              <ng-template #addAbout>
+                <div class="bv-a-ih bv-a-iha bv-transition add-row" *ngIf="isOwner" (click)="addAboutField()">
+                  <strong>
+                    <i class="fa-solid fa-plus"></i>
+                  </strong>
+                  <div class="bv-a-i bv-transition">Hakkında ekle</div>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+
+          <div class="bv-lc-contact bv-gap">
+<div class="bv-a-h">{{ 'userprofile.contact' | translate }}</div>
+
+          <div class="bv-a-ih bv-a-iha bv-transition add-row" *ngIf="isOwner" (click)="openAddModal()">
+          <strong>
+            <i class="fa-solid fa-plus"></i>
+          </strong>
+          <div class="bv-a-i bv-transition">Yeni iletişim ekle</div>
+           </div>  
+              <div
+                class="bv-a-ih bv-transition contact-row"
+                *ngFor="let contact of filteredContacts; let i = index"
+                [ngClass]="{'bv-p-edit': isOwner}"
+              >
+                <strong>
+                  <i class="fa-solid" [ngClass]="getContactIcon(contact.contactType)"></i>
+                </strong>
+                <div class="bv-a-i bv-transition">
+                  {{contact.contactValue}}
+                </div>
+              <div class="bv-i-options" *ngIf="isOwner" style="position: relative;">
+                <!-- 3 nokta butonu -->
+                <span (click)="toggleOptionsMenu(i, $event)" class="bv-contact-icon kebab-menu">
+                  <i class="fa-solid fa-ellipsis-v"></i>
+                </span>
+                <!-- Açılır menü -->
+                <div *ngIf="openMenuIndex === i" class="bv-contact-popup-menu" (click)="$event.stopPropagation()">
+                  <div class="popup-item" (click)="openEditModal(contact, i)"><i class="fa-solid fa-pen"></i></div>
+                  <div class="popup-item delete" (click)="openConfirmModal(i)"><i class="fa-solid fa-trash"></i></div>
+                </div>
+              </div>
+
+              </div>
+          </div>
           <div class="bv-lc-team bv-gap">
-            <div  class="bv-a-h">{{ 'userprofile.userTeam' | translate }}</div>
+           
            
           </div>
         </div>
       </div>
       <div class="bv-u-main-right">
+<div class="bv-last-tasks-card">
+  <h4>{{ 'userprofile.lastTasks' | translate }}</h4>
+  <ng-container *ngIf="loadingTasks">
+    <div class="bv-task-loading">{{ 'userprofile.loadingTasks' | translate }}</div>
+  </ng-container>
+  <ng-container *ngIf="!loadingTasks">
+    <ng-container *ngIf="lastTasks.length > 0; else noTasks">
+      <div class="bv-task-row" *ngFor="let task of lastTasks">
+        <div class="bv-task-title">{{ task.title }}</div>
+        <div class="bv-task-desc">{{ task.description || '-' }}</div>
+        <div class="bv-task-meta">
+          <span>{{ task.createdAt | date: 'short' }}</span>
+          <span class="bv-task-status" [ngClass]="{
+            'bv-task-open': task.status === 1,
+            'bv-task-completed': task.status === 2
+          }">
+            {{ task.status === 2 ? ('userprofile.completed' | translate) : ('userprofile.active' | translate) }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noTasks>
+      <div class="bv-task-empty">
+        {{ 'userprofile.noTasks' | translate }}
+      </div>
+    </ng-template>
+  </ng-container>
+</div>
+
+<div class="bv-last-tasks-card">
+  <h4>{{ 'userprofile.lastProjects' | translate }}</h4>
+  <ng-container *ngIf="loadingProjects">
+    <div class="bv-task-loading">{{ 'userprofile.loadingProjects' | translate }}</div>
+  </ng-container>
+  <ng-container *ngIf="!loadingProjects">
+    <ng-container *ngIf="lastProjects.length > 0; else noProjects">
+      <div class="bv-task-row" *ngFor="let project of lastProjects">
+        <div class="bv-task-title">{{ project.name }}</div>
+        <div class="bv-task-desc">{{ project.description || '-' }}</div>
+        <div class="bv-task-meta">
+          <span>{{ project.createdAt | date: 'short' }}</span>
+          <span class="bv-task-status" [ngClass]="{'bv-task-open': project.isActive, 'bv-task-completed': !project.isActive}">
+            {{ project.isActive ? ('userprofile.active' | translate) : ('userprofile.archived' | translate) }}
+          </span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noProjects>
+      <div class="bv-task-empty">{{ 'userprofile.noProjects' | translate }}</div>
+    </ng-template>
+  </ng-container>
+</div>
+
+
         <div *ngFor="let activity of activities" class="bv-activity-card">
           <h4>{{ activity.title }}</h4>
           <span>{{ activity.project }} • {{ activity.timestamp | date:'short' }}</span>
@@ -74,3 +199,43 @@
   </div>
 </div>
 
+
+
+
+
+
+<div class="bv-modal-backdrop" *ngIf="contactModalOpen">
+  <div class="bv-modal-content">
+    <div class="bv-modal-header">
+      <span>{{ modalMode === 'add' ? 'İletişim Bilgisi Ekle' : 'İletişim Bilgisi Düzenle' }}</span>
+      <span class="bv-modal-close" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></span>
+    </div>
+  <div class="bv-modal-body">
+  <label>Tür:</label>
+
+  <!-- Sadece add modunda select, edit modunda sadece yazı -->
+  <ng-container *ngIf="modalMode === 'add'; else showType">
+    <select [(ngModel)]="modalContact.contactType" class="bv-modal-input">
+      <option *ngFor="let type of getAvailableContactTypes()" [value]="type.value">
+        {{type.label}}
+      </option>
+    </select>
+  </ng-container>
+  <ng-template #showType>
+    <input [value]="modalContact.contactType" class="bv-modal-input" readonly />
+  </ng-template>
+
+  <label>Bilgi:</label>
+  <input [(ngModel)]="modalContact.contactValue" class="bv-modal-input" placeholder="Örn: example@mail.com" />
+</div>
+
+    <div class="bv-modal-footer">
+      <button class="bv-modal-btn save" (click)="saveContact()">
+        Kaydet
+      </button>
+      <button class="bv-modal-btn cancel" (click)="closeModal()">
+        Vazgeç
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,14 +1,20 @@
 .bv-landing-container {
-  background-color: var(--body-d);
+  background-color: var(--body-xsw);
   color: var(--text-d);
   min-height: 100vh;
-  padding: 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
 }
-
+.bv-land-container{
+  padding: 60px 20px;
+  background-color: var(--body-sw);
+  display: flex;
+  flex-direction: column;
+    box-shadow: 0px 8px 32px 0px var(--shadow-d);
+  align-items: center;
+}
 .bv-landing-header {
   text-align: center;
   margin-bottom: 50px;
@@ -22,7 +28,7 @@
 .bv-landing-title {
   font-size: 2.6rem;
   font-weight: 700;
-  color: var(--text-d);
+  color: var(--text-xsw);
 }
 
 .bv-landing-title span {
@@ -32,7 +38,7 @@
 .bv-landing-subtitle {
   margin-top: 10px;
   font-size: 1.2rem;
-  color: var(--text-xsd);
+  color: var(--text-xsw);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -106,7 +112,7 @@
 
 .bv-feature-card p {
   font-size: 1rem;
-  color: var(--text-xsd);
+  color: var(--text-xsw);
 }
 
 .bv-landing-footer {
@@ -147,10 +153,16 @@
   margin-top: 10px;
   padding-left: 20px;
   list-style-type: disc;
+
+}
+.bv-stats-text p{
+  color: var(--text-xsw);
+
 }
 
 .bv-stats-text li {
   margin-bottom: 8px;
+color: var(--text-xsw);
 }
 
 .bv-stats-image {
@@ -186,4 +198,9 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+.bv-landing-section{
+  margin-top: 20px;
+  color: var(--text-xsw);
+
 }

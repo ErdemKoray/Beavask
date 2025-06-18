@@ -45,6 +45,18 @@ export const routes: Routes = [
                 path: 'userprofile',
                 loadComponent:()=>import('./Pages/userprofile/userprofile.component').then(m=>m.UserprofileComponent),
                 canActivate: [AuthGuard]
+               
+            },
+            {
+                        path:'connections',
+                        loadComponent:()=>import('./Pages/userprofile/user-connection/user-connection.component').then(m=>m.UserConnectionComponent),
+                        canActivate:[AuthGuard]
+                    } 
+            ,
+            {
+            path: 'userprofile/:id',
+            loadComponent:()=>import('./Pages/userprofile/userprofile.component').then(m=>m.UserprofileComponent),
+            canActivate: [AuthGuard]
             },
             {
                 path: 'myactivities',

@@ -43,7 +43,7 @@
 
   <ul *ngIf="(selectedTeam?.teamMembers?.length ?? 0) > 0; else noMembers" class="list-group mb-4">
     <li *ngFor="let member of selectedTeam.teamMembers" class="list-group-item border border-border-w rounded-1 d-flex justify-content-between align-items-center bg-card-xsw text-text-w">
-      <span class="fw-semibold">{{ member.firstName }} {{ member.lastName }}</span>
+      <span class="fw-semibold">{{ member.username }}</span>
       <span [class.text-success]="member.isActive" [class.text-danger]="!member.isActive" class="fw-bold">
         {{ member.isActive ? 'Active' : 'Inactive' }}
       </span>

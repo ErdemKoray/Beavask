@@ -1,0 +1,92 @@
+<div class="chat-box">
+    <!-- Açık/kapalı butonu -->
+    <div *ngIf="!chatbox" class="chat-box-logo" (click)="toggleOPenModal()">
+        <div class="chat-box-circle">
+            <i class="fa-solid fa-message chat-logo"></i>
+        </div>
+    </div>
+
+    <!-- Chatbox paneli -->
+    <div *ngIf="chatbox" class="chat-box-container">
+        <!-- Mesaj paneli -->
+        <div *ngIf="!userListModel" class="chat-box-body">
+            <!-- Başlık -->
+            <div class="cb-header d-flex align-items-center justify-content-between">
+                <div class="bv-arrow" (click)="changeList()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M640-200 200-480l440-280v560Z"/></svg>
+                </div>
+                <span class="cb-header-title"></span>
+                <button class="cb-close" (click)="toggleCloseModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <!-- Mesajlar ve input alanı -->
+            <div class="cb-text-main">
+                <!-- Mesajlar -->
+                <div class="cb-text-area" id="chat-scroll-area">
+                    <div *ngFor="let msg of messages" [ngClass]="{'cb-msg-own': msg.own, 'cb-msg-other': !msg.own}" class="cb-msg-bubble">
+                        <div class="cb-msg-meta">
+                            <span class="cb-msg-user">{{ msg.own ? ('chat.you' | translate) : msg.user }}</span>
+                            <span class="cb-msg-time">{{ msg.time | date:'shortTime' }}</span>
+                        </div>
+                        <div class="cb-msg-text">{{msg.text}}</div>
+                    </div>
+                    <div *ngIf="messages.length === 0" class="cb-msg-empty">
+                        <span>{{ 'chat.noMessages' | translate }}</span>
+                    </div>
+                </div>
+                <!-- Mesaj gönderme alanı -->
+               <form class="cb-text-options" (ngSubmit)="sendMessage()" autocomplete="off">
+    <button type="button" class="cb-emoji-btn" (click)="toggleEmojiPicker($event)">
+        <i class="fa-regular fa-face-smile"></i>
+    </button>
+    <div *ngIf="showEmojiPicker" class="cb-emoji-picker" (click)="$event.stopPropagation()">
+        <span class="cb-emoji" *ngFor="let emoji of emojis" (click)="addEmoji(emoji)">{{ emoji }}</span>
+    </div>
+    <input 
+      [(ngModel)]="messageInput" 
+      name="chatMessage" 
+      type="text" 
+      class="cb-msg-input" 
+      placeholder="{{ 'chat.typeMessage' | translate }}" 
+      required
+      (focus)="showEmojiPicker=false">
+    <button type="submit" class="cb-send-btn" [disabled]="!messageInput.trim()">
+        <i class="fa-solid fa-paper-plane"></i>
+    </button>
+</form>
+
+            </div>
+        </div>
+        <!-- Kullanıcı listesi paneli -->
+        <div *ngIf="userListModel" class="chat-box-users">
+            <div class="cb-u-header">
+                <span class="cb-u-title">{{ 'chat.support' | translate }}</span>
+                <button class="cb-u-exit" (click)="toggleCloseModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="cb-u-list">
+                <div *ngFor="let user of userList"
+                    [class.selected]="user.id === selectedUser?.id"
+                    class="cb-user-item"
+                    (click)="selectUser(user)">
+                    <div class="cb-u-profile">
+                        <div class="cb-up-circle">
+                            <img [src]="user.avatarUrl || defaultAvatar" alt="profile" />
+                        </div>
+                        <span *ngIf="user.online" class="cb-u-status"></span>
+                    </div>
+                    <div class="cb-u-name">{{ user.name }}</div>
+                    <div class="cb-u-last">
+                        <span class="cb-u-last-msg">{{ user.lastMessage }}</span>
+                        <span *ngIf="user.unreadCount" class="cb-u-unread">{{user.unreadCount}}</span>
+                    </div>
+                </div>
+                <div *ngIf="userList.length === 0" class="cb-u-empty">
+                    {{ 'chat.noContacts' | translate }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

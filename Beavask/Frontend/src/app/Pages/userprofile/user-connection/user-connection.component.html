@@ -1,0 +1,110 @@
+<div class="bv-connections-root">
+  <div class="bv-connections-card bv-shadow-2">
+    <div class="bv-connections-header">
+      <span class="bv-connections-title">Bağlantılarım</span>
+      <button class="bv-mp-add-btn" (click)="openAddConnectionModal()">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Kullanıcı Ekle</span>
+      </button>
+    </div>
+
+    <!-- AKTİF ARKADAŞ LİSTESİ -->
+    <div class="bv-connections-table-wrap" *ngIf="friends.length > 0">
+      <table class="bv-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Avatar</th>
+            <th>Kullanıcı Adı</th>
+            <th>Ad Soyad</th>
+            <th>E-posta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr routerLink="/userprofile/{{friend.id}}" class="bv-project-item" *ngFor="let friend of friends; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <img [src]="friend.avatarUrl || defaultAvatar(friend.username)" class="bv-avatar" />
+            </td>
+            <td>{{ friend.username }}</td>
+            <td>{{ friend.firstName }} {{ friend.lastName }}</td>
+            <td>{{ friend.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bv-empty-row" *ngIf="friends.length === 0">
+      <div class="bv-empty-state">Henüz bir bağlantınız yok.</div>
+    </div>
+
+    <!-- BEKLEYEN İSTEKLER -->
+    <div class="bv-connections-pending" *ngIf="pendingRequests.length > 0">
+      <div class="bv-connections-pending-title">Bekleyen İstekler</div>
+      <table class="bv-table">
+        <thead>
+          <tr>
+            <th>Kullanıcı</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of pendingRequests">
+            <td>{{ req.username }} ({{ req.firstName }} {{ req.lastName }})</td>
+            <td>
+              <button class="bv-modal-btn primary" (click)="acceptRequest(req.friendshipId)">
+                <i class="fa-solid fa-check"></i> Kabul Et
+              </button>
+              <button class="bv-modal-btn" (click)="rejectRequest(req.friendshipId)">
+                <i class="fa-solid fa-xmark"></i> Reddet
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="bv-modal-backdrop" *ngIf="modalOpen" (click)="closeModal()">
+  <div class="bv-modal-card" (click)="$event.stopPropagation()">
+    <div class="bv-modal-header">
+      <span class="bv-modal-title">Kullanıcı Ara ve Ekle</span>
+      <button class="bv-modal-close" (click)="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="bv-modal-body">
+      <input
+        type="text"
+        class="bv-modal-input"
+        [(ngModel)]="usernameSearch"
+        (keyup.enter)="searchUsers()"
+        placeholder="Kullanıcı adı ile ara"
+        autocomplete="off"
+      />
+      <button class="bv-modal-btn primary" (click)="searchUsers()" style="width:100%;margin-top:7px;">
+        <i class="fa-solid fa-search"></i> Ara
+      </button>
+      <div *ngIf="searchResults.length > 0" class="search-results">
+        <div *ngFor="let user of searchResults" class="search-user-row">
+          <img [src]="user.avatarUrl || defaultAvatar(user.username)" class="bv-avatar" />
+          <div class="user-info">
+            <div class="user-name">{{ user.username }}</div>
+            <div class="user-mail">{{ user.email }}</div>
+          </div>
+          <button class="bv-modal-btn primary"
+                  [disabled]="requestSent[user.id]"
+                  (click)="sendFriendRequest(user.id)">
+            <i class="fa-solid" [ngClass]="requestSent[user.id] ? 'fa-paper-plane' : 'fa-plus'"></i>
+
+            {{ requestSent[user.id] ? 'İstek Gönderildi' : 'İstek Gönder' }}
+          </button>
+        </div>
+      </div>
+      <div *ngIf="searchResults.length === 0 && usernameSearch.trim()">
+        <div class="bv-empty-row" style="margin-top:12px; color:var(--text-xsw);">Kullanıcı bulunamadı.</div>
+      </div>
+    </div>
+  </div>
+</div>

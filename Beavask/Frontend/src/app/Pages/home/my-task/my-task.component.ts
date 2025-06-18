@@ -7,11 +7,12 @@ import { AuthprofileService } from '../../../common/services/profile/authprofile
 import { ToastService } from '../../../components/toast/toast.service';
 import { Task } from '../../../common/services/task/taskModel/task.model';
 import { ProjectsService } from '../../../common/services/projects/projects.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-my-task',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, ReactiveFormsModule,RouterLink,TranslateModule],
   templateUrl: './my-task.component.html',
   styleUrl: './my-task.component.css'
 })
@@ -47,10 +48,15 @@ projectMap: { [key: number]: string } = {};
 
         this.taskService.getUserTaskById(userId).subscribe({
           next: res => {
-            this.allTasks = res.data.sort((a, b) =>
-              new Date(b.updatedAt ?? b.createdAt).getTime() -
-              new Date(a.updatedAt ?? a.createdAt).getTime()
-            ).slice(0, 4); 
+           const allFetchedTasks = res.data;
+
+this.allTasks = allFetchedTasks
+  .filter(task => task.assignedUserId === user.userId)
+  .sort((a, b) =>
+    new Date(b.updatedAt ?? b.createdAt).getTime() -
+    new Date(a.updatedAt ?? a.createdAt).getTime()
+  );
+
 
             this.allTasks.forEach(task => {
             if (task.projectId) {
@@ -84,7 +90,6 @@ projectMap: { [key: number]: string } = {};
 
           },
           error: err => {
-            this.toastService.show({ title: 'Error', message: 'Task load failed: ' + err.message });
           }
         });
       },
@@ -161,6 +166,42 @@ getStatusLabel(status: number): string {
 
 getStatusClass(status: number): string {
   return this.getStatusLabel(status).toLowerCase().replace(/\s/g, '-');
+}
+pageSize = 5;
+currentPage = 1;
+
+get totalPages(): number {
+  return Math.ceil(this.filteredTasks.length / this.pageSize);
+}
+
+get currentItemsRange(): string {
+  if (this.filteredTasks.length === 0) return '0-0 / 0';
+  const start = (this.currentPage - 1) * this.pageSize + 1;
+  const end = Math.min(start + this.pageSize - 1, this.filteredTasks.length);
+  return `${start}-${end} / ${this.filteredTasks.length}`;
+}
+
+get paginatedTasks(): Task[] {
+  const start = (this.currentPage - 1) * this.pageSize;
+  const end = start + this.pageSize;
+  return this.filteredTasks.slice(start, end);
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) this.currentPage++;
+}
+
+prevPage(): void {
+  if (this.currentPage > 1) this.currentPage--;
+}
+
+goToPage(page: number): void {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+  }
+}
+get pageNumbers(): number[] {
+  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
 }
 
 }

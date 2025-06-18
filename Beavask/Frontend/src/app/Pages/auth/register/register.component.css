@@ -1,12 +1,76 @@
+.circle-box {
+    width: 30vh;
+    height: 30vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 25%;
+    top: 10%;
+    border-radius: 50%;
+    animation: moveX 4s ease-in-out infinite alternate;
+}
+.form-control{
+  color: var(--text-xsw);
+}
+@keyframes moveX {
+    0%   { left: 25%; }
+    100% { left: 40%; }
+}
+.circle-box1 {
+    width: 40vh;
+    height: 40vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 75%;
+    top: 50%;
+    border-radius: 50%;
+    box-shadow: 0px 8px 5px 0px var(--shadow-xsw);
+    animation: orbit 8s linear infinite;
+}
+
+@keyframes orbit {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(10px, 20px); }
+    50%  { transform: translate(0px, 40px); }
+    75%  { transform: translate(-10px, 20px);}
+    100% { transform: translate(0, 0); }
+}
+
+.circle-box2 {
+    width: 20vh;
+    height: 20vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 10%;
+    top: 68%;
+    border-radius: 50%;
+    box-shadow: 0px 8px 5px 0px var(--shadow-xsw);
+    animation: moveY 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes moveY {
+    0%   { top: 68%; }
+    100% { top: 80%; }
+}
+
+
+@keyframes identifier {
+    from{
+
+    }
+}
 .bv-register-body {
     height: 100vh;
     width: 100vw;
     overflow: hidden;
+    background-color: var(--login-body);
+
   }
   .bv-register-container {
     position: relative;
-    background-color: var(--card-dcl);
-    width: 45vw;
+    background:var(--login-container) ;
+    box-shadow: 0px 8px 32px 0px var(--shadow-d);
+    backdrop-filter: blur(10px);
+    width: 30vw;
     height: fit-content;
     min-height: 80%;
     left: 50%;
@@ -17,6 +81,7 @@
     justify-content: start;
     align-items: center;
     border-radius: 0.5rem;
+    padding: 10px 0;
   }
   
   .bv-form-container {
@@ -24,7 +89,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60%;
+    width: 90%;
     height: 60%;
   }
   
@@ -43,16 +108,16 @@
     background-color: #000000;
     color: white;
     gap: 10px;
-    width: 150px;
+    width: 250px;
     height: 50px;
     border-radius: 10px;
     transition: box-shadow 0.3s ease-in;
   }
   
 .bv-submit{
-    width: 180px;
+    width: 250px;
     height: 50px;
-    background-color: var(--button-xsw)!important;
+    background-color: var(--button-sw)!important;
     color: var(--text-xsw);
 
     border: none;
@@ -108,13 +173,15 @@
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 10px;
-    color:  var(--text-xsw);
+    color:  var(--login-text-label);
+
   }
   
   .bv-text-group input {
-    background-color: var(--button-lw);
+    background: var(--login-container)!important;
+
     height: 48px;
-    border: 2px solid var(--button-lw);
+    border:0px solid white;
   }
   
   .bv-text-group input::placeholder {
@@ -122,8 +189,8 @@
   }
   
   .bv-text-group input:focus-visible {
-    border: 2px solid var(--border-dark-white-color);
-    box-shadow: #494945 0px 0px 5px 1px;
+    border: 0px solid var(--border-w);
+    box-shadow:  var(--shadow-d)  0px 0px 5px 1px;
     color: var(--text-dark-white-color);
     font-weight: bold;
   }

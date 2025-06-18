@@ -1,8 +1,66 @@
+.circle-box {
+    width: 30vh;
+    height: 30vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 25%;
+    top: 10%;
+    border-radius: 50%;
+    animation: moveX 4s ease-in-out infinite alternate;
+}
+
+@keyframes moveX {
+    0%   { left: 25%; }
+    100% { left: 40%; }
+}
+.circle-box1 {
+    width: 40vh;
+    height: 40vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 75%;
+    top: 50%;
+    border-radius: 50%;
+    box-shadow: 0px 8px 5px 0px var(--shadow-xsw);
+    animation: orbit 8s linear infinite;
+}
+
+@keyframes orbit {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(10px, 20px); }
+    50%  { transform: translate(0px, 40px); }
+    75%  { transform: translate(-10px, 20px);}
+    100% { transform: translate(0, 0); }
+}
+
+.circle-box2 {
+    width: 20vh;
+    height: 20vh;
+    background-color: var(--login-circle);
+    position: absolute;
+    left: 10%;
+    top: 68%;
+    border-radius: 50%;
+    box-shadow: 0px 8px 5px 0px var(--shadow-xsw);
+    animation: moveY 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes moveY {
+    0%   { top: 68%; }
+    100% { top: 80%; }
+}
+
+
+@keyframes identifier {
+    from{
+
+    }
+}
 .bv-register-body {
   height: fit-content;
   min-height: 100vh;
   width: 100vw;
-  background-color: var(--body-w);
+  background-color: var(--login-body2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,11 +70,13 @@
 .bv-register-container {
     margin-top: 60px;
     margin-bottom: 60px;
-  background-color: var(--card-dcl);
+  background: var(--login-container);
+  backdrop-filter: blur(10px);
   padding: 40px;
   border-radius: 0.5rem;
   width: 90%;
   max-width: 700px;
+    box-shadow: 0px 8px 32px 0px var(--shadow-d);
   animation: slideUp 0.5s ease;
 }
 
@@ -60,13 +120,14 @@ form {
   font-weight: 600;
   font-size: 16px;
   margin-bottom: 5px;
-  color: var(--text-sw);
+  color: var(--login-text-label);
 }
 
 .bv-text-group input,
 .bv-text-group textarea {
-  background-color: var(--button-lw);
-  border: 1px solid var(--button-lw);
+  background:var(--login-container);
+ backdrop-filter: blur(10px);
+  border: 0px;
   border-radius: 8px;
   padding: 10px;
   color: var(--text-xsw);

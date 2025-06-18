@@ -23,9 +23,16 @@ export class TeamService {
   getById(teamId:Number):Observable<ApiResponse<Team>>{
     return this._http.get<ApiResponse<Team>>(`${this.endpoint}/${teamId}`)
    }
-  getAll() :Observable<ApiResponse<Team[]>>{
-    return this._http.get<ApiResponse<Team[]>>(`${this.endpoint}`)
-   }
+getAllUserTeams(): Observable<ApiResponse<Team[]>> {
+  return this._http.get<ApiResponse<Team[]>>(`${this.endpoint}/user/team`);
+}
+
+
+getAllCompanyTeams(): Observable<ApiResponse<companyTeam[]>> {
+  return this._http.get<ApiResponse<companyTeam[]>>(`${this.endpoint}/company/all-company-teams`);
+}
+
+
    getCompanyTeam(id:Number):Observable<ApiResponse<companyTeam[]>>{
     return this._http.get<ApiResponse<companyTeam[]>>(`${this.endpoint}/company/${id}/teams`)
    }

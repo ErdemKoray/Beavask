@@ -25,14 +25,14 @@
     padding: 0 12px;
 
     border-radius: 4px;
-    border: 1px solid var(--card-sw);
-    background: var(--card-sw);
+    border: 1px solid var(--card-w);
+    background: var(--card-w);
     color: var(--text-xsw);
   }
   .bv-mp-h-a-input {
-    border: 0px solid var(--card-sw);
+    border: 0px solid var(--card-w);
     outline: none;
-    background: var(--card-sw);
+    background: var(--card-w);
     color: var(--text-xsw);
   }
   .bv-mp-h-a-input::placeholder {
@@ -41,7 +41,7 @@
   }
   
   .bv-mp-h-a-button {
-    background-color: var(--card-sw);
+    background-color: var(--card-w);
     color: var(--text-xsw);
     border: none;
     width: 40px;
@@ -166,3 +166,69 @@
   .bv-project-item:hover{
     background-color: var(--card-ld);
   }
+
+
+
+  
+  .bv-invite-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 10px;
+}
+.bv-invite-row {
+  background: var(--card-xsw);
+  border: 1.5px solid var(--border-xsw);
+  border-radius: 12px;
+  padding: 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 1.5px 8px #2127331a;
+}
+.bv-invite-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bv-invite-project {
+  font-weight: 700;
+  color: var(--text-xsw);
+  font-size: 17px;
+}
+.bv-invite-desc {
+  color: var(--text-ld);
+  font-size: 14px;
+}
+.bv-invite-from {
+  color: var(--text-sw);
+  font-size: 12.5px;
+}
+.bv-invite-actions {
+  display: flex;
+  gap: 9px;
+}
+.bv-modal-btn.primary {
+  background: var(--status-color-blue);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+}
+.bv-modal-btn {
+  background: var(--card-sw);
+  color: var(--text-xsw);
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  padding: 8px 17px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background .15s, color .15s;
+}
+.bv-modal-btn:hover { background: var(--status-color-green); color: #fff; }
+.bv-modal-btn.primary:hover { background: var(--status-color-blue); color: #eee; }
+@media (max-width: 600px) {
+  .bv-invite-row { flex-direction: column; align-items: flex-start; gap: 12px;}
+  .bv-invite-actions { width: 100%; gap: 10px;}
+}

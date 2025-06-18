@@ -1,77 +1,67 @@
 <div class="bv-summary-container">
 
-   
-    <div class="bv-summary-top-cards">
-      <div class="bv-summary-card bv-shadow-1 bv-summary-box">
-        <h3>0</h3>
-        <p>Completed</p>
-        <span>in the last 7 days</span>
-      </div>
-      <div class="bv-summary-card bv-shadow-1 bv-summary-box">
-        <h3>0</h3>
-        <p>Updated</p>
-        <span>in the last 7 days</span>
-      </div>
-      <div class="bv-summary-card bv-shadow-1 bv-summary-box">
-        <h3>0</h3>
-        <p>Created</p>
-        <span>in the last 7 days</span>
-      </div>
-      <div class="bv-summary-card bv-shadow-1 bv-summary-box">
-        <h3>0</h3>
-        <p>Due Soon</p>
-        <span>in the next 7 days</span>
-      </div>
+  <div class="bv-summary-top-cards">
+    <div class="bv-summary-card bv-shadow-1 bv-summary-box">
+      <h3>{{statusType[2].count}}</h3>
+      <p>{{ 'summary.created' | translate }}</p>
     </div>
-  
-    <div class="bv-summary-grid" style="padding-bottom: 20px;">
-      
-      
-      <div class="bv-summary-box bv-summary-status">
-        <h4>Status Overview</h4>
-        <div class="bv-summary-status-chart">
-          <canvas id="statusChart" width="10" height="10"></canvas>
-          <ul class="bv-summary-legend">
-            <li><span class="bv-status-dot todo"></span>To Do: 3</li>
-            <li><span class="bv-status-dot inprogress"></span>In Progress: 0</li>
-            <li><span class="bv-status-dot done"></span>Done: 0</li>
-          </ul>
-        </div>
-      </div>
-      
-  
-      
-      <div class="bv-summary-box bv-summary-activity">
-        <h4>Recent Activity</h4>
-        <p class="bv-no-activity">No activity yet</p>
-        <span class="bv-activity-helper">
-          Create issues and invite teammates to track progress.
-        </span>
-      </div>
-  
-     
-      
-  
-   
-      <div class="bv-summary-box bv-summary-types">
-        <h4>Types of Work</h4>
-        <div class="bv-summary-type-row" *ngFor="let type of types">
-          <span>{{ type.name }}</span>
-          <div class="bv-summary-type-bar">
-            <div class="fill" [style.width.%]="type.percent"></div>
-          </div>
-          <span>{{ type.percent }}%</span>
-        </div>
-      </div>
-  
-      <div class="bv-summary-box bv-summary-workload">
-        <h4>Team Workload</h4>
-        <div class="bv-chart-cubuk">
-
-          <canvas id="priorityChart"></canvas>
-        </div>
-      </div>
+    <div class="bv-summary-card bv-shadow-1 bv-summary-box">
+      <h3>{{statusType[1].count}}</h3>
+      <p>{{ 'summary.inprogress' | translate }}</p>
     </div>
-  
+    <div class="bv-summary-card bv-shadow-1 bv-summary-box">
+      <h3>{{statusType[3].count}}</h3>
+      <p>{{ 'summary.canceled' | translate }}</p>
+    </div>
+    <div class="bv-summary-card bv-shadow-1 bv-summary-box">
+      <h3>{{statusType[0].count}}</h3>
+      <p>{{ 'summary.completed' | translate }}</p>
+    </div>
   </div>
-  
+
+  <div class="bv-summary-grid" style="padding-bottom: 20px;">
+
+    <div class="bv-summary-box bv-shadow-1 bv-summary-status">
+      <div class="bv-summary-status-chart">
+        <canvas id="statusChart" width="10" height="10"></canvas>
+        <ul class="bv-summary-legend">
+          <li>
+            <span class="bv-status-dot todo"></span>
+            {{ 'summary.todo' | translate }}: 3
+          </li>
+          <li>
+            <span class="bv-status-dot inprogress"></span>
+            {{ 'summary.inprogress' | translate }}: 0
+          </li>
+          <li>
+            <span class="bv-status-dot done"></span>
+            {{ 'summary.done' | translate }}: 0
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bv-summary-box bv-shadow-1 bv-summary-activity">
+      <p class="bv-no-activity">{{ 'summary.noActivity' | translate }}</p>
+      <span class="bv-activity-helper">
+        {{ 'summary.activityHelper' | translate }}
+      </span>
+    </div>
+
+    <div class="bv-summary-box bv-shadow-1 bv-summary-types">
+      <div class="bv-summary-type-row" *ngFor="let type of types">
+        <span>{{ type.name }}</span>
+        <div class="bv-summary-type-bar">
+          <div class="fill" [style.width.%]="type.percent"></div>
+        </div>
+        <span>{{ type.percent }}%</span>
+      </div>
+    </div>
+
+    <div class="bv-summary-box bv-shadow-1 bv-summary-workload">
+      <div class="bv-chart-cubuk">
+        <canvas id="priorityChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

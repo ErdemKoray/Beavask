@@ -16,4 +16,6 @@ export class AuthprofileService {
   whoami(): Observable<Profile> { 
     return this.http.get<Profile>( this.baseUrl);
   }
+
+  
 }

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 30px;
   height: 100%;
-  background-color: var(--main-xsw);
+  background-color: var(--body-w);
 }
 
 /* Üst istatistik kutuları */
@@ -60,7 +60,6 @@
   padding: 20px;
   height: auto;
   min-height: 200px;
-  box-shadow: 0 1px 6px var(--shadow-d);
 }
 
 .bv-summary-box:nth-child(1) :nth-child(3) {

@@ -1,65 +1,185 @@
-.cprofile-container {
-  padding: 32px;
-  background-color: var(--body-xsw);
-  color: var(--text-xsw);
-  border-radius: 8px;
-  max-width: 800px;
-  margin: auto;
+.bv-team-container {
+  background-color: var(--card-w);
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px auto;
+  max-width: 1200px;
+  width: 100%;
 }
 
-.cprofile-header {
-  display: flex;
-  align-items: center;
-  gap: 24px;
+.bv-team-header {
+  position: relative;
   margin-bottom: 24px;
 }
-
-.cprofile-logo {
-  width: 80px;
-  height: 80px;
+.text-muted{
+  color: var(--text-xsw)!important;
+}
+.bv-team-banner {
+  width: 100%;
+  height: 200px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: var(--card-lw);
 }
 
-.cprofile-info h2 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
+.bv-team-info {
+  position: absolute;
+  bottom: 16px;
+  left: 24px;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
 }
 
-.cprofile-info p {
+.bv-team-info h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.bv-team-info p {
   margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--text-d);
+}
+
+/* Main layout */
+.bv-team-main {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+/* Left: Team Members */
+.bv-team-left {
+  flex: 1;
+  background-color: var(--card-xsw);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.bv-team-left h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-xsw);
+}
+
+.bv-team-member {
+  background-color: var(--card-sw);
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.bv-team-member:hover {
+  background-color: var(--card-cl);
+}
+
+.bv-team-member-img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  margin-right: 12px;
+  background-color: var(--card-lw);
+}
+
+.bv-team-member-info {
+  flex: 1;
+}
+
+.bv-member-name {
+  font-weight: 600;
+  color: var(--text-xsw);
+}
+
+.bv-member-role {
+  font-size: 13px;
+  color: var(--text-ld);
+}
+
+.bv-member-status {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-sd);
+}
+
+.bv-member-status.active {
+  color: #10b981; /* Green */
+}
+
+.bv-member-status.inactive {
+  color: #ef4444; /* Red */
+}
+
+/* Right: Tasks & Activity */
+.bv-team-right {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.bv-team-section {
+  background-color: var(--card-xsw);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.bv-team-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-xsw);
+}
+
+.bv-task-card {
+  background-color: var(--card-sw);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--card-lcl);
+}
+
+.bv-task-title {
+  font-weight: 600;
+  color: var(--text-xsw);
+}
+
+.bv-task-user {
+  font-size: 13px;
+  color: var(--text-ld);
+}
+
+.bv-task-status {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-scl);
+}
+
+/* Activity log */
+.bv-activity-log {
+  background-color: var(--card-sw);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border-left: 4px solid var(--card-cl);
+}
+
+.bv-activity-user {
+  font-weight: 600;
+  color: var(--text-xsw);
+}
+
+.bv-activity-desc {
   font-size: 14px;
   color: var(--text-sw);
 }
 
-.cprofile-details ul {
-  list-style: none;
-  padding: 0;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.cprofile-details h4 {
-  margin-bottom: 12px;
-  font-weight: 600;
-  color: var(--text-xsw);
-}
-
-.loader {
-  margin: auto;
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--card-sw);
-  border-top: 4px solid var(--text-xsw);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-top: 40px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.bv-activity-time {
+  font-size: 12px;
+  color: var(--text-ld);
+  text-align: right;
 }

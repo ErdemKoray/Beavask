@@ -6,11 +6,12 @@ import { AuthService } from '../../../common/services/auth/auth.service';
 import { ToastComponent } from '../../../components/toast/toast.component';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ToastComponent, CommonModule, ReactiveFormsModule],
+  imports: [ToastComponent, CommonModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './register.component.html',
   animations: [
     trigger('slideDown', [
@@ -57,6 +58,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
+      username: ['',[Validators.required,Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
@@ -97,6 +99,7 @@ export class RegisterComponent implements OnInit {
     const registerPayload = {
       firstName: formData.firstName,
       lastName: formData.lastName,
+      username:formData.username,
       email: formData.email,
       password: formData.password
     };

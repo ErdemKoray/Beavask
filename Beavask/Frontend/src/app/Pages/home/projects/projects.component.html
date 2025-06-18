@@ -2,10 +2,10 @@
   <div class="bv-mp-body bv-shadow-2">
 
     <div class="bv-mp-header d-flex flex-wrap justify-content-between align-items-center">
-      <div class="bv-mp-h-title">Projects</div>
+      <div class="bv-mp-h-title">{{'project.project'  | translate}}</div>
       <div class="bv-mp-h-actions d-flex justify-content-center align-items-center">
         <form [formGroup]="searchForm" class="bv-mp-h-a-filter d-flex gap-3 justify-content-center align-items-center" (ngSubmit)="searchProject()">
-          <input class="bv-mp-h-a-input" type="text" formControlName="searchname" placeholder="Search project..." (input)="onSearchInputChange($event)" />
+          <input class="bv-mp-h-a-input" type="text" formControlName="searchname" placeholder="{{'project.searchProject' |translate}}" (input)="onSearchInputChange($event)" />
 
           <button type="submit" [disabled]="searchForm.invalid" class="bv-mp-h-a-button bv-transition">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
@@ -30,25 +30,20 @@
                </th>
               <th (click)="setSort('name')" [class.active-sort]="sortKey === 'name'">
                   <div class="bv-table-header d-flex gap-3">
-                    <div class="bv-th-title">Requested By</div>
+                    <div class="bv-th-title">{{'project.detail.projectNameDetail'|translate}}</div>
                      <div [innerHTML]="getSortIcon('name')"></div>
                    </div>
                  </th>
                  <th (click)="setSort('description')" [class.active-sort]="sortKey === 'description'">
                    <div class="bv-table-header d-flex gap-3">
-                     <div class="bv-th-title">Description</div>
+                     <div class="bv-th-title">{{'project.detail.projectDescriptionDetail'|translate}}</div>
                       <div [innerHTML]="getSortIcon('description')"></div>
                    </div>
                  </th>
                  <th (click)="setSort('createdAt')" [class.active-sort]="sortKey === 'createdAt'">
                    <div class="bv-table-header d-flex gap-3">
-                     <div class="bv-th-title">Created Date</div>
+                     <div class="bv-th-title">{{'project.detail.startDateDetail'|translate}}</div>
                       <div [innerHTML]="getSortIcon('createdAt')"></div>
-                   </div>
-                 </th>
-                 <th>
-                   <div class="bv-table-header d-flex gap-3">
-                     <div class="bv-th-title">Action</div>
                    </div>
                  </th>
 
@@ -65,7 +60,7 @@
                </td>
                <td>{{ item.description }}</td>
                <td>{{ item.createdAt |date }}</td>
-              <td><button class="bv-action">...</button></td>
+             
             </tr>
           </tbody>
         </table>
@@ -73,5 +68,38 @@
         
       </div>
     </div>
+    <div  class="bv-mp-section" style="margin-top:38px;">
+<div class="bv-mp-h-title" style="font-size: 22px; margin-bottom:12px;">
+  {{ 'project.invitation.title' | translate }}
+</div>
+  
+  <div *ngIf="projectInvitations.length > 0; else noInvitations">
+    <div class="bv-invite-list">
+      <div class="bv-invite-row" *ngFor="let invite of projectInvitations">
+        <div class="bv-invite-info">
+          <span class="bv-invite-project">{{ invite.projectName }}</span>
+         <span class="bv-invite-desc">
+  {{ 'project.invitation.invitedBy' | translate }}: {{ invite.senderName }}
+</span>
+          <span class="bv-invite-date">{{ invite.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="bv-invite-actions">
+<button class="bv-modal-btn primary" (click)="acceptProject(invite.id)">
+  <i class="fa-solid fa-check"></i> {{ 'project.invitation.accept' | translate }}
+</button>
+<button class="bv-modal-btn" (click)="rejectProject(invite.id)">
+  <i class="fa-solid fa-xmark"></i> {{ 'project.invitation.reject' | translate }}
+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ <ng-template #noInvitations>
+  <div class="bv-empty-row" style="margin-top:14px;">
+    {{ 'project.invitation.noPending' | translate }}
+  </div>
+</ng-template>
+</div>
+
   </div>
 </div>

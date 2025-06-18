@@ -1,7 +1,7 @@
 export enum TaskStatus {
   NotStarted = 0,
   InProgress = 1,
-  Blocked = 2,
+
   OnHold = 3,
   Cancelled = 4,
   Completed = 5
@@ -14,8 +14,6 @@ export function mapStatus(status: any): TaskStatus {
       return TaskStatus.NotStarted;
     case 1:
       return TaskStatus.InProgress;
-    case 2:
-      return TaskStatus.Blocked;
     case 3:
       return TaskStatus.OnHold;
     case 4:
@@ -30,7 +28,6 @@ export function mapStatus(status: any): TaskStatus {
   export enum TaskStatusk {
     NotStarted = 'NotStarted',
     InProgress = 'InProgress',
-    Blocked = 'Blocked',
     OnHold = 'OnHold',
     Cancelled = 'Cancelled',
     Completed = 'Completed'
