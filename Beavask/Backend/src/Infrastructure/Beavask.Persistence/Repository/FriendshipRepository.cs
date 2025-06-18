@@ -40,6 +40,7 @@ public class FriendshipRepository : BaseRepository<Friendship, int>, IFriendship
                 FirstName = f.SenderId == userId ? f.Receiver.FirstName : f.Sender.FirstName,
                 LastName = f.SenderId == userId ? f.Receiver.LastName : f.Sender.LastName,
                 Email = f.SenderId == userId ? f.Receiver.Email : f.Sender.Email,
+                Username = f.SenderId == userId ? f.Receiver.UserName : f.Sender.UserName,
                 AvatarUrl = f.SenderId == userId ? f.Receiver.AvatarUrl : f.Sender.AvatarUrl,
                 CreatedAt = f.SenderId == userId ? f.Receiver.CreatedAt : f.Sender.CreatedAt,
                 UpdatedAt = f.SenderId == userId ? f.Receiver.UpdatedAt : f.Sender.UpdatedAt,
