@@ -314,7 +314,7 @@ body { margin: 0;}
 
 
 :root {
-
+  
   --login-container:linear-gradient(135deg,#ffffffa6,#ffffff73);
   --login-body:#fed428;
   --login-body2:#1597bf;

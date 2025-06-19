@@ -129,8 +129,15 @@ selectUser(user: ChatUser) {
       ...(received || [])
     ];
 
+    const filteredMessages = all.filter(msg => {
+      return (
+        (msg.senderId === this.myUserId && msg.receiverId === user.id) ||
+        (msg.senderId === user.id && msg.receiverId === this.myUserId)
+      );
+    });
+
     const seen = new Set<number>();
-    const uniqueMessages = all.filter(msg => {
+    const uniqueMessages = filteredMessages.filter(msg => {
       if (seen.has(msg.id)) return false;
       seen.add(msg.id);
       return true;
@@ -147,7 +154,6 @@ selectUser(user: ChatUser) {
     this.loadingMessages = false;
   });
 }
-
   changeList() {
     this.userListModel = true;
     this.selectedUser = null;

@@ -15,8 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './share.component.css'
 })
 export class ShareModalComponent {
-   @Input() projectId!: number;  // Proje id'sini parent verir
-  @Output() invited = new EventEmitter<number>(); // Başarılı davette parent'ı bilgilendir
+   @Input() projectId!: number;  
+  @Output() invited = new EventEmitter<number>(); 
   friends: Friend[] = [];
   inviteSent: { [userId: number]: boolean } = {};
   loading = false;

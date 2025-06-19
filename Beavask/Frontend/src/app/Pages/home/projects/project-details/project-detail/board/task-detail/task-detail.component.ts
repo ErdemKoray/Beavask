@@ -122,7 +122,6 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  // Görevli ismini al
   getAssigneeName(userId: number) {
     this.taskapi.getReporter(userId).subscribe({
       next: (res) => {
@@ -139,16 +138,13 @@ export class TaskDetailComponent implements OnInit {
     });
   }
 
-  // Görev açıklaması kaydetme
 async saveDescription() {
   if (!this.taskD) return;
 
   try {
-    // Kullanıcı bilgisini al
     const response = await this.authapi.whoami().toPromise();
     const currentUserId = response?.userId;
 
-    // Yetki kontrolü: Görevi yalnızca atanan kullanıcı güncelleyebilir
     if (this.taskD!.assignedUserId !== currentUserId) {
       this.toastServices.show({
         title: 'Unauthorized',
