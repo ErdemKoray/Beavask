@@ -28,7 +28,6 @@
         <table class="bv-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>{{ 'task.project' | translate }}</th>
               <th>{{ 'task.title' | translate }}</th>
               <th>{{ 'task.priority' | translate }}</th>
@@ -41,7 +40,6 @@
                 *ngFor="let task of paginatedTasks"
                 [routerLink]="'/project-detail/board/' + task.projectId"
                 [queryParams]="{ TaskId: task.id }">
-              <td>{{ task.id }}</td>
               <td>{{ projectMap[task.projectId] }}</td>
               <td>{{ task.title }}</td>
               <td>

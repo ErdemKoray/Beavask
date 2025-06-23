@@ -16,6 +16,7 @@ import { MailService } from '../../../common/services/company/mail.service';
 import { CompanyService } from '../../../common/services/company/company.service';
 import { CompanyUser } from '../../../common/services/company/profile-company/company.model';
 import { CompanyMail } from '../../../common/services/company/profile-company/model/company-mail.model';
+import { UserService } from '../../../common/services/user.service';
 
 @Component({
   selector: 'app-company-detail',
@@ -72,7 +73,8 @@ companyName='';
     private companyProfileService:CompanyProfileService,
     private mailService: MailService,
     private companyService:CompanyService ,
-    private fb:FormBuilder   
+    private fb:FormBuilder,
+    private userService:UserService
 
   ) {}
 
@@ -100,20 +102,38 @@ ngOnInit(): void {
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
   }
-   loadCompanyUsers(): void {
-    console.log(this.projectId)
-    this.companyService.getCompanyUsers(this.projectId).subscribe({
-      next: (res) => {
-        console.log(res)
-        console.log(res)
-        this.users = res || [];
-        
-      },
-      error: () => {
-        this.toastServices.show({ title: 'Error', message: 'Failed to load users.' });
-      }
-    });
-  }
+loadCompanyUsers(): void {
+  if (!this.projectId) return;
+
+  this.companyService.getCompanyUsers(this.projectId).subscribe({
+    next: (res) => {
+      const updatedUsers: CompanyUser[] = [];
+      const fetches = res.map(user =>
+        this.userService.apiUserById(user.id).subscribe({
+          next: (userInfo) => {
+            if (userInfo.data.companyId !== this.companyId) {
+              user.isAssignedToCompany = false;
+            }
+            updatedUsers.push(user);
+            if (updatedUsers.length === res.length) {
+              this.users = updatedUsers;
+            }
+          },
+          error: () => {
+            // Hata olsa bile kullanıcıyı ekle
+            updatedUsers.push(user);
+            if (updatedUsers.length === res.length) {
+              this.users = updatedUsers;
+            }
+          }
+        })
+      );
+    },
+    error: () => {
+      this.toastServices.show({ title: 'Error', message: 'Failed to load users.' });
+    }
+  });
+}
 
    canSendInvite(user: CompanyUser): boolean {
     return !(user.isRegistered && user.isAssignedToCompany);

@@ -18,7 +18,8 @@
     "recentTeams": "Son Takımlar",
     "recentWork": "Son Çalışmalar",
         "quit":"Çıkış",
-    "connections":"Bağlantılarım"
+    "connections":"Bağlantılarım",
+     "notifications": "Bildirimler"
   },
  "project": {
   "createProject": "Proje Oluştur",

@@ -22,12 +22,6 @@
         <table class="bv-table">
           <thead>
             <tr>
-              <th (click)="setSort('id')" [class.active-sort]="sortKey === 'id'">
-                 <div class="bv-table-header d-flex gap-3">
-                   <div class="bv-th-title">ID</div>
-                   <div [innerHTML]="getSortIcon('id')"></div>
-                 </div>
-               </th>
               <th (click)="setSort('name')" [class.active-sort]="sortKey === 'name'">
                   <div class="bv-table-header d-flex gap-3">
                     <div class="bv-th-title">{{'project.detail.projectNameDetail'|translate}}</div>
@@ -51,7 +45,6 @@
           </thead>
           <tbody>
             <tr class="bv-project-item bv-transition" *ngFor="let item of items | sort: sortKey: sortDirection" routerLink="/project-detail/board/{{ item.id }}" [queryParams]="{ projectId: item.id }">
-              <td>{{ item.id }}</td>
                <td>
                  <div class="bv-user d-flex gap-3 align-items-center">
 

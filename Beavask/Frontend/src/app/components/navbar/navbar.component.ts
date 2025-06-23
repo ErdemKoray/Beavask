@@ -16,6 +16,7 @@ import { ProjectsService } from '../../common/services/projects/projects.service
 import { Project } from '../../common/model/project.model';
 import { TaskService } from '../../common/services/task/task.service';
 import { Task } from '../../common/services/task/taskModel/task.model';
+import { notification, NotificationService } from '../../common/services/notification/notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -38,8 +39,12 @@ export class NavbarComponent implements OnInit {
     localStorage.getItem(this.themeKey)=== 'dark' ? this.darkMode = true : this.darkMode = false;
     this.getUserProject();
     this.getUserTask();
+    this.getNotifications();
+
     
   }
+  isNotificationDropdownOpen = false;
+notifications: notification[] = [];
     constructor(
       private router: Router,
       private fb:FormBuilder,
@@ -51,7 +56,9 @@ export class NavbarComponent implements OnInit {
       private toastService:ToastService,
       private projectService:ProjectsService,
       private taskService:TaskService,
-      private authService:AuthprofileService
+      private authService:AuthprofileService,
+      private notificationService: NotificationService,
+
     
     ) {
       this.currentLang = this.langService.getCurrentLanguage();
@@ -166,6 +173,14 @@ form = new FormGroup({
     ) {
       this.dropdownOpen = false;
     }
+    if (
+  this.isNotificationDropdownOpen &&
+  !target.closest('.bv-dropdown-content') &&
+  !target.closest('.bv-notifi')
+) {
+  this.isNotificationDropdownOpen = false;
+}
+
   }
   userInfo: Profile | null = null;
   avatarUrl: string = '';
@@ -175,8 +190,29 @@ form = new FormGroup({
   currentLang: string;
 
 
+  getNotifications() {
+  this.authService.whoami().subscribe({
+    next: (user) => {
+      const userId = user.userId;
+      this.notificationService.getAll().subscribe({
+        next: (response) => {
+          const allNotifications = Array.isArray(response.data) ? response.data : [response.data];
+          this.notifications = allNotifications
+            .filter(n => n.userId === userId)
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+            .slice(0, 5);
+        },
+        error: (err) => {
+          console.error('Bildirim çekme hatası:', err);
+        }
+      });
+    }
+  });
+}
+
   togglelDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
+    
   }
 
   changeLang(lang: string): void {
@@ -262,7 +298,7 @@ getUserTask() {
     this.dropdownOpen = false;
   }
 
-  toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown' | 'profile') {
+  toggleDropdown(type: 'project' | 'dropdown' | 'modal' | 'create' | 'teamdropdown' | 'taskdropdown' | 'profile' |'notification') {
     if (type === 'project') {
       this.isProjectDropdownOpen = !this.isProjectDropdownOpen;
     } else if (type === 'dropdown') {
@@ -277,7 +313,9 @@ getUserTask() {
         this.isTaskDropdownOpen = !this.isTaskDropdownOpen;
     }  else if (type === 'profile') {
       this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
-  }
+  }else if (type === 'notification') {
+  this.isNotificationDropdownOpen = !this.isNotificationDropdownOpen;
+}
   }
 
   gotomytask() { 
